@@ -48,31 +48,33 @@ const About = () => {
                 </motion.h2>
 
                 <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-                    {/* Profile Image - Performance Optimized */}
+                    {/* Profile Image - Optimized for head visibility */}
                     <motion.div
                         variants={itemVariants}
                         className="relative"
                     >
-                        <div className="relative aspect-square max-w-[450px] mx-auto group">
-                            {/* Static Decorative Elements for Performance */}
-                            <div className={`absolute inset-0 rounded-[40px] -rotate-6 border shadow-lg transition-colors ${isDarkMode ? 'bg-slate-900/80 border-white/5' : 'bg-white border-slate-100'}`} />
-                            <div className={`absolute inset-0 rounded-[40px] rotate-3 border transition-colors ${isDarkMode ? 'bg-indigo-900/10 border-indigo-500/20' : 'bg-indigo-50 border-indigo-100'}`} />
+                        <div className="relative aspect-[4/5] max-w-[550px] mx-auto group">
+                            {/* Decorative Background Elements */}
+                            <div className={`absolute inset-0 rounded-[48px] -rotate-6 border shadow-lg transition-colors duration-700 ${isDarkMode ? 'bg-slate-900/80 border-white/5' : 'bg-white border-slate-100'}`} />
+                            <div className={`absolute inset-0 rounded-[48px] rotate-3 border transition-colors duration-700 ${isDarkMode ? 'bg-indigo-900/10 border-indigo-500/20' : 'bg-indigo-50 border-indigo-100'}`} />
 
-                            {/* Main Image Container */}
-                            <div className={`relative rounded-[40px] shadow-2xl overflow-hidden border-4 h-full transition-colors ${isDarkMode ? 'border-slate-800' : 'border-white'}`}>
-                                <img
-                                    src="/Profile Pic.jpg"
-                                    alt="Ritesh Kumar"
-                                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 rounded-[36px]"
-                                />
+                            {/* Main Image Container - Added padding to prevent top cropping */}
+                            <div className={`relative rounded-[48px] shadow-2xl overflow-hidden border-4 h-full transition-colors p-4 ${isDarkMode ? 'border-slate-800 bg-slate-900/50' : 'border-white bg-slate-50'}`}>
+                                <div className="w-full h-full rounded-[36px] overflow-hidden">
+                                    <img
+                                        src="/Profile Pic.jpg"
+                                        alt="Ritesh Kumar"
+                                        className="w-full h-full object-cover object-top transform hover:scale-110 transition-transform duration-700 origin-top"
+                                    />
+                                </div>
                                 <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             </div>
 
                             {/* Tech Stamp */}
-                            <div className={`absolute -bottom-2 -right-2 sm:-bottom-6 sm:-right-6 w-20 h-20 sm:w-24 sm:h-24 rounded-full shadow-2xl p-4 flex items-center justify-center border-4 sm:border-8 rotate-12 transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-50'}`}>
+                            <div className={`absolute -bottom-4 -right-4 sm:-bottom-8 sm:-right-8 w-24 h-24 sm:w-28 sm:h-28 rounded-full shadow-2xl p-4 flex items-center justify-center border-4 sm:border-8 rotate-12 transition-all duration-500 group-hover:rotate-0 ${isDarkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-50'}`}>
                                 <div className="text-center">
-                                    <div className="text-xl">🎓</div>
-                                    <div className="text-[10px] font-black leading-tight">CSE</div>
+                                    <div className="text-2xl sm:text-3xl mb-1">🎓</div>
+                                    <div className="text-[12px] font-black leading-tight tracking-tighter uppercase">CSE</div>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +96,7 @@ const About = () => {
                             </p>
                         </div>
 
-                        {/* Stats Cards with Hover Depth */}
+                        {/* Stats Cards */}
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
                             {[
                                 { number: '10+', label: 'Projects', color: isDarkMode ? 'bg-indigo-900/40 text-indigo-400 border-indigo-500/20' : 'bg-indigo-50 text-indigo-600 border-white', icon: '🚀' },
