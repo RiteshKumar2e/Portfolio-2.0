@@ -69,7 +69,7 @@ const About = () => {
                             </div>
 
                             {/* Tech Stamp */}
-                            <div className={`absolute -bottom-6 -right-6 w-24 h-24 rounded-full shadow-2xl p-4 flex items-center justify-center border-8 rotate-12 transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-50'}`}>
+                            <div className={`absolute -bottom-2 -right-2 sm:-bottom-6 sm:-right-6 w-20 h-20 sm:w-24 sm:h-24 rounded-full shadow-2xl p-4 flex items-center justify-center border-4 sm:border-8 rotate-12 transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-50'}`}>
                                 <div className="text-center">
                                     <div className="text-xl">🎓</div>
                                     <div className="text-[10px] font-black leading-tight">CSE</div>

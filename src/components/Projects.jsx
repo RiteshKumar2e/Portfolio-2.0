@@ -17,6 +17,7 @@ const ProjectCard = ({ project, index }) => {
     const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
 
     const handleMouseMove = (e) => {
+        if (window.innerWidth < 768) return; // Disable for mobile
         const rect = e.currentTarget.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;

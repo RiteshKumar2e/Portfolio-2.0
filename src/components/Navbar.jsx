@@ -187,33 +187,83 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu Overlay */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className={`md:hidden overflow-hidden border-t transition-colors ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-50'}`}
+                        initial={{ opacity: 0, x: '100%' }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: '100%' }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                        className={`fixed inset-0 z-[1100] md:hidden backdrop-blur-2xl transition-colors duration-700 ${isDarkMode ? 'bg-slate-900/95' : 'bg-white/95'}`}
                     >
-                        <div className="p-4 space-y-1">
-                            {navItems.map((item) => (
-                                <a
+                        {/* Close Button Header */}
+                        <div className="flex items-center justify-between p-8">
+                            <motion.a
+                                href="#home"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    scrollToSection('#home');
+                                }}
+                                className="flex items-center gap-0"
+                            >
+                                <span className="text-3xl font-black text-indigo-600 tracking-tighter">R</span>
+                                <span className={`text-3xl font-black tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>itesh.</span>
+                            </motion.a>
+                            <button
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl transition-colors ${isDarkMode ? 'bg-white/10 text-white' : 'bg-slate-900/5 text-slate-900'}`}
+                            >
+                                <FaTimes />
+                            </button>
+                        </div>
+
+                        {/* Menu Items */}
+                        <div className="flex flex-col items-center justify-center gap-6 h-[60%] px-8">
+                            {navItems.map((item, index) => (
+                                <motion.a
                                     key={item.name}
                                     href={item.href}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.1 + index * 0.05 }}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         scrollToSection(item.href);
                                     }}
-                                    className={`block px-6 py-4 rounded-xl font-bold transition-colors ${activeSection === item.href.substring(1)
-                                        ? 'bg-indigo-600/10 text-indigo-500'
+                                    className={`text-4xl font-black tracking-tighter transition-all hover:scale-110 ${activeSection === item.href.substring(1)
+                                        ? 'text-indigo-600'
                                         : isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
                                         }`}
                                 >
                                     {item.name}
-                                </a>
+                                </motion.a>
                             ))}
                         </div>
+
+                        {/* Footer area in Mobile Menu */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5 }}
+                            className="absolute bottom-16 left-0 right-0 px-12"
+                        >
+                            <div className="flex flex-col items-center gap-8">
+                                <button
+                                    onClick={() => scrollToSection('#contact')}
+                                    className={`w-full py-6 rounded-3xl text-lg font-black uppercase tracking-widest transition-all shadow-xl ${isDarkMode ? 'bg-white text-slate-900 shadow-white/5' : 'bg-slate-900 text-white shadow-slate-900/10'}`}
+                                >
+                                    Let's Talk
+                                </button>
+                                <div className="flex gap-6">
+                                    <span className={`text-sm font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Connect:</span>
+                                    <div className="flex gap-4">
+                                        <FaGithub className={`text-2xl ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`} />
+                                        <FaLinkedin className="text-2xl text-blue-500" />
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>

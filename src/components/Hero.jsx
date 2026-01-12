@@ -62,6 +62,18 @@ const Hero = () => {
                             </span>
                         </motion.h1>
 
+                        {/* Mobile Only Avatar Visual */}
+                        <motion.div
+                            variants={itemVariants}
+                            className="lg:hidden flex justify-center mb-8"
+                        >
+                            <div className={`w-32 h-32 rounded-3xl p-4 border transition-all duration-700 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'bg-white border-slate-100 shadow-xl'}`}>
+                                <div className={`w-full h-full rounded-2xl flex items-center justify-center text-4xl shadow-inner ${isDarkMode ? 'bg-slate-900/60' : 'bg-slate-50'}`}>
+                                    🚀
+                                </div>
+                            </div>
+                        </motion.div>
+
                         <motion.p
                             variants={itemVariants}
                             className={`text-base sm:text-lg md:text-xl mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
@@ -75,11 +87,11 @@ const Hero = () => {
 
                         <motion.div
                             variants={itemVariants}
-                            className="flex flex-wrap gap-4 justify-center lg:justify-start mb-10"
+                            className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10 px-4 sm:px-0"
                         >
                             <motion.a
                                 href="#projects"
-                                className="btn-primary"
+                                className="btn-primary w-full sm:w-auto text-center"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
@@ -88,19 +100,11 @@ const Hero = () => {
                             <motion.a
                                 href="/Ritesh_Kumar_Resume.pdf"
                                 download
-                                className="btn-secondary"
+                                className="btn-secondary w-full sm:w-auto text-center"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
                                 📄 Download Resume
-                            </motion.a>
-                            <motion.a
-                                href="#contact"
-                                className="btn-secondary hidden sm:flex"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                Get In Touch
                             </motion.a>
                         </motion.div>
 
@@ -119,7 +123,7 @@ const Hero = () => {
                                     href={social.href}
                                     target={social.href.startsWith('http') ? '_blank' : '_self'}
                                     rel="noopener noreferrer"
-                                    className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-500 shadow-lg cyber-card-glow' : 'bg-white border-slate-100 shadow-sm text-slate-400'} ${social.color}`}
+                                    className={`w-14 h-14 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-500 shadow-lg cyber-card-glow' : 'bg-white border-slate-100 shadow-sm text-slate-400'} ${social.color}`}
                                     whileHover={{ scale: 1.1, y: -4 }}
                                     whileTap={{ scale: 0.9 }}
                                     aria-label={social.label}

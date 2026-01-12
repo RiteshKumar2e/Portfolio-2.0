@@ -243,25 +243,27 @@ const Achievements = () => {
                 </motion.p>
 
                 {/* Tabs - Responsive handling */}
-                <motion.div
-                    variants={itemVariants}
-                    className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mb-12 px-2"
-                >
-                    {tabs.map((tab) => (
-                        <motion.button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm md:text-base font-bold transition-all shadow-sm ${activeTab === tab.id
-                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                                : isDarkMode ? 'bg-white/5 text-slate-400 border border-white/10 hover:border-indigo-500 hover:text-white' : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-400 hover:text-indigo-600'
-                                }`}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            {tab.label} <span className="text-[10px] md:text-xs opacity-75 ml-1">({tab.count})</span>
-                        </motion.button>
-                    ))}
-                </motion.div>
+                <div className="overflow-x-auto no-scrollbar pb-4 px-2 -mx-2">
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex items-center justify-start md:justify-center gap-2 md:gap-4 min-w-max px-2"
+                    >
+                        {tabs.map((tab) => (
+                            <motion.button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm md:text-base font-bold transition-all shadow-sm ${activeTab === tab.id
+                                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
+                                    : isDarkMode ? 'bg-white/5 text-slate-400 border border-white/10 hover:border-indigo-500 hover:text-white' : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-400 hover:text-indigo-600'
+                                    }`}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                {tab.label} <span className="text-[10px] md:text-xs opacity-75 ml-1">({tab.count})</span>
+                            </motion.button>
+                        ))}
+                    </motion.div>
+                </div>
 
                 {/* Items Grid */}
                 <AnimatePresence mode="popLayout">
