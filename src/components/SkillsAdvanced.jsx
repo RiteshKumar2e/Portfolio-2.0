@@ -106,36 +106,57 @@ const SkillsAdvanced = () => {
                         <motion.div
                             key={catIndex}
                             variants={itemVariants}
-                            className={`rounded-[32px] p-8 border transition-all duration-500 shine-effect ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'bg-white border-white shadow-sm'}`}
+                            className={`group relative rounded-[40px] p-10 border transition-all duration-500 overflow-hidden ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow hover:border-indigo-500/30' : 'bg-white border-slate-100 shadow-xl'}`}
                         >
-                            <div className="flex items-center gap-3 mb-8">
-                                <span className="text-3xl">{category.icon}</span>
-                                <h3 className={`text-xl font-black ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
+                            {/* Category Corner Accent */}
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                            <div className="flex items-center gap-5 mb-10">
+                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-inner ${isDarkMode ? 'bg-white/5 shadow-white/5' : 'bg-indigo-50'}`}>
+                                    {category.icon}
+                                </div>
+                                <h3 className={`text-2xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
                                     {category.category}
                                 </h3>
                             </div>
 
-                            <div className="space-y-6">
+                            <div className="space-y-8">
                                 {category.skills.map((skill, skillIndex) => (
-                                    <div key={skillIndex} className="space-y-2">
+                                    <div key={skillIndex} className="group/skill space-y-3">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-3">
-                                                <skill.icon className="text-2xl" style={{ color: skill.color }} />
-                                                <span className={`font-bold text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{skill.name}</span>
+                                                <skill.icon className={`text-2xl transition-transform group-hover/skill:scale-125 duration-300`} style={{ color: skill.color }} />
+                                                <span className={`font-black uppercase text-xs tracking-widest ${isDarkMode ? 'text-slate-200' : 'text-slate-700'}`}>{skill.name}</span>
                                             </div>
-                                            <span className={`text-[10px] font-black px-2 py-0.5 rounded-lg ${isDarkMode ? 'bg-white/5 text-slate-400' : 'bg-slate-50 text-slate-400'}`}>{skill.level}%</span>
+                                            <span className={`text-[10px] font-black tracking-tighter ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>{skill.level}% CAPABILITY</span>
                                         </div>
-                                        <div className={`h-2.5 rounded-full overflow-hidden border p-[1px] ${isDarkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'}`}>
+
+                                        {/* Futuristic Segmented Bar */}
+                                        <div className="relative">
+                                            {/* Track Background */}
+                                            <div className={`h-4 rounded-lg overflow-hidden flex gap-1 p-[2px] ${isDarkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
+                                                {[...Array(20)].map((_, i) => (
+                                                    <div key={i} className={`flex-1 rounded-[1px] ${isDarkMode ? 'bg-white/5' : 'bg-white'}`} />
+                                                ))}
+                                            </div>
+
+                                            {/* Active Bar - Segmented Overlay */}
                                             <motion.div
-                                                className="h-full rounded-full relative"
-                                                style={{
-                                                    background: `linear-gradient(90deg, ${skill.color}cc, ${skill.color})`
-                                                }}
+                                                className="absolute inset-x-0 top-0 h-4 flex gap-1 p-[2px] pointer-events-none"
                                                 initial={{ width: 0 }}
                                                 animate={inView ? { width: `${skill.level}%` } : { width: 0 }}
-                                                transition={{ duration: 1.5, ease: "easeOut", delay: catIndex * 0.1 }}
+                                                transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 + (skillIndex * 0.1) }}
                                             >
-                                                <div className="absolute top-0 right-0 w-4 h-full bg-white/20 blur-[2px]" />
+                                                {[...Array(20)].map((_, i) => (
+                                                    <div
+                                                        key={i}
+                                                        className="flex-1 rounded-[1px] transition-colors duration-500"
+                                                        style={{
+                                                            backgroundColor: i < (skill.level / 5) ? skill.color : 'transparent',
+                                                            boxShadow: i < (skill.level / 5) ? `0 0 10px ${skill.color}80` : 'none'
+                                                        }}
+                                                    />
+                                                ))}
                                             </motion.div>
                                         </div>
                                     </div>
@@ -145,19 +166,23 @@ const SkillsAdvanced = () => {
                     ))}
                 </div>
 
-                {/* Summary Section */}
+                {/* Summary Section - High End Status Chips */}
                 <motion.div
                     variants={itemVariants}
-                    className="mt-16 flex flex-wrap justify-center gap-8"
+                    className="mt-20 flex flex-wrap justify-center gap-6"
                 >
                     {[
-                        { label: 'Frontend', value: 'High', color: isDarkMode ? 'bg-blue-900/20 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-white' },
-                        { label: 'Backend', value: 'Strong', color: isDarkMode ? 'bg-indigo-900/20 text-indigo-400 border-indigo-500/20' : 'bg-indigo-50 text-indigo-600 border-white' },
-                        { label: 'Cloud/Tools', value: 'Capable', color: isDarkMode ? 'bg-rose-900/20 text-rose-400 border-rose-500/20' : 'bg-rose-50 text-rose-600 border-white' },
-                        { label: 'AI/ML', value: 'Expertise', color: isDarkMode ? 'bg-amber-900/20 text-amber-400 border-amber-500/20' : 'bg-amber-50 text-amber-600 border-white' }
+                        { label: 'Frontend Architecture', value: 'High Density', color: 'from-blue-600 to-indigo-600' },
+                        { label: 'Cloud Infrastructure', value: 'Scalable', color: 'from-purple-600 to-pink-600' },
+                        { label: 'Neural Intelligence', value: 'Core Engine', color: 'from-amber-600 to-orange-600' },
+                        { label: 'System Kernel', value: 'Optimized', color: 'from-emerald-600 to-teal-600' }
                     ].map((badge, idx) => (
-                        <div key={idx} className={`${badge.color} px-5 py-2 rounded-2xl text-xs font-black uppercase tracking-widest shadow-sm border`}>
-                            {badge.label}: {badge.value}
+                        <div key={idx} className={`group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 hover:scale-105 hover:-translate-y-1`}>
+                            <div className={`absolute inset-0 bg-gradient-to-br ${badge.color} opacity-20 group-hover:opacity-100 transition-opacity`} />
+                            <div className={`relative px-6 py-4 rounded-2xl flex flex-col items-center gap-1 min-w-[180px] backdrop-blur-xl ${isDarkMode ? 'bg-slate-900/90' : 'bg-white/95 border border-slate-100'}`}>
+                                <span className={`text-[9px] font-black uppercase tracking-[0.3em] ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{badge.label}</span>
+                                <span className={`text-sm font-black transition-colors ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{badge.value}</span>
+                            </div>
                         </div>
                     ))}
                 </motion.div>

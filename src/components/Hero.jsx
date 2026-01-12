@@ -54,8 +54,9 @@ const Hero = () => {
 
                         <motion.h1
                             variants={itemVariants}
-                            className={`text-4xl sm:text-6xl md:text-8xl font-black mb-6 tracking-tighter leading-[1] md:leading-[0.9] ${isDarkMode ? 'text-white text-glow' : 'text-slate-900'}`}
+                            className={`text-5xl sm:text-7xl md:text-8xl font-black mb-6 tracking-tighter leading-[0.9] ${isDarkMode ? 'text-white text-glow' : 'text-slate-900'}`}
                         >
+                            <span className="block text-2xl md:text-3xl font-bold tracking-[0.2em] uppercase opacity-50 mb-4">Initialising Protocol:</span>
                             Hello, I'm{' '}
                             <span className="gradient-text">
                                 Ritesh Kumar
@@ -76,12 +77,12 @@ const Hero = () => {
 
                         <motion.p
                             variants={itemVariants}
-                            className={`text-base sm:text-lg md:text-xl mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
+                            className={`text-base sm:text-lg md:text-xl mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
                         >
                             Computer Science & Engineering Student
                             <br />
-                            <span className="text-indigo-600 font-bold">
-                                Web Developer | AI & ML Enthusiast
+                            <span className="text-indigo-600 font-extrabold flex items-center justify-center lg:justify-start gap-2">
+                                <span className="w-8 h-[2px] bg-indigo-600" /> Web Developer | AI & ML Enthusiast
                             </span>
                         </motion.p>
 
@@ -95,7 +96,7 @@ const Hero = () => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                View My Work
+                                [ EXPLORE ARCHIVE ]
                             </motion.a>
                             <motion.a
                                 href="/Ritesh_Kumar_Resume.pdf"
@@ -104,7 +105,7 @@ const Hero = () => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                📄 Download Resume
+                                📄 DOWNLOAD CV
                             </motion.a>
                         </motion.div>
 
@@ -114,17 +115,17 @@ const Hero = () => {
                             className="flex gap-4 justify-center lg:justify-start"
                         >
                             {[
-                                { icon: FaGithub, href: 'https://github.com/RiteshKumar2e', label: 'GitHub', color: isDarkMode ? 'hover:text-white' : 'hover:text-black' },
-                                { icon: FaLinkedin, href: 'https://www.linkedin.com/in/ritesh-kumar-b5a1a0257/', label: 'LinkedIn', color: 'hover:text-blue-500' },
-                                { icon: FaEnvelope, href: 'mailto:riteshkumar90359@gmail.com', label: 'Email', color: 'hover:text-red-500' }
+                                { icon: FaGithub, href: 'https://github.com/RiteshKumar2e', label: 'GitHub', color: isDarkMode ? 'hover:text-white hover:bg-white/20' : 'hover:text-black hover:bg-black/5' },
+                                { icon: FaLinkedin, href: 'https://www.linkedin.com/in/ritesh-kumar-b5a1a0257/', label: 'LinkedIn', color: 'hover:text-white hover:bg-blue-600' },
+                                { icon: FaEnvelope, href: 'mailto:riteshkumar90359@gmail.com', label: 'Email', color: 'hover:text-white hover:bg-red-500' }
                             ].map((social, index) => (
                                 <motion.a
                                     key={index}
                                     href={social.href}
                                     target={social.href.startsWith('http') ? '_blank' : '_self'}
                                     rel="noopener noreferrer"
-                                    className={`w-14 h-14 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-500 shadow-lg cyber-card-glow' : 'bg-white border-slate-100 shadow-sm text-slate-400'} ${social.color}`}
-                                    whileHover={{ scale: 1.1, y: -4 }}
+                                    className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-2xl transition-all duration-500 border ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-500' : 'bg-white border-slate-100 shadow-sm text-slate-400'} ${social.color}`}
+                                    whileHover={{ scale: 1.1, y: -4, rotate: 8 }}
                                     whileTap={{ scale: 0.9 }}
                                     aria-label={social.label}
                                 >
@@ -134,65 +135,87 @@ const Hero = () => {
                         </motion.div>
                     </motion.div>
 
-                    {/* Right Content - Clean Interactive Profile Visual */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, delay: 0.4 }}
-                        className="relative hidden lg:block"
-                    >
-                        <div className="relative w-full aspect-square max-w-[500px] mx-auto">
-                            {/* Static Decorative Orbs - Light and Fast */}
-                            <motion.div
-                                className={`absolute top-10 right-10 w-64 h-64 rounded-full blur-3xl animate-pulse ${isDarkMode ? 'bg-indigo-600/30' : 'bg-indigo-100/60'}`}
-                            />
-                            <motion.div
-                                className={`absolute bottom-10 left-10 w-72 h-72 rounded-full blur-3xl ${isDarkMode ? 'bg-purple-600/30' : 'bg-purple-100/60'}`}
-                            />
+                    {/* Right Content - Advanced HUD Visual */}
+                    <div className="relative hidden lg:block">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 1 }}
+                            className="relative w-full aspect-square max-w-[550px] mx-auto p-8"
+                        >
+                            {/* HUD Ring */}
+                            <svg className="absolute inset-0 w-full h-full animate-[spin_20s_linear_infinite] opacity-20" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 4" className={isDarkMode ? 'text-indigo-500' : 'text-indigo-200'} />
+                                <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="0.25" strokeDasharray="1 2" className={isDarkMode ? 'text-purple-500' : 'text-purple-200'} />
+                            </svg>
 
-                            {/* Main Profile Frame - Premium Glassmorphism */}
-                            <div className={`relative z-10 w-full h-full p-4 rounded-[60px] border backdrop-blur-md shadow-2xl overflow-hidden shine-effect transition-colors duration-700 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'bg-white/20 border-white/60'}`}>
-                                <div className={`w-full h-full rounded-[44px] flex items-center justify-center p-12 text-center transition-colors duration-700 ${isDarkMode ? 'bg-slate-900/60 border border-white/5' : 'bg-white/80 border border-white'}`}>
-                                    <div className="space-y-6">
-                                        <div className={`w-24 h-24 rounded-3xl shadow-lg flex items-center justify-center mx-auto border ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-indigo-50 border-indigo-100'}`}>
-                                            <span className="text-4xl">🚀</span>
+                            {/* Main Interactive HUD Box */}
+                            <div className={`group relative z-10 w-full h-full p-1 rounded-[48px] overflow-hidden transition-all duration-700 ${isDarkMode ? 'cyber-card-glow' : 'shadow-2xl'}`}>
+                                <div className={`absolute inset-0 transition-opacity duration-700 ${isDarkMode ? 'bg-gradient-to-br from-indigo-600/20 to-purple-600/20' : 'bg-gradient-to-br from-indigo-50 to-purple-50'}`} />
+
+                                <div className={`relative w-full h-full rounded-[47px] backdrop-blur-3xl p-10 flex flex-col items-center justify-center text-center gap-8 border transition-colors ${isDarkMode ? 'bg-slate-900/60 border-white/10' : 'bg-white/90 border-white'}`}>
+                                    {/* Tech Icon with Glow */}
+                                    <div className="relative">
+                                        <div className={`w-32 h-32 rounded-[32px] flex items-center justify-center text-5xl shadow-2xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12 ${isDarkMode ? 'bg-slate-800 border-white/10 rotate-3' : 'bg-indigo-50 border-indigo-100'}`}>
+                                            🚀
                                         </div>
-                                        <div>
-                                            <h3 className={`text-3xl font-black mb-2 leading-tight ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Innovating the Digital Frontier.</h3>
-                                            <p className={`font-bold text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Deploying scalable AI solutions and modern web architectures with precision.</p>
+                                        {/* Scanner Line Animation */}
+                                        <div className="absolute inset-0 overflow-hidden rounded-[32px] pointer-events-none">
+                                            <motion.div
+                                                className="w-full h-1 bg-indigo-500/50 blur-[2px]"
+                                                animate={{ top: ['0%', '100%', '0%'] }}
+                                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                            />
                                         </div>
-                                        <div className="flex justify-center gap-3">
-                                            <span className="px-4 py-1.5 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-indigo-500/20">Architect</span>
-                                            <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg ${isDarkMode ? 'bg-white text-slate-900' : 'bg-slate-900 text-white'}`}>Developer</span>
-                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <h3 className={`text-4xl font-black tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
+                                            CORE OPERATIVE
+                                        </h3>
+                                        <p className={`text-sm font-bold uppercase tracking-[0.2em] px-4 py-2 border rounded-full transition-colors ${isDarkMode ? 'text-indigo-400 border-indigo-500/30 bg-indigo-500/5' : 'text-indigo-600 border-indigo-100 bg-indigo-50'}`}>
+                                            System Architect & Developer
+                                        </p>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4 w-full">
+                                        {[
+                                            { label: 'Neural Accuracy', val: '99.7%' },
+                                            { label: 'System Uptime', val: '100%' }
+                                        ].map((stat, i) => (
+                                            <div key={i} className={`p-4 rounded-2xl border ${isDarkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'}`}>
+                                                <div className={`text-[10px] font-black uppercase tracking-widest opacity-50 mb-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{stat.label}</div>
+                                                <div className={`text-xl font-black ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{stat.val}</div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Floating Tech Insight Labels */}
+                            {/* Floating Metadata Labels */}
                             <motion.div
-                                className={`absolute -top-4 -right-4 p-5 rounded-[28px] shadow-2xl border z-20 ${isDarkMode ? 'bg-slate-900/90 border-white/10 backdrop-blur-md' : 'bg-white/90 border-white'}`}
-                                animate={{ y: [0, -10, 0] }}
+                                className={`absolute top-0 -left-12 p-4 rounded-2xl border backdrop-blur-xl shadow-2xl z-20 ${isDarkMode ? 'bg-slate-900/90 border-indigo-500/30 text-indigo-400' : 'bg-white border-indigo-100 text-indigo-600'}`}
+                                animate={{ y: [0, -15, 0] }}
                                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 bg-indigo-500 rounded-full animate-ping" />
-                                    <span className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Neural Engines Active</span>
+                                <div className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                                    AI Engine Live
                                 </div>
                             </motion.div>
 
                             <motion.div
-                                className={`absolute bottom-10 -left-10 p-5 rounded-[28px] shadow-2xl border z-20 ${isDarkMode ? 'bg-slate-900/90 border-white/10 backdrop-blur-md' : 'bg-white/90 border-white'}`}
-                                animate={{ y: [0, 10, 0] }}
+                                className={`absolute bottom-0 -right-12 p-4 rounded-2xl border backdrop-blur-xl shadow-2xl z-20 ${isDarkMode ? 'bg-slate-900/90 border-purple-500/30 text-purple-400' : 'bg-white border-purple-100 text-purple-600'}`}
+                                animate={{ y: [0, 15, 0] }}
                                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                             >
-                                <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 bg-purple-500 rounded-full" />
-                                    <span className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Quantum Ops Verified</span>
+                                <div className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                                    Fullstack Ready
                                 </div>
                             </motion.div>
-                        </div>
-                    </motion.div>
+                        </motion.div>
+                    </div>
                 </div>
             </div>
 
