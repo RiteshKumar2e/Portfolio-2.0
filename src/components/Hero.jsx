@@ -63,7 +63,7 @@ const Hero = () => {
                             </span>
                         </motion.h1>
 
-                        {/* Mobile Only Avatar Visual */}
+                        {/* Mobile Only Avatar Visual - Reverted to Rocket as per user request */}
                         <motion.div
                             variants={itemVariants}
                             className="lg:hidden flex justify-center mb-8"
@@ -135,7 +135,7 @@ const Hero = () => {
                         </motion.div>
                     </motion.div>
 
-                    {/* Right Content - Advanced HUD Visual */}
+                    {/* Right Content - Reverted to Rocket HUD as per user request */}
                     <div className="relative hidden lg:block">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8 }}
