@@ -38,7 +38,7 @@ function VolumetricSmoke() {
         particles.forEach((p, i) => {
             p.position.add(p.velocity);
 
-            // Reset particles that drift too far
+
             if (p.position.y > 30) {
                 p.position.y = -30;
                 p.position.x = (Math.random() - 0.5) * 80;
