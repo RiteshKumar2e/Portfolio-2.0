@@ -45,7 +45,7 @@ function VolumetricSmoke() {
                 p.position.z = (Math.random() - 0.5) * 60;
             }
 
-            // Gentle swirling motion
+
             const time = state.clock.getElapsedTime();
             p.position.x += Math.sin(time * 0.2 + i) * 0.01;
             p.position.z += Math.cos(time * 0.2 + i) * 0.01;
