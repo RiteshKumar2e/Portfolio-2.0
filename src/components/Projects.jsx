@@ -10,11 +10,11 @@ const ProjectCard = ({ project, index }) => {
     const y = useMotionValue(0);
 
     // Optimized spring settings for performance (lower stiffness/damping to reduce frequent updates)
-    const mouseXSpring = useSpring(x, { stiffness: 60, damping: 20 });
-    const mouseYSpring = useSpring(y, { stiffness: 60, damping: 20 });
+    const mouseXSpring = useSpring(x, { stiffness: 40, damping: 25 });
+    const mouseYSpring = useSpring(y, { stiffness: 40, damping: 25 });
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["3deg", "-3deg"]);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-3deg", "3deg"]);
 
     const handleMouseMove = (e) => {
         if (window.innerWidth < 1024) return; // Disable for tablets & mobile
@@ -59,7 +59,7 @@ const ProjectCard = ({ project, index }) => {
                     <motion.div
                         className="absolute inset-x-0 h-[3px] bg-white/30 blur-[3px] z-10"
                         animate={{ top: ['0%', '100%', '0%'] }}
-                        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
                     />
 
                     <div className="relative z-10 text-7xl sm:text-8xl group-hover:scale-110 transition-transform duration-1000 filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.4)]">

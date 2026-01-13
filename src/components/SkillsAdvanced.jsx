@@ -12,7 +12,7 @@ const SkillSegment = ({ level, color, isDarkMode, inView, skillIndex }) => {
         <div className="relative">
             {/* Track Background */}
             <div className={`h-4 rounded-lg overflow-hidden flex gap-1 p-[2px] ${isDarkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
-                {[...Array(20)].map((_, i) => (
+                {[...Array(10)].map((_, i) => (
                     <div key={i} className={`flex-1 rounded-[1px] ${isDarkMode ? 'bg-white/5' : 'bg-white'}`} />
                 ))}
             </div>
@@ -22,15 +22,15 @@ const SkillSegment = ({ level, color, isDarkMode, inView, skillIndex }) => {
                 className="absolute inset-x-0 top-0 h-4 flex gap-1 p-[2px] pointer-events-none"
                 initial={{ width: 0 }}
                 animate={inView ? { width: `${level}%` } : { width: 0 }}
-                transition={{ duration: 1, ease: "easeOut", delay: 0.2 + (skillIndex * 0.05) }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 + (skillIndex * 0.05) }}
             >
-                {[...Array(20)].map((_, i) => (
+                {[...Array(10)].map((_, i) => (
                     <div
                         key={i}
                         className="flex-1 rounded-[1px] transition-colors duration-500"
                         style={{
-                            backgroundColor: i < (level / 5) ? color : 'transparent',
-                            boxShadow: i < (level / 5) ? `0 0 8px ${color}60` : 'none'
+                            backgroundColor: i < (level / 10) ? color : 'transparent',
+                            boxShadow: i < (level / 10) ? `0 0 6px ${color}40` : 'none'
                         }}
                     />
                 ))}

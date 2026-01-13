@@ -33,17 +33,16 @@ function AppContent() {
         const sections = document.querySelectorAll('section');
         sections.forEach(section => {
             gsap.fromTo(section,
-                { opacity: 0, y: 100 },
+                { opacity: 0, y: 50 },
                 {
                     opacity: 1,
                     y: 0,
-                    duration: 1.5,
-                    ease: 'expo.out',
+                    duration: 0.8,
+                    ease: 'power2.out',
                     scrollTrigger: {
                         trigger: section,
-                        start: 'top 85%',
-                        end: 'top 20%',
-                        toggleActions: 'play none none reverse'
+                        start: 'top 90%',
+                        toggleActions: 'play none none none'
                     }
                 }
             );
@@ -54,11 +53,11 @@ function AppContent() {
 
     return (
         <ReactLenis root options={{
-            lerp: 0.1,
-            duration: 1.2,
-            smoothTouch: true,
-            wheelMultiplier: 1,
-            touchMultiplier: 2,
+            lerp: 0.05,
+            duration: 0.8,
+            smoothTouch: false,
+            wheelMultiplier: 0.8,
+            touchMultiplier: 1.5,
         }}>
             <div className={`transition-colors duration-700 bg-transparent ${isDarkMode ? 'text-white' : 'text-slate-900'} selection:bg-indigo-600 selection:text-white pb-20 overflow-x-hidden`}>
                 <AnimatePresence mode="wait">
@@ -82,9 +81,9 @@ function AppContent() {
                                 <div className="space-y-40 md:space-y-72">
                                     <About />
                                     <Experience />
-                                    <Achievements />
-                                    <SkillsAdvanced />
                                     <Projects />
+                                    <SkillsAdvanced />
+                                    <Achievements />
                                     <Contact />
                                 </div>
                             </main>

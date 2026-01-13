@@ -7,7 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 
 function VolumetricSmoke() {
     const smokeRef = useRef();
-    const count = 300;
+    const count = 80; // Reduced from 300
 
     const particles = useMemo(() => {
         const temp = [];
@@ -97,7 +97,7 @@ function VolumetricSmoke() {
 
 function AdvancedTechPlexus() {
     const pointsRef = useRef();
-    const count = 150;
+    const count = 50; // Reduced from 150
 
     const [particles, connections] = useMemo(() => {
         const temp = [];
@@ -318,15 +318,15 @@ function EnhancedInfiniteGrid() {
 function AdvancedFloatingArtifacts() {
     return (
         <group>
-            {[...Array(5)].map((_, i) => (
+            {[...Array(3)].map((_, i) => (
                 <Float
                     key={i}
                     speed={1.5 + Math.random()}
-                    rotationIntensity={2}
-                    floatIntensity={3}
+                    rotationIntensity={1}
+                    floatIntensity={2}
                     position={[(Math.random() - 0.5) * 50, (Math.random() - 0.5) * 25, -20 - Math.random() * 20]}
                 >
-                    <TorusKnot args={[1.2, 0.3, 128, 16]} castShadow>
+                    <TorusKnot args={[1.2, 0.3, 64, 8]}>
                         <meshPhysicalMaterial
                             color={i % 2 === 0 ? "#818cf8" : "#a78bfa"}
                             roughness={0.1}
@@ -341,8 +341,8 @@ function AdvancedFloatingArtifacts() {
                 </Float>
             ))}
 
-            <Float speed={1} rotationIntensity={0.5} floatIntensity={2} position={[20, 12, -25]}>
-                <Icosahedron args={[3.5, 1]} castShadow>
+            <Float speed={1} rotationIntensity={0.3} floatIntensity={1.5} position={[20, 12, -25]}>
+                <Icosahedron args={[3.5, 0]}>
                     <meshPhysicalMaterial
                         color="#c084fc"
                         roughness={0.05}
@@ -357,14 +357,14 @@ function AdvancedFloatingArtifacts() {
                 </Icosahedron>
             </Float>
 
-            <Float speed={1.2} rotationIntensity={0.8} floatIntensity={2.5} position={[-20, 8, -30]}>
-                <Sphere args={[2, 32, 32]} castShadow>
+            <Float speed={1.2} rotationIntensity={0.5} floatIntensity={2} position={[-20, 8, -30]}>
+                <Sphere args={[2, 16, 16]}>
                     <MeshDistortMaterial
                         color="#6366f1"
                         transparent
                         opacity={0.25}
-                        distort={0.6}
-                        speed={3}
+                        distort={0.4}
+                        speed={2}
                         roughness={0.2}
                         metalness={0.8}
                         emissive="#4f46e5"
@@ -386,13 +386,13 @@ function EnhancedEnergyField() {
     });
 
     return (
-        <Sphere ref={mesh} args={[45, 128, 128]} scale={[-1, 1, 1]}>
+        <Sphere ref={mesh} args={[45, 64, 64]} scale={[-1, 1, 1]}>
             <MeshDistortMaterial
                 color="#050314"
                 transparent
                 opacity={0.9}
-                distort={0.5}
-                speed={2.5}
+                distort={0.3}
+                speed={1.5}
                 side={THREE.BackSide}
                 roughness={0.8}
             />
@@ -456,25 +456,15 @@ const DarkEnvironment = () => (
         <fogExp2 attach="fog" args={['#0a0118', 0.018]} />
 
         {/* Enhanced star field */}
-        <Stars radius={200} depth={80} count={8000} factor={5} fade speed={1.5} />
+        <Stars radius={200} depth={80} count={2000} factor={4} fade speed={1} />
 
         {/* Ambient and directional lighting */}
         <ambientLight intensity={0.15} />
-        <directionalLight position={[10, 20, 10]} intensity={1} color="#818cf8" castShadow />
+        <directionalLight position={[10, 20, 10]} intensity={1} color="#818cf8" />
 
         {/* Accent lights */}
         <pointLight position={[15, 15, 15]} intensity={3} color="#a78bfa" />
         <pointLight position={[-15, 10, 10]} intensity={2.5} color="#6366f1" />
-        <spotLight
-            position={[0, 60, 0]}
-            angle={0.4}
-            penumbra={1}
-            intensity={3}
-            castShadow
-            color="#4f46e5"
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
-        />
 
         <Suspense fallback={null}>
             <VolumetricSmoke />
@@ -483,11 +473,6 @@ const DarkEnvironment = () => (
             <AdvancedFloatingArtifacts />
             <EnhancedEnergyField />
             <EnergyCoreGlow />
-
-            {/* Floating smoke clouds */}
-            <FloatingSmokeCloud position={[-25, 5, -30]} />
-            <FloatingSmokeCloud position={[25, 8, -35]} />
-            <FloatingSmokeCloud position={[0, 15, -40]} />
         </Suspense>
     </>
 );
@@ -526,16 +511,15 @@ const LayoutBackground = () => {
     return (
         <div className={`fixed inset-0 -z-50 w-full h-full pointer-events-none transition-all duration-1000 ${isDarkMode ? 'bg-[#000000]' : 'bg-[#f8fafc]'}`}>
             <Canvas
-                shadows
                 camera={{ position: [0, 8, 55], fov: 50 }}
                 gl={{
-                    antialias: true,
+                    antialias: false,
                     alpha: true,
                     powerPreference: 'high-performance',
                     toneMapping: THREE.ACESFilmicToneMapping,
                     toneMappingExposure: 1.2
                 }}
-                dpr={[1, 2]}
+                dpr={[1, 1.5]}
             >
                 {isDarkMode ? <DarkEnvironment /> : <LightEnvironment />}
                 <Rig />
