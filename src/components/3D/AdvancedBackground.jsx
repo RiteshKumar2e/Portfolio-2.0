@@ -94,7 +94,7 @@ function VolumetricSmoke() {
     );
 }
 
-// --- ENHANCED TECH PLEXUS WITH GLOW ---
+
 function AdvancedTechPlexus() {
     const pointsRef = useRef();
     const count = 150;
