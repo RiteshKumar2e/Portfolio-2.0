@@ -4,7 +4,7 @@ import { Float, Sphere, MeshDistortMaterial, Points, PointMaterial, Stars, Icosa
 import * as THREE from 'three';
 import { useTheme } from '../../context/ThemeContext';
 
-// --- ADVANCED VOLUMETRIC SMOKE PARTICLES ---
+
 function VolumetricSmoke() {
     const smokeRef = useRef();
     const count = 300;
