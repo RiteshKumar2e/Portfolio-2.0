@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { ExternalLink, Code2, Globe, Github as LucidGithub } from 'lucide-react';
+import {
+    ExternalLink, Code2, Globe, Github as LucidGithub,
+    Bot, Cpu, Brain, FileCheck, LayoutDashboard, ShoppingBag,
+    ShieldCheck, ScanSearch
+} from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 const ProjectCard = ({ project, index }) => {
@@ -136,7 +140,7 @@ const Projects = () => {
             gradient: 'from-indigo-600 via-indigo-500 to-purple-600',
             github: 'https://github.com/RiteshKumar2e/customer-complaint-agent_new',
             demo: 'https://riteshkr.online',
-            icon: '⚡'
+            icon: <Bot className="w-16 h-16 text-white" />
         },
         {
             title: 'Steel Surface Defect Detection',
@@ -145,7 +149,7 @@ const Projects = () => {
             gradient: 'from-blue-600 via-blue-500 to-cyan-500',
             github: 'https://github.com/RiteshKumar2e/Steel_Surface_Defect',
             demo: '#',
-            icon: '👁️'
+            icon: <ScanSearch className="w-16 h-16 text-white" />
         },
         {
             title: 'Age Gender Prediction',
@@ -154,7 +158,7 @@ const Projects = () => {
             gradient: 'from-emerald-500 via-teal-500 to-teal-600',
             github: 'https://github.com/RiteshKumar2e/AGE_GENDER_PREDECTION',
             demo: '#',
-            icon: '🧬'
+            icon: <Cpu className="w-16 h-16 text-white" />
         },
         {
             title: 'Combat Online Plagiarism',
@@ -163,7 +167,7 @@ const Projects = () => {
             gradient: 'from-rose-500 via-pink-500 to-pink-600',
             github: 'https://github.com/RiteshKumar2e/Combat-Online-Plagiarism-with-AI',
             demo: '#',
-            icon: '🧠'
+            icon: <FileCheck className="w-16 h-16 text-white" />
         },
         {
             title: 'Sentiment Analysis Pipeline',
@@ -172,7 +176,7 @@ const Projects = () => {
             gradient: 'from-amber-500 via-orange-500 to-orange-600',
             github: 'https://github.com/RiteshKumar2e/Sentiment-Analysis',
             demo: '#',
-            icon: '🌍'
+            icon: <LayoutDashboard className="w-16 h-16 text-white" />
         },
         {
             title: 'Black Friday Sales Model',
@@ -181,7 +185,7 @@ const Projects = () => {
             gradient: 'from-blue-500 via-indigo-500 to-indigo-600',
             github: 'https://github.com/RiteshKumar2e/Black-Friday-Sales-Prediction',
             demo: '#',
-            icon: '📉'
+            icon: <ShoppingBag className="w-16 h-16 text-white" />
         }
     ];
 
