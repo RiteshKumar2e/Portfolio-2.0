@@ -33,7 +33,7 @@ const About = () => {
     };
 
     return (
-        <section id="about" className={`section-container relative transition-colors duration-700 ${isDarkMode ? 'bg-transparent' : 'bg-transparent'}`}>
+        <section id="about" className={`py-12 px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto relative transition-colors duration-700 ${isDarkMode ? 'bg-transparent' : 'bg-transparent'}`}>
             <motion.div
                 ref={ref}
                 variants={containerVariants}

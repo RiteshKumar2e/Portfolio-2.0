@@ -65,7 +65,7 @@ function AppContent() {
                 <div className="blur-overlay blur-purple" />
                 <div className="blur-overlay blur-indigo" />
 
-                <div className={`transition-colors duration-700 bg-transparent ${isDarkMode ? 'text-white' : 'text-slate-900'} pb-20 overflow-x-hidden`}>
+                <div className={`transition-colors duration-700 bg-transparent ${isDarkMode ? 'text-white' : 'text-slate-900'} pb-0 overflow-x-hidden`}>
                     <AnimatePresence mode="wait">
                         {isLoading ? (
                             <LoadingScreen key="loader" />
@@ -82,9 +82,9 @@ function AppContent() {
                                 </Suspense>
                                 <ScrollProgress />
                                 <ScrollToTop />
-                                <main className="relative z-10 w-full px-4 md:px-0">
+                                <main className="relative z-10 w-full px-0">
                                     <Hero />
-                                    <div className="space-y-40 md:space-y-72 lg:space-y-96">
+                                    <div className="space-y-10 md:space-y-16 lg:space-y-20">
                                         <About />
                                         <Experience />
                                         <Projects />

@@ -74,7 +74,7 @@ const Contact = () => {
     ];
 
     return (
-        <section id="contact" className={`py-32 relative overflow-hidden transition-colors duration-700 ${isDarkMode ? 'bg-transparent' : 'bg-white'}`}>
+        <section id="contact" className={`py-12 relative overflow-hidden transition-colors duration-700 ${isDarkMode ? 'bg-transparent' : 'bg-white'}`}>
             {/* Artistic Background blobs */}
             <div className={`absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2 opacity-60 ${isDarkMode ? 'bg-indigo-900/20' : 'bg-indigo-50'}`} />
             <div className={`absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px] -z-10 -translate-x-1/2 translate-y-1/2 opacity-40 ${isDarkMode ? 'bg-purple-900/20' : 'bg-purple-50'}`} />

@@ -31,7 +31,7 @@ const Hero = () => {
     };
 
     return (
-        <section id="home" className="relative min-h-[110vh] flex items-center justify-center pt-20 overflow-visible">
+        <section id="home" className="relative min-h-screen flex items-center justify-center pt-10 overflow-visible">
             <div className="container-custom relative z-10">
                 <div className="grid lg:grid-cols-2 gap-16 items-center">
                     {/* Left Content */}
@@ -193,3 +193,4 @@ const Hero = () => {
 };
 
 export default Hero;
+
