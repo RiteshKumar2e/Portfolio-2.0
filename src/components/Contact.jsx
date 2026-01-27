@@ -79,58 +79,37 @@ const Contact = () => {
             <div className={`absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2 opacity-60 ${isDarkMode ? 'bg-indigo-900/20' : 'bg-indigo-50'}`} />
             <div className={`absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px] -z-10 -translate-x-1/2 translate-y-1/2 opacity-40 ${isDarkMode ? 'bg-purple-900/20' : 'bg-purple-50'}`} />
 
-            <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10" ref={ref}>
-                <div className="grid lg:grid-cols-2 gap-20 items-start">
-
-                    {/* Left side: Info & Context */}
+            <div className="container-custom relative z-10" ref={ref}>
+                <div className="grid lg:grid-cols-2 gap-20 items-center">
+                    {/* Left Side: Text Content */}
                     <div className="space-y-12">
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             animate={inView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: 0.8 }}
                         >
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-4 px-1">Network & Connect</h4>
-                            <h2 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter mb-8 leading-[0.9]">
-                                Let's build the <span className="gradient-text">Next Gen</span>
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-4 px-1">Transmission Channel</h4>
+                            <h2 className={`text-6xl md:text-7xl font-black tracking-tighter mb-8 leading-[0.9] ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                Let's build the <br /> <span className="text-gradient">Next Gen</span>
                             </h2>
-                            <p className="text-slate-500 text-lg font-medium leading-relaxed max-w-md">
+                            <p className={`text-xl font-medium leading-relaxed max-w-md ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                                 I'm excited to hear about your projects and ideas. Whether it's AI, Full-Stack, or anything tech, let's make it real.
                             </p>
+                            <div className="h-1 w-20 bg-indigo-600 rounded-full mt-10" />
                         </motion.div>
-
-                        <div className="grid sm:grid-cols-2 gap-6">
-                            {contactInfo.map((info, idx) => (
-                                <motion.a
-                                    key={idx}
-                                    href={info.link || '#'}
-                                    target={info.link && info.link.startsWith('http') ? '_blank' : '_self'}
-                                    rel={info.link && info.link.startsWith('http') ? 'noopener noreferrer' : ''}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                    className={`p-8 border rounded-[32px] transition-all duration-500 group ${isDarkMode ? 'bg-slate-900/40 border-white/10 hover:border-indigo-500/50 hover:bg-slate-800/60 cyber-card-glow' : 'bg-white/40 backdrop-blur-xl border-slate-100 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-2'}`}
-                                >
-                                    <div className={`${info.color} text-2xl mb-6 group-hover:scale-110 transition-transform duration-500 ${isDarkMode && info.color === 'text-slate-900' ? 'text-white' : ''}`}>
-                                        <info.icon />
-                                    </div>
-                                    <div className={`text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{info.label}</div>
-                                    <div className={`text-sm font-black break-all ${isDarkMode ? 'text-slate-300' : 'text-slate-800'}`}>{info.value}</div>
-                                </motion.a>
-                            ))}
-                        </div>
                     </div>
 
-                    {/* Right side: Modern Form */}
+                    {/* Right Side: Modern Form */}
                     <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={inView ? { opacity: 1, y: 0 } : {}}
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={inView ? { opacity: 1, x: 0 } : {}}
                         transition={{ duration: 0.8 }}
-                        className="relative"
+                        className="relative w-full"
                     >
                         {/* Decorative background for form */}
                         <div className={`absolute -inset-4 rounded-[50px] -z-10 blur-2xl opacity-50 ${isDarkMode ? 'bg-indigo-500/10' : 'bg-gradient-to-tr from-indigo-50 to-purple-50'}`} />
 
-                        <div className={`p-8 md:p-12 rounded-[48px] border transition-all duration-500 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'bg-white/70 backdrop-blur-2xl border-white/50 shadow-2xl shadow-slate-200/50'}`}>
+                        <div className={`p-8 md:p-12 rounded-[48px] border transition-all duration-500 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'glass-card border-white/50 shadow-2xl shadow-slate-200/50'}`}>
                             <form onSubmit={handleSubmit} className="space-y-8">
                                 <div className="grid md:grid-cols-2 gap-8">
                                     <div className="space-y-3">
