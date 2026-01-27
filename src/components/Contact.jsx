@@ -109,11 +109,11 @@ const Contact = () => {
                         {/* Decorative background for form */}
                         <div className={`absolute -inset-4 rounded-[50px] -z-10 blur-2xl opacity-50 ${isDarkMode ? 'bg-indigo-500/10' : 'bg-gradient-to-tr from-indigo-50 to-purple-50'}`} />
 
-                        <div className={`p-8 md:p-12 rounded-[48px] border transition-all duration-500 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'glass-card border-white/50 shadow-2xl shadow-slate-200/50'}`}>
+                        <div className={`p-8 md:p-12 rounded-[48px] border transition-all duration-500 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'bg-white border-slate-200 shadow-2xl shadow-indigo-100/50'}`}>
                             <form onSubmit={handleSubmit} className="space-y-8">
                                 <div className="grid md:grid-cols-2 gap-8">
                                     <div className="space-y-3">
-                                        <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Identity</label>
+                                        <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Identity</label>
                                         <input
                                             type="text"
                                             name="name"
@@ -121,11 +121,11 @@ const Contact = () => {
                                             onChange={handleChange}
                                             required
                                             placeholder="Your name"
-                                            className={`w-full px-8 py-5 rounded-3xl border-none focus:ring-4 focus:ring-indigo-500/10 transition-all font-bold ${isDarkMode ? 'bg-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 text-slate-700 placeholder:text-slate-300'}`}
+                                            className={`w-full px-8 py-5 rounded-3xl border transition-all font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
                                         />
                                     </div>
                                     <div className="space-y-3">
-                                        <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Digital Address</label>
+                                        <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Email Address</label>
                                         <input
                                             type="email"
                                             name="email"
@@ -133,13 +133,13 @@ const Contact = () => {
                                             onChange={handleChange}
                                             required
                                             placeholder="hello@example.com"
-                                            className={`w-full px-8 py-5 rounded-3xl border-none focus:ring-4 focus:ring-indigo-500/10 transition-all font-bold ${isDarkMode ? 'bg-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 text-slate-700 placeholder:text-slate-300'}`}
+                                            className={`w-full px-8 py-5 rounded-3xl border transition-all font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
-                                    <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Objective</label>
+                                    <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Subject</label>
                                     <input
                                         type="text"
                                         name="subject"
@@ -147,12 +147,12 @@ const Contact = () => {
                                         onChange={handleChange}
                                         required
                                         placeholder="Project Inquiry / Job Opportunity"
-                                        className={`w-full px-8 py-5 rounded-3xl border-none focus:ring-4 focus:ring-indigo-500/10 transition-all font-bold ${isDarkMode ? 'bg-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 text-slate-700 placeholder:text-slate-300'}`}
+                                        className={`w-full px-8 py-5 rounded-3xl border transition-all font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
                                     />
                                 </div>
 
                                 <div className="space-y-3">
-                                    <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Transmission</label>
+                                    <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Message Transmission</label>
                                     <textarea
                                         name="message"
                                         value={formData.message}
@@ -160,7 +160,7 @@ const Contact = () => {
                                         required
                                         rows="5"
                                         placeholder="What's on your mind?"
-                                        className={`w-full px-8 py-5 rounded-3xl border-none focus:ring-4 focus:ring-indigo-500/10 transition-all font-bold resize-none ${isDarkMode ? 'bg-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 text-slate-700 placeholder:text-slate-300'}`}
+                                        className={`w-full px-8 py-5 rounded-3xl border transition-all font-bold resize-none focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
                                     />
                                 </div>
 

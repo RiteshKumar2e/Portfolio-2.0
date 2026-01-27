@@ -50,11 +50,11 @@ const Hero = () => {
 
                         <motion.div variants={itemVariants} className="space-y-4">
                             <h1 className="text-6xl sm:text-7xl md:text-8xl font-black tracking-tighter leading-[0.85]">
-                                <span className={`block text-xl md:text-2xl font-bold tracking-[0.3em] uppercase mb-4 ${isDarkMode ? 'text-indigo-500/60' : 'text-slate-400'}`}>
+                                <span className={`block text-xl md:text-2xl font-bold tracking-[0.3em] uppercase mb-4 ${isDarkMode ? 'text-indigo-500/60' : 'text-slate-500/60'}`}>
                                     Initialising Protocol:
                                 </span>
                                 Hello! I'm <br />
-                                <span className="text-gradient drop-shadow-2xl">
+                                <span className="text-gradient font-black">
                                     Ritesh Kumar
                                 </span>
                             </h1>
@@ -62,10 +62,10 @@ const Hero = () => {
 
                         <motion.p
                             variants={itemVariants}
-                            className={`text-lg md:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium text-balance ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
+                            className={`text-lg md:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium text-balance ${isDarkMode ? 'text-slate-400' : 'text-slate-700'}`}
                         >
-                            A passionate <span className={isDarkMode ? 'text-white' : 'text-slate-900'}>Computer Science Engineer</span> crafting
-                            intelligent digital experiences at the intersection of <span className="text-indigo-500">Code, Design, & Intelligence.</span>
+                            A passionate <span className={isDarkMode ? 'text-white font-black' : 'text-slate-900 font-black'}>Computer Science Engineer</span> crafting
+                            intelligent digital experiences at the intersection of <span className="text-indigo-600 dark:text-indigo-400 font-bold">Code, Design, & Intelligence.</span>
                         </motion.p>
 
                         <motion.div
