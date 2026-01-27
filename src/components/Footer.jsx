@@ -23,8 +23,8 @@ const Footer = () => {
 
     return (
         <footer className={`relative border-t transition-colors duration-700 ${isDarkMode ? 'bg-transparent border-white/5' : 'bg-white border-slate-100'}`}>
-            <div className="section-container pb-10">
-                <div className="grid md:grid-cols-3 gap-12 mb-16">
+            <div className="container-custom py-12">
+                <div className="grid md:grid-cols-3 gap-10 mb-10">
                     {/* Brand Section */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -104,7 +104,7 @@ const Footer = () => {
                 </div>
 
                 {/* Divider Line */}
-                <div className={`h-px mb-10 ${isDarkMode ? 'bg-white/5' : 'bg-slate-100'}`} />
+                <div className={`h-px mb-8 ${isDarkMode ? 'bg-white/5' : 'bg-slate-100'}`} />
 
                 {/* Bottom Bar */}
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">

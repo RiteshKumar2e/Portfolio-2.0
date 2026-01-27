@@ -1,13 +1,83 @@
 import React, { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Float, Sphere, MeshDistortMaterial, Points, PointMaterial, Stars, Icosahedron, TorusKnot, useTexture } from '@react-three/drei';
+import { Float, Sphere, MeshDistortMaterial, Points, PointMaterial, Stars, Icosahedron, TorusKnot, useTexture, MeshWobbleMaterial, OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
 import { useTheme } from '../../context/ThemeContext';
 
+// --- DEEP SPACE NEBULA ---
+function DeepSpaceNebula() {
+    const groupRef = useRef();
 
-function VolumetricSmoke() {
-    const smokeRef = useRef();
-    const count = 80; // Reduced from 300
+    useFrame((state) => {
+        const time = state.clock.getElapsedTime();
+        groupRef.current.rotation.y = time * 0.05;
+        groupRef.current.rotation.z = time * 0.02;
+    });
+
+    return (
+        <group ref={groupRef}>
+            {[...Array(5)].map((_, i) => (
+                <Float key={i} speed={1 + i} rotationIntensity={2} floatIntensity={2}>
+                    <Sphere args={[15 + i * 5, 32, 32]} position={[0, 0, -20]}>
+                        <MeshDistortMaterial
+                            color={i % 2 === 0 ? "#1e1b4b" : "#312e81"}
+                            transparent
+                            opacity={0.1}
+                            distort={0.4 + i * 0.1}
+                            speed={2}
+                            side={THREE.BackSide}
+                        />
+                    </Sphere>
+                </Float>
+            ))}
+        </group>
+    );
+}
+
+// --- QUANTUM DATA STREAMS ---
+function QuantumDataStreams() {
+    const count = 40;
+    const streams = useMemo(() => {
+        return [...Array(count)].map(() => ({
+            x: (Math.random() - 0.5) * 100,
+            z: (Math.random() - 0.5) * 50 - 20,
+            y: Math.random() * 100 - 50,
+            speed: 0.2 + Math.random() * 0.5,
+            length: 5 + Math.random() * 15,
+            opacity: 0.1 + Math.random() * 0.3
+        }));
+    }, []);
+
+    const streamRefs = useRef([]);
+
+    useFrame(() => {
+        streams.forEach((s, i) => {
+            s.y -= s.speed;
+            if (s.y < -50) s.y = 50;
+        });
+    });
+
+    return (
+        <group>
+            {streams.map((s, i) => (
+                <mesh key={i} position={[s.x, s.y, s.z]}>
+                    <capsuleGeometry args={[0.05, s.length, 4, 8]} />
+                    <meshBasicMaterial
+                        color="#6366f1"
+                        transparent
+                        opacity={s.opacity}
+                        blending={THREE.AdditiveBlending}
+                    />
+                </mesh>
+            ))}
+        </group>
+    );
+}
+
+// --- ADVANCED TECH PLEXUS 2.0 ---
+function AdvancedTechPlexus() {
+    const pointsRef = useRef();
+    const count = 60;
 
     const particles = useMemo(() => {
         const temp = [];
@@ -16,156 +86,49 @@ function VolumetricSmoke() {
                 position: new THREE.Vector3(
                     (Math.random() - 0.5) * 80,
                     (Math.random() - 0.5) * 60,
-                    (Math.random() - 0.5) * 60
+                    (Math.random() - 0.5) * 40 - 20
                 ),
                 velocity: new THREE.Vector3(
-                    (Math.random() - 0.5) * 0.02,
-                    Math.random() * 0.03 + 0.01,
-                    (Math.random() - 0.5) * 0.02
-                ),
-                size: Math.random() * 3 + 1,
-                opacity: Math.random() * 0.4 + 0.1
+                    (Math.random() - 0.5) * 0.05,
+                    (Math.random() - 0.5) * 0.05,
+                    (Math.random() - 0.5) * 0.05
+                )
             });
         }
         return temp;
     }, []);
 
-    useFrame((state) => {
-        const positions = new Float32Array(count * 3);
-        const sizes = new Float32Array(count);
-        const opacities = new Float32Array(count);
-
-        particles.forEach((p, i) => {
-            p.position.add(p.velocity);
-
-
-            if (p.position.y > 30) {
-                p.position.y = -30;
-                p.position.x = (Math.random() - 0.5) * 80;
-                p.position.z = (Math.random() - 0.5) * 60;
-            }
-
-
-            const time = state.clock.getElapsedTime();
-            p.position.x += Math.sin(time * 0.2 + i) * 0.01;
-            p.position.z += Math.cos(time * 0.2 + i) * 0.01;
-
-            positions[i * 3] = p.position.x;
-            positions[i * 3 + 1] = p.position.y;
-            positions[i * 3 + 2] = p.position.z;
-            sizes[i] = p.size;
-            opacities[i] = p.opacity;
-        });
-
-        if (smokeRef.current) {
-            smokeRef.current.geometry.attributes.position.array.set(positions);
-            smokeRef.current.geometry.attributes.position.needsUpdate = true;
-            smokeRef.current.geometry.attributes.size.array.set(sizes);
-            smokeRef.current.geometry.attributes.size.needsUpdate = true;
-        }
-    });
-
-    return (
-        <Points ref={smokeRef}>
-            <bufferGeometry>
-                <bufferAttribute
-                    attach="attributes-position"
-                    count={count}
-                    array={new Float32Array(count * 3)}
-                    itemSize={3}
-                />
-                <bufferAttribute
-                    attach="attributes-size"
-                    count={count}
-                    array={new Float32Array(count)}
-                    itemSize={1}
-                />
-            </bufferGeometry>
-            <pointsMaterial
-                size={2}
-                color="#1e1b4b"
-                transparent
-                opacity={0.3}
-                sizeAttenuation={true}
-                depthWrite={false}
-                blending={THREE.AdditiveBlending}
-            />
-        </Points>
-    );
-}
-
-
-function AdvancedTechPlexus() {
-    const pointsRef = useRef();
-    const count = 50; // Reduced from 150
-
-    const [particles, connections] = useMemo(() => {
-        const temp = [];
-        for (let i = 0; i < count; i++) {
-            temp.push({
-                position: new THREE.Vector3(
-                    (Math.random() - 0.5) * 70,
-                    (Math.random() - 0.5) * 50,
-                    (Math.random() - 0.5) * 50
-                ),
-                velocity: new THREE.Vector3(
-                    (Math.random() - 0.5) * 0.04,
-                    (Math.random() - 0.5) * 0.04,
-                    (Math.random() - 0.5) * 0.04
-                ),
-                pulsePhase: Math.random() * Math.PI * 2
-            });
-        }
-        return [temp, []];
-    }, []);
-
     const lineRef = useRef();
-    const glowPointsRef = useRef();
 
     useFrame((state) => {
-        const time = state.clock.getElapsedTime();
         const positions = new Float32Array(count * 3);
-        const colors = new Float32Array(count * 3);
         const linePositions = [];
         const lineColors = [];
 
         particles.forEach((p, i) => {
             p.position.add(p.velocity);
 
-            // Bounce boundaries
-            if (Math.abs(p.position.x) > 35) p.velocity.x *= -1;
-            if (Math.abs(p.position.y) > 25) p.velocity.y *= -1;
-            if (Math.abs(p.position.z) > 25) p.velocity.z *= -1;
-
-            // Pulsing effect
-            const pulse = Math.sin(time * 2 + p.pulsePhase) * 0.5 + 0.5;
+            if (Math.abs(p.position.x) > 40) p.velocity.x *= -1;
+            if (Math.abs(p.position.y) > 30) p.velocity.y *= -1;
+            if (Math.abs(p.position.z + 20) > 20) p.velocity.z *= -1;
 
             positions[i * 3] = p.position.x;
             positions[i * 3 + 1] = p.position.y;
             positions[i * 3 + 2] = p.position.z;
-
-            // Color gradient based on position
-            const color = new THREE.Color();
-            color.setHSL(0.65 + pulse * 0.1, 0.8, 0.5 + pulse * 0.2);
-            colors[i * 3] = color.r;
-            colors[i * 3 + 1] = color.g;
-            colors[i * 3 + 2] = color.b;
         });
 
-        // Enhanced connections with distance-based opacity
         for (let i = 0; i < count; i++) {
             for (let j = i + 1; j < count; j++) {
                 const dist = particles[i].position.distanceTo(particles[j].position);
-                if (dist < 15) {
+                if (dist < 18) {
                     linePositions.push(
                         particles[i].position.x, particles[i].position.y, particles[i].position.z,
                         particles[j].position.x, particles[j].position.y, particles[j].position.z
                     );
-
-                    const opacity = 1 - (dist / 15);
-                    const lineColor = new THREE.Color(0.4 + opacity * 0.3, 0.3 + opacity * 0.4, 0.9);
-                    lineColors.push(lineColor.r, lineColor.g, lineColor.b);
-                    lineColors.push(lineColor.r, lineColor.g, lineColor.b);
+                    const opacity = 1 - (dist / 18);
+                    const color = new THREE.Color(0.4, 0.4, 1);
+                    lineColors.push(color.r * opacity, color.g * opacity, color.b * opacity);
+                    lineColors.push(color.r * opacity, color.g * opacity, color.b * opacity);
                 }
             }
         }
@@ -173,11 +136,9 @@ function AdvancedTechPlexus() {
         if (pointsRef.current) {
             pointsRef.current.geometry.attributes.position.array.set(positions);
             pointsRef.current.geometry.attributes.position.needsUpdate = true;
-            pointsRef.current.geometry.attributes.color.array.set(colors);
-            pointsRef.current.geometry.attributes.color.needsUpdate = true;
         }
 
-        if (lineRef.current && linePositions.length > 0) {
+        if (lineRef.current) {
             lineRef.current.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
             lineRef.current.geometry.setAttribute('color', new THREE.Float32BufferAttribute(lineColors, 3));
         }
@@ -193,333 +154,275 @@ function AdvancedTechPlexus() {
                         array={new Float32Array(count * 3)}
                         itemSize={3}
                     />
-                    <bufferAttribute
-                        attach="attributes-color"
-                        count={count}
-                        array={new Float32Array(count * 3)}
-                        itemSize={3}
-                    />
                 </bufferGeometry>
                 <pointsMaterial
-                    size={0.6}
-                    vertexColors
+                    size={0.8}
+                    color="#818cf8"
                     transparent
                     opacity={0.8}
-                    sizeAttenuation={true}
-                    depthWrite={false}
+                    sizeAttenuation
                     blending={THREE.AdditiveBlending}
                 />
             </Points>
-
-            {/* Glow effect for points */}
-            <Points ref={glowPointsRef}>
-                <bufferGeometry>
-                    <bufferAttribute
-                        attach="attributes-position"
-                        count={count}
-                        array={new Float32Array(count * 3)}
-                        itemSize={3}
-                    />
-                </bufferGeometry>
-                <pointsMaterial
-                    size={1.5}
-                    color="#6366f1"
-                    transparent
-                    opacity={0.2}
-                    sizeAttenuation={true}
-                    depthWrite={false}
-                    blending={THREE.AdditiveBlending}
-                />
-            </Points>
-
             <lineSegments ref={lineRef}>
                 <bufferGeometry />
-                <lineBasicMaterial
-                    vertexColors
-                    transparent
-                    opacity={0.25}
-                    blending={THREE.AdditiveBlending}
-                />
+                <lineBasicMaterial vertexColors transparent blending={THREE.AdditiveBlending} opacity={0.3} />
             </lineSegments>
         </group>
     );
 }
 
-// --- FLOATING SMOKE CLOUDS ---
-function FloatingSmokeCloud({ position }) {
-    const meshRef = useRef();
-
-    useFrame((state) => {
-        const time = state.clock.getElapsedTime();
-        meshRef.current.rotation.y = time * 0.05;
-        meshRef.current.rotation.z = Math.sin(time * 0.3) * 0.1;
-        meshRef.current.position.y = position[1] + Math.sin(time * 0.5) * 2;
-    });
-
-    return (
-        <mesh ref={meshRef} position={position}>
-            <sphereGeometry args={[8, 32, 32]} />
-            <meshStandardMaterial
-                color="#0f0a1f"
-                transparent
-                opacity={0.15}
-                roughness={1}
-                metalness={0}
-                emissive="#1e1b4b"
-                emissiveIntensity={0.1}
-            />
-        </mesh>
-    );
-}
-
-// --- ENHANCED INFINITE GRID WITH SHADOWS ---
-function EnhancedInfiniteGrid() {
-    const gridRef = useRef();
-    const shadowPlaneRef = useRef();
-
-    useFrame((state) => {
-        const time = state.clock.getElapsedTime();
-        gridRef.current.position.z = (time * 10) % 20;
-
-        // Animate shadow intensity
-        if (shadowPlaneRef.current) {
-            shadowPlaneRef.current.material.opacity = 0.8 + Math.sin(time * 0.5) * 0.2;
-        }
-    });
-
-    return (
-        <group position={[0, -18, 0]}>
-            <group ref={gridRef}>
-                <gridHelper args={[250, 60, '#3730a3', '#1e1b4b']} rotation={[0, 0, 0]} />
-                <gridHelper args={[250, 60, '#3730a3', '#1e1b4b']} rotation={[0, 0, 0]} position={[0, 0, -250]} />
-            </group>
-
-            {/* Shadow plane */}
-            <mesh ref={shadowPlaneRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.1, -50]} receiveShadow>
-                <planeGeometry args={[250, 150]} />
-                <shadowMaterial transparent opacity={0.8} color="#000000" />
-            </mesh>
-
-            {/* Horizon glow with gradient */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -60]}>
-                <planeGeometry args={[250, 120]} />
-                <meshBasicMaterial color="#000000" transparent opacity={1} />
-            </mesh>
-
-            {/* Multiple light sources for depth */}
-            <pointLight position={[0, 8, -50]} intensity={15} color="#6366f1" distance={120} castShadow />
-            <pointLight position={[-30, 5, -40]} intensity={8} color="#8b5cf6" distance={80} />
-            <pointLight position={[30, 5, -40]} intensity={8} color="#3b82f6" distance={80} />
-        </group>
-    );
-}
-
-// --- ADVANCED FLOATING ARTIFACTS WITH SHADOWS ---
-function AdvancedFloatingArtifacts() {
+// --- CRYSTALLINE ARTIFACTS ---
+function CrystallineArtifacts() {
     return (
         <group>
-            {[...Array(3)].map((_, i) => (
-                <Float
-                    key={i}
-                    speed={1.5 + Math.random()}
-                    rotationIntensity={1}
-                    floatIntensity={2}
-                    position={[(Math.random() - 0.5) * 50, (Math.random() - 0.5) * 25, -20 - Math.random() * 20]}
-                >
-                    <TorusKnot args={[1.2, 0.3, 64, 8]}>
+            {[...Array(4)].map((_, i) => (
+                <Float key={i} speed={2} rotationIntensity={1.5} floatIntensity={2} position={[(i - 1.5) * 25, 10, -30]}>
+                    <Icosahedron args={[3, 0]}>
                         <meshPhysicalMaterial
-                            color={i % 2 === 0 ? "#818cf8" : "#a78bfa"}
-                            roughness={0.1}
-                            metalness={0.9}
+                            color="#818cf8"
+                            metalness={1}
+                            roughness={0}
                             transparent
-                            opacity={0.4}
-                            wireframe
-                            emissive={i % 2 === 0 ? "#6366f1" : "#8b5cf6"}
-                            emissiveIntensity={0.3}
+                            opacity={0.3}
+                            transmission={0.5}
+                            thickness={2}
+                            envMapIntensity={2}
                         />
-                    </TorusKnot>
+                    </Icosahedron>
+                    <mesh scale={1.1}>
+                        <Icosahedron args={[3, 0]}>
+                            <meshBasicMaterial color="#6366f1" wireframe transparent opacity={0.1} />
+                        </Icosahedron>
+                    </mesh>
                 </Float>
             ))}
-
-            <Float speed={1} rotationIntensity={0.3} floatIntensity={1.5} position={[20, 12, -25]}>
-                <Icosahedron args={[3.5, 0]}>
-                    <meshPhysicalMaterial
-                        color="#c084fc"
-                        roughness={0.05}
-                        metalness={0.95}
-                        transparent
-                        opacity={0.3}
-                        transmission={0.9}
-                        thickness={3}
-                        emissive="#a855f7"
-                        emissiveIntensity={0.2}
-                    />
-                </Icosahedron>
-            </Float>
-
-            <Float speed={1.2} rotationIntensity={0.5} floatIntensity={2} position={[-20, 8, -30]}>
-                <Sphere args={[2, 16, 16]}>
-                    <MeshDistortMaterial
-                        color="#6366f1"
-                        transparent
-                        opacity={0.25}
-                        distort={0.4}
-                        speed={2}
-                        roughness={0.2}
-                        metalness={0.8}
-                        emissive="#4f46e5"
-                        emissiveIntensity={0.4}
-                    />
-                </Sphere>
-            </Float>
         </group>
     );
 }
 
-// --- DYNAMIC ENERGY FIELD WITH ENHANCED DISTORTION ---
-function EnhancedEnergyField() {
-    const mesh = useRef();
+// --- CYBER GRID WITH ENERGY WAVES ---
+function CyberGrid() {
+    const gridRef = useRef();
+
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
-        mesh.current.rotation.x = time * 0.08;
-        mesh.current.rotation.y = time * 0.12;
+        gridRef.current.position.z = (time * 5) % 40;
     });
 
     return (
-        <Sphere ref={mesh} args={[45, 64, 64]} scale={[-1, 1, 1]}>
-            <MeshDistortMaterial
-                color="#050314"
-                transparent
-                opacity={0.9}
-                distort={0.3}
-                speed={1.5}
-                side={THREE.BackSide}
-                roughness={0.8}
-            />
-        </Sphere>
+        <group position={[0, -20, 0]}>
+            <group ref={gridRef}>
+                <gridHelper args={[200, 40, '#4338ca', '#1e1b4b']} />
+                <gridHelper args={[200, 40, '#4338ca', '#1e1b4b']} position={[0, 0, -200]} />
+            </group>
+
+            {/* Horizontal Glow */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -50]}>
+                <planeGeometry args={[200, 100]} />
+                <meshBasicMaterial color="#000000" transparent opacity={0.8} />
+            </mesh>
+        </group>
     );
 }
 
-// --- CENTRAL ENERGY CORE ---
-function EnergyCoreGlow() {
+// --- ENERGY VORTEX (THE CORE) ---
+function EnergyVortex() {
     const coreRef = useRef();
-    const glowRef = useRef();
+    const ringRef = useRef();
 
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
-        const pulse = Math.sin(time * 2) * 0.3 + 0.7;
-
-        if (coreRef.current) {
-            coreRef.current.scale.setScalar(pulse);
-        }
-        if (glowRef.current) {
-            glowRef.current.scale.setScalar(pulse * 1.5);
-        }
+        coreRef.current.rotation.z = time * 0.5;
+        ringRef.current.rotation.x = time * 0.3;
+        ringRef.current.rotation.y = time * 0.2;
     });
 
     return (
-        <group position={[0, 0, -15]}>
-            {/* Core */}
-            <Sphere ref={coreRef} args={[1.5, 32, 32]}>
-                <meshBasicMaterial color="#6366f1" transparent opacity={0.8} />
-            </Sphere>
-
-            {/* Glow layers */}
-            <Sphere ref={glowRef} args={[2, 32, 32]}>
-                <meshBasicMaterial
-                    color="#818cf8"
-                    transparent
-                    opacity={0.2}
-                    blending={THREE.AdditiveBlending}
+        <group position={[0, 0, -40]}>
+            <Sphere ref={coreRef} args={[5, 64, 64]}>
+                <MeshDistortMaterial
+                    color="#4f46e5"
+                    speed={3}
+                    distort={0.5}
+                    radius={1}
                 />
             </Sphere>
 
-            <Sphere args={[3, 32, 32]}>
-                <meshBasicMaterial
-                    color="#a78bfa"
-                    transparent
-                    opacity={0.1}
-                    blending={THREE.AdditiveBlending}
-                />
-            </Sphere>
+            {/* Inner Glow */}
+            <pointLight intensity={30} color="#818cf8" distance={60} />
 
-            {/* Point light from core */}
-            <pointLight intensity={20} color="#6366f1" distance={50} />
+            <group ref={ringRef}>
+                <TorusKnot args={[10, 0.2, 128, 16]}>
+                    <meshBasicMaterial color="#6366f1" transparent opacity={0.2} blending={THREE.AdditiveBlending} />
+                </TorusKnot>
+                <TorusKnot args={[12, 0.1, 128, 16]} rotation={[Math.PI / 2, 0, 0]}>
+                    <meshBasicMaterial color="#8b5cf6" transparent opacity={0.1} blending={THREE.AdditiveBlending} />
+                </TorusKnot>
+            </group>
         </group>
     );
 }
 
-// --- DARK ENVIRONMENT WITH ALL ENHANCEMENTS ---
+// --- DARK ENVIRONMENT ---
 const DarkEnvironment = () => (
     <>
-        <color attach="background" args={['#000000']} />
-        <fogExp2 attach="fog" args={['#0a0118', 0.018]} />
+        <color attach="background" args={['#020617']} />
+        <fogExp2 attach="fog" args={['#020617', 0.015]} />
 
-        {/* Enhanced star field */}
-        <Stars radius={200} depth={80} count={2000} factor={4} fade speed={1} />
+        <Stars radius={150} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
 
-        {/* Ambient and directional lighting */}
-        <ambientLight intensity={0.15} />
-        <directionalLight position={[10, 20, 10]} intensity={1} color="#818cf8" />
-
-        {/* Accent lights */}
-        <pointLight position={[15, 15, 15]} intensity={3} color="#a78bfa" />
-        <pointLight position={[-15, 10, 10]} intensity={2.5} color="#6366f1" />
+        <ambientLight intensity={0.2} />
+        <pointLight position={[10, 10, 10]} intensity={2} color="#818cf8" />
+        <pointLight position={[-10, -10, -10]} intensity={1} color="#6366f1" />
 
         <Suspense fallback={null}>
-            <VolumetricSmoke />
+            <DeepSpaceNebula />
+            <QuantumDataStreams />
             <AdvancedTechPlexus />
-            <EnhancedInfiniteGrid />
-            <AdvancedFloatingArtifacts />
-            <EnhancedEnergyField />
-            <EnergyCoreGlow />
+            <CrystallineArtifacts />
+            <CyberGrid />
+            <EnergyVortex />
         </Suspense>
     </>
 );
 
-// --- LIGHT ENVIRONMENT (UNCHANGED) ---
+// --- FROSTED GLASS GEOMETRY ---
+function FrostedGlassGeometry() {
+    return (
+        <group>
+            {[...Array(5)].map((_, i) => (
+                <Float key={i} speed={1.5} rotationIntensity={0.5} floatIntensity={1} position={[(i - 2) * 20, Math.sin(i) * 10, -30]}>
+                    <Sphere args={[4, 32, 32]}>
+                        <meshPhysicalMaterial
+                            color="#ffffff"
+                            transmission={0.9}
+                            thickness={2}
+                            roughness={0.1}
+                            transparent
+                            opacity={0.3}
+                            envMapIntensity={1}
+                        />
+                    </Sphere>
+                    <mesh scale={1.05}>
+                        <Sphere args={[4, 16, 16]}>
+                            <meshBasicMaterial color="#6366f1" wireframe transparent opacity={0.05} />
+                        </Sphere>
+                    </mesh>
+                </Float>
+            ))}
+        </group>
+    );
+}
+
+// --- SOFT LIGHT STREAMS ---
+function SoftLightStreams() {
+    const count = 25;
+    const streams = useMemo(() => {
+        return [...Array(count)].map(() => ({
+            x: (Math.random() - 0.5) * 80,
+            z: (Math.random() - 0.5) * 40 - 15,
+            y: Math.random() * 80 - 40,
+            speed: 0.1 + Math.random() * 0.2,
+            length: 10 + Math.random() * 10,
+            opacity: 0.2 + Math.random() * 0.3
+        }));
+    }, []);
+
+    useFrame(() => {
+        streams.forEach((s) => {
+            s.y += s.speed;
+            if (s.y > 40) s.y = -40;
+        });
+    });
+
+    return (
+        <group>
+            {streams.map((s, i) => (
+                <mesh key={i} position={[s.x, s.y, s.z]}>
+                    <capsuleGeometry args={[0.08, s.length, 4, 8]} />
+                    <meshBasicMaterial
+                        color="#818cf8"
+                        transparent
+                        opacity={s.opacity}
+                        blending={THREE.NormalBlending}
+                    />
+                </mesh>
+            ))}
+        </group>
+    );
+}
+
+// --- LIGHT ENVIRONMENT ---
 const LightEnvironment = () => (
     <>
-        <color attach="background" args={['#f8fafc']} />
-        <fog attach="fog" args={['#f8fafc', 30, 90]} />
-        <ambientLight intensity={1} />
-        <pointLight position={[20, 20, 20]} intensity={0.5} color="#6366f1" />
-        <Stars radius={100} depth={50} count={1000} factor={2} saturation={0} fade speed={0.5} />
-        <Float speed={2} floatIntensity={0.5}>
-            <Sphere position={[20, -10, -25]} args={[10, 32, 32]}>
-                <MeshDistortMaterial color="#f1f5f9" speed={1} distort={0.2} transparent opacity={0.4} />
-            </Sphere>
-        </Float>
-        <gridHelper args={[100, 30, '#cbd5e1', '#f1f5f9']} position={[0, -15, 0]} />
+        <color attach="background" args={['#f1f5f9']} />
+        <fog attach="fog" args={['#f1f5f9', 20, 100]} />
+
+        <ambientLight intensity={1.5} />
+        <pointLight position={[20, 20, 20]} intensity={2} color="#6366f1" />
+        <pointLight position={[-20, 10, -10]} intensity={1} color="#94a3b8" />
+
+        <Suspense fallback={null}>
+            <FrostedGlassGeometry />
+            <SoftLightStreams />
+
+            {/* Soft Distorted Horizon */}
+            <Float speed={1.5} floatIntensity={0.5}>
+                <Sphere args={[25, 64, 64]} position={[0, -10, -50]}>
+                    <MeshDistortMaterial
+                        color="#cbd5e1"
+                        speed={1}
+                        distort={0.3}
+                        transparent
+                        opacity={0.3}
+                        roughness={1}
+                    />
+                </Sphere>
+            </Float>
+
+            {/* Premium Light Grid */}
+            <group position={[0, -18, 0]}>
+                <gridHelper args={[150, 30, '#94a3b8', '#e2e8f0']} />
+                {/* Glow plane for grid */}
+                <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, -20]}>
+                    <planeGeometry args={[150, 100]} />
+                    <meshBasicMaterial color="#ffffff" transparent opacity={0.5} />
+                </mesh>
+            </group>
+
+            <Stars radius={100} depth={50} count={800} factor={3} saturation={0} fade speed={0.5} />
+        </Suspense>
     </>
 );
 
-// --- ENHANCED CAMERA RIG ---
+// --- CAMERA RIG ---
 function Rig() {
-    const { camera, pointer } = useThree();
-    useFrame(() => {
-        camera.position.x = THREE.MathUtils.lerp(camera.position.x, pointer.x * 18, 0.03);
-        camera.position.y = THREE.MathUtils.lerp(camera.position.y, -pointer.y * 15 + 8, 0.03);
-        camera.lookAt(0, 0, -25);
+    const { camera, mouse } = useThree();
+    const vec = new THREE.Vector3();
+
+    return useFrame(() => {
+        camera.position.lerp(vec.set(mouse.x * 10, mouse.y * 10, 50), 0.05);
+        camera.lookAt(0, 0, -20);
     });
-    return null;
 }
 
 const LayoutBackground = () => {
     const { isDarkMode } = useTheme();
 
     return (
-        <div className={`fixed inset-0 -z-50 w-full h-full pointer-events-none transition-all duration-1000 ${isDarkMode ? 'bg-[#000000]' : 'bg-[#f8fafc]'}`}>
+        <div className={`fixed inset-0 -z-50 w-full h-full pointer-events-none transition-colors duration-1000 ${isDarkMode ? 'bg-[#020617]' : 'bg-[#f8fafc]'}`}>
             <Canvas
-                camera={{ position: [0, 8, 55], fov: 50 }}
+                shadows
+                camera={{ position: [0, 0, 50], fov: 60 }}
                 gl={{
-                    antialias: false,
+                    antialias: true,
                     alpha: true,
                     powerPreference: 'high-performance',
                     toneMapping: THREE.ACESFilmicToneMapping,
-                    toneMappingExposure: 1.2
+                    toneMappingExposure: 1.5
                 }}
-                dpr={[1, 1.5]}
+                dpr={[1, 2]}
             >
                 {isDarkMode ? <DarkEnvironment /> : <LightEnvironment />}
                 <Rig />
@@ -529,3 +432,4 @@ const LayoutBackground = () => {
 };
 
 export default LayoutBackground;
+

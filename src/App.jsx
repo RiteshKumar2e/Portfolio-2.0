@@ -59,38 +59,45 @@ function AppContent() {
             wheelMultiplier: 0.8,
             touchMultiplier: 1.5,
         }}>
-            <div className={`transition-colors duration-700 bg-transparent ${isDarkMode ? 'text-white' : 'text-slate-900'} selection:bg-indigo-600 selection:text-white pb-20 overflow-x-hidden`}>
-                <AnimatePresence mode="wait">
-                    {isLoading ? (
-                        <LoadingScreen key="loader" />
-                    ) : (
-                        <motion.div
-                            key="content"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 1 }}
-                        >
-                            <Navbar />
-                            <Suspense fallback={null}>
-                                <AdvancedBackground />
-                            </Suspense>
-                            <ScrollProgress />
-                            <ScrollToTop />
-                            <main className="relative z-10 w-full px-4 md:px-0">
-                                <Hero />
-                                <div className="space-y-40 md:space-y-72">
-                                    <About />
-                                    <Experience />
-                                    <Projects />
-                                    <SkillsAdvanced />
-                                    <Achievements />
-                                    <Contact />
-                                </div>
-                            </main>
-                            <Footer />
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+            <div className="relative min-h-screen">
+                {/* Global Theme Overlays */}
+                <div className="fixed inset-0 bg-grid -z-10" />
+                <div className="blur-overlay blur-purple" />
+                <div className="blur-overlay blur-indigo" />
+
+                <div className={`transition-colors duration-700 bg-transparent ${isDarkMode ? 'text-white' : 'text-slate-900'} pb-20 overflow-x-hidden`}>
+                    <AnimatePresence mode="wait">
+                        {isLoading ? (
+                            <LoadingScreen key="loader" />
+                        ) : (
+                            <motion.div
+                                key="content"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 1 }}
+                            >
+                                <Navbar />
+                                <Suspense fallback={null}>
+                                    <AdvancedBackground />
+                                </Suspense>
+                                <ScrollProgress />
+                                <ScrollToTop />
+                                <main className="relative z-10 w-full px-4 md:px-0">
+                                    <Hero />
+                                    <div className="space-y-40 md:space-y-72 lg:space-y-96">
+                                        <About />
+                                        <Experience />
+                                        <Projects />
+                                        <SkillsAdvanced />
+                                        <Achievements />
+                                        <Contact />
+                                    </div>
+                                </main>
+                                <Footer />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </div>
         </ReactLenis>
     );
