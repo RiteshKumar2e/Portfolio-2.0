@@ -10,6 +10,7 @@ import SkillsAdvanced from './components/SkillsAdvanced';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import CustomCursor from './components/CustomCursor';
 import AdvancedBackground from './components/3D/AdvancedBackground';
 import ScrollProgress from './components/ScrollProgress';
 import ScrollToTop from './components/ScrollToTop';
@@ -60,6 +61,7 @@ function AppContent() {
             touchMultiplier: 1.5,
         }}>
             <div className="relative min-h-screen">
+                <CustomCursor />
                 {/* Global Theme Overlays */}
                 <div className="fixed inset-0 bg-grid -z-10" />
                 <div className="blur-overlay blur-purple" />
