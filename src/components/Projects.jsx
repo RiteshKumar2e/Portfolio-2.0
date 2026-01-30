@@ -98,16 +98,16 @@ const ProjectCard = ({ project, index }) => {
                         ))}
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                         <motion.a
                             href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${isDarkMode ? 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20' : 'bg-slate-900 text-white hover:bg-indigo-600'}`}
+                            className={`flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-transparent ${isDarkMode ? 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20' : 'bg-slate-900 text-white hover:bg-indigo-600'}`}
                             whileHover={{ y: -3 }}
                             whileTap={{ scale: 0.98 }}
                         >
-                            <LucidGithub size={16} /> VIEW SOURCE
+                            <LucidGithub size={16} /> SOURCE
                         </motion.a>
 
                         {project.demo !== '#' && (
@@ -115,11 +115,11 @@ const ProjectCard = ({ project, index }) => {
                                 href={project.demo}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`flex items-center justify-center w-14 h-14 rounded-2xl border transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-indigo-600' : 'bg-white border-slate-100 text-slate-800 hover:border-indigo-600 shadow-md'}`}
+                                className={`flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl border transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-indigo-600 hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-600/20' : 'bg-white border-slate-200 text-slate-800 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 shadow-sm'}`}
                                 whileHover={{ y: -3 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                <ExternalLink size={18} />
+                                <Globe size={16} /> LIVE
                             </motion.a>
                         )}
                     </div>
