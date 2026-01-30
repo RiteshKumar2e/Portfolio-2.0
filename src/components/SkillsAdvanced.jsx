@@ -9,8 +9,53 @@ import {
     SiJsonwebtokens, SiSqlalchemy
 } from 'react-icons/si';
 import { VscVscode } from 'react-icons/vsc';
-import { FaLaptopCode, FaServer, FaDatabase, FaBrain, FaTools, FaCloud } from 'react-icons/fa';
+import { FaLaptopCode, FaServer, FaDatabase, FaBrain, FaTools, FaCloud, FaCodeBranch, FaCube, FaGlobe, FaShapes, FaLayerGroup } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
+
+const HoverSkillPill = ({ name, icon: Icon, color, index }) => {
+    const { isDarkMode } = useTheme();
+    const [isHovered, setIsHovered] = useState(false);
+
+    return (
+        <motion.div
+            className={`relative flex items-center justify-center w-20 h-14 md:w-24 md:h-16 rounded-2xl border cursor-pointer transition-all duration-300 ${isDarkMode
+                ? 'bg-white/5 border-white/5 hover:border-indigo-500/50 hover:bg-white/10'
+                : 'bg-slate-100 border-slate-200 hover:border-indigo-400 hover:bg-white hover:shadow-xl'
+                }`}
+            whileHover={{ scale: 1.15, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            onHoverStart={() => setIsHovered(true)}
+            onHoverEnd={() => setIsHovered(false)}
+            onClick={() => setIsHovered(!isHovered)}
+        >
+            <div className={`flex items-center justify-center text-2xl md:text-4xl transition-colors duration-300 ${color}`}>
+                <Icon />
+            </div>
+
+            <AnimatePresence>
+                {isHovered && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10, x: "-50%", scale: 0.8 }}
+                        animate={{ opacity: 1, y: -10, x: "-50%", scale: 1 }}
+                        exit={{ opacity: 0, y: 5, x: "-50%", scale: 0.8 }}
+                        transition={{ duration: 0.2, ease: "backOut" }}
+                        className={`absolute -top-14 left-1/2 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap shadow-xl z-50 border ${isDarkMode
+                            ? 'bg-slate-900 border-indigo-500/30 text-white'
+                            : 'bg-white border-indigo-100 text-slate-900'
+                            }`}
+                    >
+                        {name}
+                        {/* Tooltip Arrow */}
+                        <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 border-r border-b ${isDarkMode
+                            ? 'bg-slate-900 border-indigo-500/30'
+                            : 'bg-white border-indigo-100'
+                            }`} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+};
 
 const SkillCategory = ({ title, icon: Icon, skills, index }) => {
     const { isDarkMode } = useTheme();
@@ -40,22 +85,13 @@ const SkillCategory = ({ title, icon: Icon, skills, index }) => {
 
             <div className="flex flex-wrap gap-3">
                 {skills.map((skill, idx) => (
-                    <div
+                    <HoverSkillPill
                         key={idx}
-                        className={`group relative flex items-center gap-2 px-4 py-2 rounded-xl border transition-all duration-300 ${isDarkMode
-                            ? 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-indigo-500/50'
-                            : 'bg-slate-50 border-slate-100 hover:bg-white hover:border-indigo-200 hover:shadow-md'
-                            }`}
-                    >
-                        {skill.icon && (
-                            <span className={`text-lg transition-transform duration-300 group-hover:scale-110 ${skill.color}`}>
-                                <skill.icon />
-                            </span>
-                        )}
-                        <span className={`text-sm font-bold ${isDarkMode ? 'text-slate-400 group-hover:text-white' : 'text-slate-600 group-hover:text-slate-900'}`}>
-                            {skill.name}
-                        </span>
-                    </div>
+                        name={skill.name}
+                        icon={skill.icon}
+                        color={skill.color}
+                        index={idx}
+                    />
                 ))}
             </div>
         </motion.div>
@@ -83,7 +119,7 @@ const SkillsAdvanced = () => {
             skills: [
                 { name: "Node.js", icon: SiNodedotjs, color: "text-[#339933]" },
                 { name: "FastAPI", icon: SiFastapi, color: "text-[#009688]" },
-                { name: "Express.js", icon: SiExpress, color: "text-white" },
+                { name: "Express.js", icon: SiExpress, color: "text-slate-900 dark:text-white" },
                 { name: "Python", icon: SiPython, color: "text-[#3776AB]" },
                 { name: "JWT", icon: SiJsonwebtokens, color: "text-[#D63AFF]" },
                 { name: "C++", icon: SiCplusplus, color: "text-[#00599C]" }
@@ -98,7 +134,7 @@ const SkillsAdvanced = () => {
                 { name: "MySQL", icon: SiMysql, color: "text-[#4479A1]" },
                 { name: "SQLAlchemy", icon: SiSqlalchemy, color: "text-[#D71F00]" },
                 { name: "GCP Cloud", icon: SiGooglecloud, color: "text-[#4285F4]" },
-                { name: "GitHub Pages", icon: SiGithub, color: "text-white" }
+                { name: "GitHub Pages", icon: SiGithub, color: "text-slate-900 dark:text-white" }
             ]
         },
         {
@@ -120,7 +156,7 @@ const SkillsAdvanced = () => {
             icon: FaTools,
             skills: [
                 { name: "Git", icon: SiGit, color: "text-[#F05032]" },
-                { name: "GitHub", icon: SiGithub, color: "text-white" },
+                { name: "GitHub", icon: SiGithub, color: "text-slate-900 dark:text-white" },
                 { name: "VS Code", icon: VscVscode, color: "text-[#007ACC]" },
                 { name: "Jupyter", icon: SiJupyter, color: "text-[#F37626]" }
             ]
@@ -128,16 +164,16 @@ const SkillsAdvanced = () => {
     ];
 
     const coursework = [
-        "Data Structures & Algorithms",
-        "Object-Oriented Programming",
-        "DBMS",
-        "Software Engineering"
+        { name: "Data Structures", icon: FaCodeBranch },
+        { name: "OOPs", icon: FaCube },
+        { name: "DBMS", icon: FaDatabase },
+        { name: "Software Eng.", icon: FaShapes }
     ];
 
     const interests = [
-        "Machine Learning",
-        "Deep Learning",
-        "Web Development"
+        { name: "Machine Learning", icon: FaBrain },
+        { name: "Deep Learning", icon: FaLayerGroup },
+        { name: "Web Development", icon: FaGlobe }
     ];
 
     return (
@@ -193,9 +229,13 @@ const SkillsAdvanced = () => {
                             </span>
                             <div className="flex flex-wrap justify-center gap-3">
                                 {coursework.map((course, idx) => (
-                                    <span key={idx} className={`px-4 py-2 rounded-xl text-sm font-bold transition-transform hover:scale-105 ${isDarkMode ? 'bg-white/10 text-white' : 'bg-slate-100 text-slate-800'}`}>
-                                        {course}
-                                    </span>
+                                    <HoverSkillPill
+                                        key={idx}
+                                        name={course.name}
+                                        icon={course.icon}
+                                        color={isDarkMode ? 'text-white' : 'text-slate-900'}
+                                        index={idx}
+                                    />
                                 ))}
                             </div>
                         </div>
@@ -209,9 +249,13 @@ const SkillsAdvanced = () => {
                             </span>
                             <div className="flex flex-wrap justify-center gap-3">
                                 {interests.map((interest, idx) => (
-                                    <span key={idx} className={`px-4 py-2 rounded-xl text-sm font-bold transition-transform hover:scale-105 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'}`}>
-                                        {interest}
-                                    </span>
+                                    <HoverSkillPill
+                                        key={idx}
+                                        name={interest.name}
+                                        icon={interest.icon}
+                                        color={isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}
+                                        index={idx}
+                                    />
                                 ))}
                             </div>
                         </div>
