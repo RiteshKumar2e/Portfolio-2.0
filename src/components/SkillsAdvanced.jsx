@@ -77,7 +77,6 @@ const SkillsAdvanced = () => {
         [
             { icon: SiPython, color: '#3776AB', name: 'Python' },
             { icon: SiFastapi, color: '#05998B', name: 'FastAPI' },
-            { icon: SiSpringboot, color: '#6DB33F', name: 'SpringBoot' },
             { icon: SiNodedotjs, color: '#339933', name: 'Node.js' },
             { icon: SiCplusplus, color: '#00599C', name: 'C++' },
         ],
