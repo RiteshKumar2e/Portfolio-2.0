@@ -1,61 +1,62 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import {
-    SiReact, SiJavascript, SiNodedotjs, SiMongodb, SiTailwindcss,
-    SiHtml5, SiCss3, SiPostgresql, SiPython, SiTensorflow,
-    SiCplusplus, SiSpringboot, SiFastapi, SiPytorch, SiPandas,
-    SiNumpy, SiBootstrap, SiMysql, SiGit
+    SiReact, SiJavascript, SiNodedotjs, SiMongodb, SiHtml5, SiCss3,
+    SiPython, SiTensorflow, SiCplusplus, SiPytorch, SiPandas, SiNumpy,
+    SiMysql, SiGit, SiGithub, SiGooglecloud, SiJupyter, SiOpencv,
+    SiExpress, SiScikitlearn, SiKeras, SiFastapi, SiPostgresql,
+    SiJsonwebtokens, SiSqlalchemy
 } from 'react-icons/si';
+import { VscVscode } from 'react-icons/vsc';
+import { FaLaptopCode, FaServer, FaDatabase, FaBrain, FaTools, FaCloud } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
 
-const SkillIcon = ({ icon: Icon, color, name, index }) => {
+const SkillCategory = ({ title, icon: Icon, skills, index }) => {
     const { isDarkMode } = useTheme();
+    const [ref, inView] = useInView({
+        triggerOnce: true,
+        threshold: 0.1,
+    });
 
     return (
         <motion.div
-            initial={{ opacity: 0, scale: 0, y: 20 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true }}
-            whileHover={{
-                scale: 1.2,
-                rotate: 5,
-                transition: { type: "spring", stiffness: 400, damping: 10 }
-            }}
-            transition={{
-                delay: index * 0.02,
-                type: 'spring',
-                stiffness: 260,
-                damping: 20
-            }}
-            className="relative group p-4"
+            ref={ref}
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            className={`rounded-3xl p-6 md:p-8 border transition-all duration-300 hover:-translate-y-1 ${isDarkMode
+                ? 'bg-slate-900/40 border-white/10 cyber-card-glow hover:border-indigo-500/30'
+                : 'bg-white border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10'
+                }`}
         >
-            {/* Hover Name Label */}
-            <div className="absolute -top-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:-top-6 transition-all duration-300 pointer-events-none z-30">
-                <div className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest whitespace-nowrap shadow-xl border ${isDarkMode ? 'bg-slate-800 border-white/20 text-white' : 'bg-white border-slate-200 text-slate-800'
+            <div className="flex items-center gap-4 mb-6">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg ${isDarkMode ? 'bg-indigo-600/20 text-indigo-400' : 'bg-indigo-50 text-indigo-600'
                     }`}>
-                    {name}
+                    <Icon />
                 </div>
-                {/* Carrot/Arrow */}
-                <div className={`w-2 h-2 rotate-45 mx-auto -mt-1 border-r border-b ${isDarkMode ? 'bg-slate-800 border-white/20' : 'bg-white border-slate-200'
-                    }`} />
+                <h3 className={`text-xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{title}</h3>
             </div>
 
-            {/* Glow Aura */}
-            <div
-                className={`absolute inset-0 rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500`}
-                style={{ backgroundColor: color }}
-            />
-
-            {/* Card Body */}
-            <div className={`relative z-10 w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-2xl border transition-all duration-300 ${isDarkMode
-                ? 'bg-slate-900/60 border-white/10 cyber-card-glow group-hover:border-white/30'
-                : 'bg-white border-slate-100 shadow-lg group-hover:shadow-xl'
-                }`}>
-                <Icon
-                    className="text-4xl sm:text-5xl transition-transform duration-500 group-hover:scale-110"
-                    style={{ color: color }}
-                />
+            <div className="flex flex-wrap gap-3">
+                {skills.map((skill, idx) => (
+                    <div
+                        key={idx}
+                        className={`group relative flex items-center gap-2 px-4 py-2 rounded-xl border transition-all duration-300 ${isDarkMode
+                            ? 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-indigo-500/50'
+                            : 'bg-slate-50 border-slate-100 hover:bg-white hover:border-indigo-200 hover:shadow-md'
+                            }`}
+                    >
+                        {skill.icon && (
+                            <span className={`text-lg transition-transform duration-300 group-hover:scale-110 ${skill.color}`}>
+                                <skill.icon />
+                            </span>
+                        )}
+                        <span className={`text-sm font-bold ${isDarkMode ? 'text-slate-400 group-hover:text-white' : 'text-slate-600 group-hover:text-slate-900'}`}>
+                            {skill.name}
+                        </span>
+                    </div>
+                ))}
             </div>
         </motion.div>
     );
@@ -65,89 +66,128 @@ const SkillsAdvanced = () => {
     const { isDarkMode } = useTheme();
     const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
-    const rows = [
-        [
-            { icon: SiHtml5, color: '#E34F26', name: 'HTML5' },
-            { icon: SiCss3, color: '#1572B6', name: 'CSS3' },
-            { icon: SiJavascript, color: '#F7DF1E', name: 'JavaScript' },
-            { icon: SiReact, color: '#61DAFB', name: 'React' },
-            { icon: SiTailwindcss, color: '#06B6D4', name: 'Tailwind' },
-            { icon: SiBootstrap, color: '#7952B3', name: 'Bootstrap' },
-        ],
-        [
-            { icon: SiPython, color: '#3776AB', name: 'Python' },
-            { icon: SiFastapi, color: '#05998B', name: 'FastAPI' },
-            { icon: SiNodedotjs, color: '#339933', name: 'Node.js' },
-            { icon: SiCplusplus, color: '#00599C', name: 'C++' },
-        ],
-        [
-            { icon: SiTensorflow, color: '#FF6F00', name: 'TensorFlow' },
-            { icon: SiPytorch, color: '#EE4C2C', name: 'PyTorch' },
-            { icon: SiPandas, color: '#150458', name: 'Pandas' },
-            { icon: SiNumpy, color: '#013243', name: 'NumPy' },
-        ],
-        [
-            { icon: SiPostgresql, color: '#4169E1', name: 'PostgreSQL' },
-            { icon: SiMysql, color: '#4479A1', name: 'MySQL' },
-            { icon: SiMongodb, color: '#47A248', name: 'MongoDB' },
-            { icon: SiGit, color: '#F05032', name: 'Git' },
-        ]
+    const skillCategories = [
+        {
+            title: "Frontend Development",
+            icon: FaLaptopCode,
+            skills: [
+                { name: "React.js", icon: SiReact, color: "text-[#61DAFB]" },
+                { name: "JavaScript", icon: SiJavascript, color: "text-[#F7DF1E]" },
+                { name: "HTML5", icon: SiHtml5, color: "text-[#E34F26]" },
+                { name: "CSS3", icon: SiCss3, color: "text-[#1572B6]" }
+            ]
+        },
+        {
+            title: "Backend Development",
+            icon: FaServer,
+            skills: [
+                { name: "Node.js", icon: SiNodedotjs, color: "text-[#339933]" },
+                { name: "FastAPI", icon: SiFastapi, color: "text-[#009688]" },
+                { name: "Express.js", icon: SiExpress, color: "text-white" },
+                { name: "Python", icon: SiPython, color: "text-[#3776AB]" },
+                { name: "JWT", icon: SiJsonwebtokens, color: "text-[#D63AFF]" },
+                { name: "C++", icon: SiCplusplus, color: "text-[#00599C]" }
+            ]
+        },
+        {
+            title: "Database & Cloud",
+            icon: FaCloud,
+            skills: [
+                { name: "PostgreSQL", icon: SiPostgresql, color: "text-[#336791]" },
+                { name: "MongoDB", icon: SiMongodb, color: "text-[#47A248]" },
+                { name: "MySQL", icon: SiMysql, color: "text-[#4479A1]" },
+                { name: "SQLAlchemy", icon: SiSqlalchemy, color: "text-[#D71F00]" },
+                { name: "GCP Cloud", icon: SiGooglecloud, color: "text-[#4285F4]" },
+                { name: "GitHub Pages", icon: SiGithub, color: "text-white" }
+            ]
+        },
+        {
+            title: "Data Science & AI",
+            icon: FaBrain,
+            skills: [
+                { name: "Deep Learning", icon: FaBrain, color: "text-[#FF6F00]" },
+                { name: "TensorFlow", icon: SiTensorflow, color: "text-[#FF6F00]" },
+                { name: "PyTorch", icon: SiPytorch, color: "text-[#EE4C2C]" },
+                { name: "CNN", icon: SiKeras, color: "text-[#D00000]" },
+                { name: "OpenCV", icon: SiOpencv, color: "text-[#5C3EE8]" },
+                { name: "Scikit-learn", icon: SiScikitlearn, color: "text-[#F7931E]" },
+                { name: "Pandas", icon: SiPandas, color: "text-[#150458]" },
+                { name: "NumPy", icon: SiNumpy, color: "text-[#013243]" }
+            ]
+        },
+        {
+            title: "Developer Tools",
+            icon: FaTools,
+            skills: [
+                { name: "Git", icon: SiGit, color: "text-[#F05032]" },
+                { name: "GitHub", icon: SiGithub, color: "text-white" },
+                { name: "VS Code", icon: VscVscode, color: "text-[#007ACC]" },
+                { name: "Jupyter", icon: SiJupyter, color: "text-[#F37626]" }
+            ]
+        }
     ];
 
-    const allSkills = rows.flat();
+    const coursework = [
+        "Data Structures & Algorithms",
+        "Object-Oriented Programming"
+    ];
 
     return (
         <section id="skills" className="py-24 relative overflow-hidden">
-            {/* Dark Energy / Grid Background */}
-            <div className={`absolute inset-0 pointer-events-none -z-10 ${isDarkMode ? 'opacity-40' : 'opacity-5'}`}>
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
-                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[120px] ${isDarkMode ? 'bg-indigo-600/10' : 'bg-indigo-100'}`} />
+            {/* Background Matrix */}
+            <div className={`absolute inset-0 pointer-events-none -z-10 ${isDarkMode ? 'opacity-30' : 'opacity-5'}`}>
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
             </div>
 
             <div className="container-custom relative z-10">
-                <div className="text-center mb-24">
+                <div className="text-center mb-20">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         className={`inline-block px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-6 border ${isDarkMode ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' : 'bg-indigo-50 border-indigo-100 text-indigo-600'}`}
                     >
-                        Mastering the Stack
+                        Technical Arsenal
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className={`text-5xl md:text-8xl font-black mb-8 tracking-tighter transition-all duration-300 ${isDarkMode ? 'text-white text-glow' : 'text-slate-900'}`}
+                        className={`text-5xl md:text-7xl font-black mb-8 tracking-tighter ${isDarkMode ? 'text-white text-glow' : 'text-slate-900'}`}
                     >
-                        Technical <span className="gradient-text">DNA</span>
+                        Skills & <span className="gradient-text">Expertise</span>
                     </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        className={`text-lg md:text-xl max-w-2xl mx-auto font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
-                    >
-                        A powerful collection of modern tools and frameworks that I use to bring complex digital visions to life.
-                    </motion.p>
                 </div>
 
-                {/* Pyramid Layout */}
-                <div className="flex flex-col items-center gap-4 sm:gap-8">
-                    {rows.map((row, rowIndex) => (
-                        <div key={rowIndex} className="flex flex-wrap justify-center items-center gap-1 sm:gap-2">
-                            {row.map((skill, skillIndex) => (
-                                <SkillIcon
-                                    key={`${rowIndex}-${skillIndex}`}
-                                    icon={skill.icon}
-                                    color={skill.color}
-                                    name={skill.name}
-                                    index={rowIndex * 10 + skillIndex}
-                                />
-                            ))}
-                        </div>
+                <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+                    {skillCategories.map((category, index) => (
+                        <SkillCategory
+                            key={index}
+                            title={category.title}
+                            icon={category.icon}
+                            skills={category.skills}
+                            index={index}
+                        />
                     ))}
                 </div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mt-12 text-center"
+                >
+                    <div className={`inline-flex flex-wrap justify-center gap-4 p-6 rounded-3xl border ${isDarkMode ? 'bg-slate-900/40 border-white/5' : 'bg-white border-slate-100 shadow-lg'}`}>
+                        <span className={`text-sm font-black uppercase tracking-widest py-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                            Core Coursework:
+                        </span>
+                        {coursework.map((course, idx) => (
+                            <span key={idx} className={`px-4 py-2 rounded-xl text-sm font-bold ${isDarkMode ? 'bg-white/10 text-white' : 'bg-slate-100 text-slate-800'}`}>
+                                {course}
+                            </span>
+                        ))}
+                    </div>
+                </motion.div>
             </div>
         </section>
     );
