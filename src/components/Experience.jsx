@@ -29,7 +29,7 @@ const Experience = () => {
         {
             title: 'Machine Learning Intern',
             company: 'NIT Jamshedpur',
-            duration: 'May 2025 - July 2025',
+            duration: 'May 2025 - Present',
             location: 'Offline',
             description: [
                 'Developed AMFF-CNN for steel surface defect detection.',
