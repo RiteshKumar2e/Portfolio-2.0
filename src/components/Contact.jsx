@@ -31,10 +31,11 @@ const Contact = () => {
             // NOTE: The user should replace 'your-form-id' with their actual Formspree ID
             // For now, I'll use a placeholder that they can easily update or I'll ask.
             // But to make it work "out of the box" for them, they just need to create a form on Formspree.
-            const response = await fetch('https://formspree.io/f/mqakppov', {
+            const response = await fetch('https://formspree.io/f/movwelby', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(formData)
             });
