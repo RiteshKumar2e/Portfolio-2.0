@@ -49,6 +49,12 @@ const Contact = () => {
                     colors: ['#6366f1', '#a855f7', '#3b82f6']
                 });
                 setFormData({ name: '', email: '', subject: '', message: '' });
+
+                // Automatically scroll to top after a short delay
+                setTimeout(() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 2000);
+
                 setTimeout(() => setStatus('idle'), 5000);
             } else {
                 setStatus('error');
