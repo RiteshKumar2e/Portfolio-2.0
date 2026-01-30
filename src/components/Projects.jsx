@@ -134,6 +134,15 @@ const Projects = () => {
 
     const projects = [
         {
+            title: 'Community AI Platform',
+            description: 'Comprehensive AI ecosystem delivering government resources and opportunities to underserved communities. Engineered with high-performance async FastAPI backends, SQLAlchemy ORM, and JWT security. Features context-aware multilingual AI chat assistance and deep-learning driven recommendations.',
+            tech: ['FastAPI', 'React', 'SQLAlchemy', 'JWT', 'Pydantic'],
+            gradient: 'from-violet-600 via-indigo-600 to-purple-600',
+            github: 'https://github.com/RiteshKumar2e/Community-Empowering-2.0',
+            demo: 'https://communityai.co.in',
+            icon: <Globe className="w-16 h-16 text-white" />
+        },
+        {
             title: 'QuickFix AI Customer Agent',
             description: 'Enterprise-grade AI platform with 7+ specialized agents. Built with Google Gemini AI, FastAPI, and React for millisecond responses.',
             tech: ['Gemini AI', 'FastAPI', 'React', 'PostgreSQL'],

@@ -156,7 +156,7 @@ const Achievements = () => {
             {
                 icon: FaAward,
                 title: '10+ Projects',
-                description: 'Successfully delivered AI/ML projects: QuickFix AI, Steel Defect Detection, Sentiment Analysis',
+                description: 'Successfully delivered major projects: Community AI Platform, QuickFix AI, Steel Defect Detection, Sentiment Analysis',
                 color: 'from-rose-600 to-red-600',
                 gradient: 'bg-gradient-to-br from-rose-600/10 to-red-600/10',
                 category: 'Technical'
