@@ -20,6 +20,14 @@ const Achievements = () => {
     const achievementsData = {
         achievements: [
             {
+                icon: FaRocket,
+                title: 'AutonomousHacks ’26 Finalist',
+                description: 'Shortlisted for Offline Finale among 2,000+ participants, qualifying for agentic AI hackathon organized by GDG Gandhinagar.',
+                color: 'from-indigo-600 to-violet-600',
+                gradient: 'bg-gradient-to-br from-indigo-600/10 to-violet-600/10',
+                category: 'Achievements'
+            },
+            {
                 icon: FaTrophy,
                 title: '98.61 Percentile',
                 description: 'Awarded Merit Certificate in Naukri Campus Young Turks - Round 1 (2025)',
