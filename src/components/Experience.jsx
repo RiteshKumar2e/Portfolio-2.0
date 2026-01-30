@@ -22,22 +22,22 @@ const Experience = () => {
                 'Proficient in designing, deploying, and managing scalable applications.',
                 'Implemented responsive UI using modern web standards.'
             ],
-            skills: ['SpringBoot', 'HTML', 'CSS', 'Bootstrap', 'JavaScript'],
+            skills: ['HTML', 'CSS', 'Bootstrap', 'JavaScript'],
             icon: '🚀',
             color: 'from-blue-500 to-indigo-600'
         },
         {
-            title: 'Machine Learning Intern',
+            title: 'Research Intern',
             company: 'NIT Jamshedpur',
             duration: 'May 2025 - Present',
             location: 'Offline',
             description: [
+                'Promoted to Research Intern from Machine Learning Intern.',
                 'Developed AMFF-CNN for steel surface defect detection.',
-                'Achieved 99.31% accuracy on a 7-class industry dataset.',
                 'Secured 99.72% accuracy on the NEU-DET dataset.'
             ],
             skills: ['Python', 'Computer Vision', 'PyTorch', 'OpenCV'],
-            icon: '🤖',
+            icon: '🔬',
             color: 'from-purple-500 to-pink-600'
         },
         {
