@@ -129,7 +129,15 @@ const SkillsAdvanced = () => {
 
     const coursework = [
         "Data Structures & Algorithms",
-        "Object-Oriented Programming"
+        "Object-Oriented Programming",
+        "DBMS",
+        "Software Engineering"
+    ];
+
+    const interests = [
+        "Machine Learning",
+        "Deep Learning",
+        "Web Development"
     ];
 
     return (
@@ -175,17 +183,38 @@ const SkillsAdvanced = () => {
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="mt-12 text-center"
+                    className="mt-16 flex flex-col items-center gap-8"
                 >
-                    <div className={`inline-flex flex-wrap justify-center gap-4 p-6 rounded-3xl border ${isDarkMode ? 'bg-slate-900/40 border-white/5' : 'bg-white border-slate-100 shadow-lg'}`}>
-                        <span className={`text-sm font-black uppercase tracking-widest py-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                            Core Coursework:
-                        </span>
-                        {coursework.map((course, idx) => (
-                            <span key={idx} className={`px-4 py-2 rounded-xl text-sm font-bold ${isDarkMode ? 'bg-white/10 text-white' : 'bg-slate-100 text-slate-800'}`}>
-                                {course}
+                    {/* Coursework */}
+                    <div className={`w-full max-w-4xl p-6 rounded-3xl border ${isDarkMode ? 'bg-slate-900/40 border-white/5' : 'bg-white border-slate-100 shadow-lg'}`}>
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+                            <span className={`text-sm font-black uppercase tracking-widest whitespace-nowrap ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                                Core Coursework:
                             </span>
-                        ))}
+                            <div className="flex flex-wrap justify-center gap-3">
+                                {coursework.map((course, idx) => (
+                                    <span key={idx} className={`px-4 py-2 rounded-xl text-sm font-bold transition-transform hover:scale-105 ${isDarkMode ? 'bg-white/10 text-white' : 'bg-slate-100 text-slate-800'}`}>
+                                        {course}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Interests */}
+                    <div className={`w-full max-w-4xl p-6 rounded-3xl border ${isDarkMode ? 'bg-slate-900/40 border-white/5' : 'bg-white border-slate-100 shadow-lg'}`}>
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+                            <span className={`text-sm font-black uppercase tracking-widest whitespace-nowrap ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                                Key Interests:
+                            </span>
+                            <div className="flex flex-wrap justify-center gap-3">
+                                {interests.map((interest, idx) => (
+                                    <span key={idx} className={`px-4 py-2 rounded-xl text-sm font-bold transition-transform hover:scale-105 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'}`}>
+                                        {interest}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </motion.div>
             </div>
