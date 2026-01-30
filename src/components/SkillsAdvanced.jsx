@@ -148,32 +148,6 @@ const SkillsAdvanced = () => {
                         </div>
                     ))}
                 </div>
-
-                {/* Performance HUD */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto"
-                >
-                    {[
-                        { label: 'Neural Compute', value: 'Optimized', icon: '🧠' },
-                        { label: 'Cloud Latency', value: '< 20ms', icon: '⚡' },
-                        { label: 'Data Security', value: 'AES-256', icon: '🛡️' },
-                        { label: 'Logic Flow', value: 'Async 2.0', icon: '⚙️' }
-                    ].map((hud, idx) => (
-                        <div key={idx} className={`relative p-6 rounded-3xl border transition-all duration-500 group hover:-translate-y-2 ${isDarkMode ? 'bg-slate-900/40 border-white/5 cyber-card-glow hover:border-indigo-500/50' : 'bg-white border-slate-100 shadow-xl'
-                            }`}>
-                            <div className="text-2xl mb-3">{hud.icon}</div>
-                            <div className={`text-[9px] font-black uppercase tracking-widest mb-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                                {hud.label}
-                            </div>
-                            <div className={`text-lg font-black ${isDarkMode ? 'text-white group-hover:text-indigo-400' : 'text-slate-900'}`}>
-                                {hud.value}
-                            </div>
-                        </div>
-                    ))}
-                </motion.div>
             </div>
         </section>
     );
