@@ -58,17 +58,25 @@ const ProjectCard = ({ project, index }) => {
                 <div className="absolute -inset-2 bg-gradient-to-r from-indigo-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-1000 pointer-events-none" />
 
                 {/* Header Image/Icon Area */}
-                <div className={`relative h-48 sm:h-56 bg-gradient-to-br ${project.gradient} p-8 flex items-center justify-center overflow-hidden`}>
+                <div className={`relative h-48 sm:h-56 bg-gradient-to-br ${project.gradient} ${project.image ? 'p-0' : 'p-8'} flex items-center justify-center overflow-hidden`}>
+                    <div className={`relative z-10 ${project.image ? 'w-full h-full' : 'text-7xl sm:text-8xl'} group-hover:scale-110 transition-transform duration-1000 filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.4)] flex items-center justify-center`}>
+                        {project.image ? (
+                            <img
+                                src={project.image}
+                                alt={project.title}
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            project.icon
+                        )}
+                    </div>
+
                     {/* Data Scanning Animation - Throttled duration */}
                     <motion.div
-                        className="absolute inset-x-0 h-[3px] bg-white/30 blur-[3px] z-10"
+                        className="absolute inset-x-0 h-[3px] bg-white/30 blur-[3px] z-20"
                         animate={{ top: ['0%', '100%', '0%'] }}
                         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
                     />
-
-                    <div className="relative z-10 text-7xl sm:text-8xl group-hover:scale-110 transition-transform duration-1000 filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.4)]">
-                        {project.icon}
-                    </div>
 
                     <div className="absolute top-6 left-6">
                         <div className={`px-4 py-1.5 backdrop-blur-md rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-xl border ${isDarkMode ? 'bg-black/40 border-white/20 text-indigo-400' : 'bg-white/40 border-white/30 text-indigo-700'}`}>
@@ -140,6 +148,7 @@ const Projects = () => {
             gradient: 'from-violet-600 via-indigo-600 to-purple-600',
             github: 'https://github.com/RiteshKumar2e/Community-Empowering-2.0',
             demo: 'https://communityai.co.in',
+            image: '/projects/community-ai.png',
             icon: <Globe className="w-16 h-16 text-white" />
         },
         {
