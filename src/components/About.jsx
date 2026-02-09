@@ -62,7 +62,7 @@ const About = () => {
                             <div className={`relative rounded-[48px] shadow-2xl overflow-hidden border-4 h-full transition-colors p-4 ${isDarkMode ? 'border-slate-800 bg-slate-900/50' : 'border-white bg-[#f8fafc]'}`}>
                                 <div className="w-full h-full rounded-[36px] overflow-hidden">
                                     <img
-                                        src="/Profile Pic.jpg"
+                                        src="/profile-pic.jpg"
                                         alt="Ritesh Kumar"
                                         className="w-full h-full object-cover object-top transform hover:scale-110 transition-transform duration-700 origin-top"
                                     />
