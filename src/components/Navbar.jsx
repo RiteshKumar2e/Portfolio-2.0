@@ -104,178 +104,198 @@ const Navbar = () => {
         }
     };
 
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+            if (lenis) lenis.stop();
+        } else {
+            document.body.style.overflow = 'unset';
+            if (lenis) lenis.start();
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+            if (lenis) lenis.start();
+        };
+    }, [isMobileMenuOpen, lenis]);
+
     return (
-        <motion.nav
-            ref={navRef}
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className={`fixed top-0 left-0 right-0 z-[1000] pointer-events-auto transition-all duration-300 ${isScrolled
-                ? isDarkMode
-                    ? 'py-4 bg-slate-900/80 backdrop-blur-xl shadow-lg border-b border-white/5'
-                    : 'py-4 bg-white/90 backdrop-blur-xl shadow-lg border-b border-slate-100'
-                : 'py-6 bg-transparent'
-                }`}
-        >
-            <div className="max-w-7xl mx-auto px-6 lg:px-12">
-                <div className="flex items-center justify-between">
-                    {/* Logo Section */}
-                    <motion.a
-                        href="#home"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            scrollToSection('#home');
-                        }}
-                        className="flex items-center gap-0 group cursor-pointer"
-                        whileHover={{ scale: 1.02 }}
-                    >
-                        <span className="text-2xl font-black text-indigo-600 tracking-tighter">R</span>
-                        <span className={`text-2xl font-black tracking-tighter transition-colors group-hover:text-indigo-600 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>itesh</span>
-                        <span className="text-2xl font-black text-indigo-600">.</span>
-                    </motion.a>
-
-                    {/* Desktop Navigation */}
-                    <div className={`hidden md:flex items-center gap-2 p-1 rounded-2xl border transition-colors ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-slate-900/5 border-slate-200'}`}>
-                        {navItems.map((item) => (
-                            <motion.a
-                                key={item.name}
-                                href={item.href}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    scrollToSection(item.href);
-                                }}
-                                className={`nav-link-magnetic px-6 py-2 rounded-xl text-sm font-bold transition-all duration-300 relative ${activeSection === item.href.substring(1)
-                                    ? 'text-indigo-600'
-                                    : isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                                    }`}
-                            >
-                                {activeSection === item.href.substring(1) && (
-                                    <motion.div
-                                        layoutId="nav-pill"
-                                        className={`absolute inset-0 rounded-xl shadow-sm -z-10 ${isDarkMode ? 'bg-white/10' : 'bg-white'}`}
-                                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                                    />
-                                )}
-                                {item.name}
-                            </motion.a>
-                        ))}
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        {/* Theme Toggle Button */}
-                        <motion.button
-                            onClick={toggleTheme}
-                            className={`w-12 h-12 flex items-center justify-center rounded-xl border transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-yellow-400 hover:bg-white/10' : 'bg-slate-100 border-slate-200 text-indigo-600 hover:bg-slate-200'}`}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+        <>
+            <motion.nav
+                ref={navRef}
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                className={`fixed top-0 left-0 right-0 z-[1000] pointer-events-auto transition-all duration-300 ${isMobileMenuOpen
+                    ? 'opacity-0 pointer-events-none' // Hide navbar when menu is open to avoid double buttons
+                    : isScrolled
+                        ? isDarkMode
+                            ? 'py-4 bg-slate-900/80 backdrop-blur-xl shadow-lg border-b border-white/5'
+                            : 'py-4 bg-white/90 backdrop-blur-xl shadow-lg border-b border-slate-100'
+                        : 'py-6 bg-transparent'
+                    }`}
+            >
+                <div className="max-w-7xl mx-auto px-6 lg:px-12">
+                    <div className="flex items-center justify-between">
+                        {/* Logo Section */}
+                        <motion.a
+                            href="#home"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                scrollToSection('#home');
+                            }}
+                            className="flex items-center gap-0 group cursor-pointer"
+                            whileHover={{ scale: 1.02 }}
                         >
-                            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-                        </motion.button>
+                            <span className="text-2xl font-black text-indigo-600 tracking-tighter">R</span>
+                            <span className={`text-2xl font-black tracking-tighter transition-colors group-hover:text-indigo-600 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>itesh</span>
+                            <span className="text-2xl font-black text-indigo-600">.</span>
+                        </motion.a>
 
-                        {/* Contact Button */}
-                        <div className="hidden md:block">
-                            <motion.button
-                                onClick={() => scrollToSection('#contact')}
-                                className={`px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-md ${isDarkMode ? 'bg-white text-slate-900 hover:bg-indigo-500 hover:text-white' : 'bg-slate-900 text-white hover:bg-indigo-600'}`}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                Let's Talk
-                            </motion.button>
-                        </div>
-
-                        {/* Mobile Menu Button */}
-                        <button
-                            className={`md:hidden w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-sm border transition-colors ${isDarkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-white border-slate-100 text-slate-900'}`}
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        >
-                            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Mobile Menu Overlay */}
-            <AnimatePresence>
-                {isMobileMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, x: '100%' }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: '100%' }}
-                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className={`fixed inset-0 z-[1100] md:hidden backdrop-blur-2xl transition-colors duration-700 ${isDarkMode ? 'bg-slate-900/95' : 'bg-white/95'}`}
-                    >
-                        {/* Close Button Header */}
-                        <div className="flex items-center justify-between p-8">
-                            <motion.a
-                                href="#home"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    scrollToSection('#home');
-                                }}
-                                className="flex items-center gap-0"
-                            >
-                                <span className="text-3xl font-black text-indigo-600 tracking-tighter">R</span>
-                                <span className={`text-3xl font-black tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>itesh.</span>
-                            </motion.a>
-                            <button
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl transition-colors ${isDarkMode ? 'bg-white/10 text-white' : 'bg-slate-900/5 text-slate-900'}`}
-                            >
-                                <FaTimes />
-                            </button>
-                        </div>
-
-                        {/* Menu Items */}
-                        <div className="flex flex-col items-center justify-center gap-6 h-[60%] px-8">
-                            {navItems.map((item, index) => (
+                        {/* Desktop Navigation */}
+                        <div className={`hidden md:flex items-center gap-2 p-1 rounded-2xl border transition-colors ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-slate-900/5 border-slate-200'}`}>
+                            {navItems.map((item) => (
                                 <motion.a
                                     key={item.name}
                                     href={item.href}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.1 + index * 0.05 }}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         scrollToSection(item.href);
                                     }}
-                                    className={`text-4xl font-black tracking-tighter transition-all hover:scale-110 ${activeSection === item.href.substring(1)
+                                    className={`nav-link-magnetic px-6 py-2 rounded-xl text-sm font-bold transition-all duration-300 relative ${activeSection === item.href.substring(1)
                                         ? 'text-indigo-600'
                                         : isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
                                         }`}
                                 >
+                                    {activeSection === item.href.substring(1) && (
+                                        <motion.div
+                                            layoutId="nav-pill"
+                                            className={`absolute inset-0 rounded-xl shadow-sm -z-10 ${isDarkMode ? 'bg-white/10' : 'bg-white'}`}
+                                            transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                        />
+                                    )}
                                     {item.name}
                                 </motion.a>
                             ))}
                         </div>
 
-                        {/* Footer area in Mobile Menu */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.5 }}
-                            className="absolute bottom-16 left-0 right-0 px-12"
-                        >
-                            <div className="flex flex-col items-center gap-8">
-                                <button
+                        <div className="flex items-center gap-4">
+                            {/* Theme Toggle Button */}
+                            <motion.button
+                                onClick={toggleTheme}
+                                className={`w-12 h-12 flex items-center justify-center rounded-xl border transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-yellow-400 hover:bg-white/10' : 'bg-slate-100 border-slate-200 text-indigo-600 hover:bg-slate-200'}`}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                            </motion.button>
+
+                            {/* Contact Button */}
+                            <div className="hidden md:block">
+                                <motion.button
                                     onClick={() => scrollToSection('#contact')}
-                                    className={`w-full py-6 rounded-3xl text-lg font-black uppercase tracking-widest transition-all shadow-xl ${isDarkMode ? 'bg-white text-slate-900 shadow-white/5' : 'bg-slate-900 text-white shadow-slate-900/10'}`}
+                                    className={`px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-md ${isDarkMode ? 'bg-white text-slate-900 hover:bg-indigo-500 hover:text-white' : 'bg-slate-900 text-white hover:bg-indigo-600'}`}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     Let's Talk
+                                </motion.button>
+                            </div>
+
+                            {/* Mobile Menu Button */}
+                            <button
+                                className={`md:hidden w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-sm border transition-colors ${isDarkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-white border-slate-100 text-slate-900'}`}
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            >
+                                {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </motion.nav>
+
+            {/* Mobile Menu Overlay - Movied outside to prevent clipping */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className={`fixed inset-0 z-[20000] md:hidden transition-colors duration-700 ${isDarkMode ? 'bg-slate-900' : 'bg-white'}`}
+                    >
+                        {/* Content Container */}
+                        <div className="relative w-full h-full flex flex-col overflow-y-auto overflow-x-hidden">
+                            {/* Header Section */}
+                            <div className="flex items-center justify-between p-8 border-b border-dashed border-slate-200/20">
+                                <motion.a
+                                    href="#home"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection('#home');
+                                    }}
+                                    className="flex items-center gap-0"
+                                >
+                                    <span className="text-3xl font-black text-indigo-600 tracking-tighter">R</span>
+                                    <span className={`text-3xl font-black tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>itesh.</span>
+                                </motion.a>
+                                <button
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl transition-colors ${isDarkMode ? 'bg-white/10 text-white' : 'bg-slate-900/5 text-slate-900'}`}
+                                >
+                                    <FaTimes />
                                 </button>
-                                <div className="flex gap-6">
-                                    <span className={`text-sm font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Connect:</span>
-                                    <div className="flex gap-4">
-                                        <FaGithub className={`text-2xl ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`} />
-                                        <FaLinkedin className="text-2xl text-blue-500" />
+                            </div>
+
+                            {/* Menu Items */}
+                            <div className="flex flex-col items-center justify-center gap-6 py-12 px-8">
+                                {navItems.map((item, index) => (
+                                    <motion.a
+                                        key={item.name}
+                                        href={item.href}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: 0.1 + index * 0.05 }}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            scrollToSection(item.href);
+                                        }}
+                                        className={`text-5xl font-black tracking-tighter transition-all hover:scale-105 ${activeSection === item.href.substring(1)
+                                            ? 'text-indigo-600'
+                                            : isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                                            }`}
+                                    >
+                                        {item.name}
+                                    </motion.a>
+                                ))}
+                            </div>
+
+                            {/* Footer area in Mobile Menu */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5 }}
+                                className="mt-auto p-12 pb-20"
+                            >
+                                <div className="flex flex-col items-center gap-8">
+                                    <button
+                                        onClick={() => scrollToSection('#contact')}
+                                        className={`w-full py-6 rounded-3xl text-lg font-black uppercase tracking-widest transition-all shadow-xl ${isDarkMode ? 'bg-white text-slate-900 shadow-white/5' : 'bg-slate-900 text-white shadow-slate-900/10'}`}
+                                    >
+                                        Let's Talk
+                                    </button>
+                                    <div className="flex gap-6">
+                                        <span className={`text-sm font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Connect:</span>
+                                        <div className="flex gap-4">
+                                            <FaGithub className={`text-2xl ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`} />
+                                            <FaLinkedin className="text-2xl text-blue-500" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </motion.div>
+                            </motion.div>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.nav>
+        </>
     );
 };
 
