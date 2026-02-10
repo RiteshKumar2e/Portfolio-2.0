@@ -2,6 +2,10 @@
 
 A modern, cutting-edge portfolio website built with React, Three.js, and advanced animation libraries. Features stunning 3D graphics, smooth animations, and an immersive user experience.
 
+## 🔗 Live Demo
+**View Live Portfolio:** [riteshkr.info](https://riteshkr.info)
+
+
 ## ✨ Features
 
 - **3D Particle Background**: Interactive particle system using React Three Fiber
@@ -156,12 +160,12 @@ colors: {
 
 This project is open source and available under the MIT License.
 
-## 👤 Author
+##  Author
 
 **Ritesh Kumar**
-- Portfolio: [Your Portfolio URL]
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourusername)
+- Website: [riteshkr.info](https://riteshkr.info)
+- GitHub: [RiteshKumar2e](https://github.com/RiteshKumar2e)
+- LinkedIn: [Ritesh Kumar](https://www.linkedin.com/in/ritesh-kumar-b5a1a0257/)
 
 ## 🙏 Acknowledgments
 
