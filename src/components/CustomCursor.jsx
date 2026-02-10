@@ -47,6 +47,20 @@ const CustomCursor = () => {
         };
     }, []);
 
+    // Strictly hide on touch devices
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+    useEffect(() => {
+        const checkTouch = () => {
+            return (('ontouchstart' in window) ||
+                (navigator.maxTouchPoints > 0) ||
+                (navigator.msMaxTouchPoints > 0));
+        };
+        setIsTouchDevice(checkTouch());
+    }, []);
+
+    if (isTouchDevice) return null;
+
     // Only render on devices that support hover (desktop/mouse users)
     if (typeof window !== 'undefined' && window.matchMedia && !window.matchMedia('(hover: hover)').matches) {
         return null;
