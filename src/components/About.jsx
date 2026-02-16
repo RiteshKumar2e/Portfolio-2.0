@@ -53,14 +53,14 @@ const About = () => {
                         variants={itemVariants}
                         className="relative"
                     >
-                        <div className="relative aspect-[4/5] max-w-[500px] mx-auto group">
+                        <div className="relative aspect-[4/5] max-w-[380px] mx-auto group">
                             {/* Decorative Background Elements */}
-                            <div className="absolute inset-0 rounded-[48px] -rotate-6 glass-card shadow-2xl" />
-                            <div className={`absolute inset-0 rounded-[48px] rotate-3 border transition-colors duration-700 ${isDarkMode ? 'bg-indigo-900/10 border-indigo-500/20' : 'bg-white border-indigo-100'}`} />
+                            <div className="absolute inset-0 rounded-[40px] -rotate-2 glass-card shadow-xl" />
+                            <div className={`absolute inset-0 rounded-[40px] rotate-2 border transition-colors duration-700 ${isDarkMode ? 'bg-indigo-900/10 border-indigo-500/20' : 'bg-white border-indigo-100'}`} />
 
                             {/* Main Image Container */}
-                            <div className={`relative rounded-[48px] shadow-2xl overflow-hidden border-4 h-full transition-colors p-4 ${isDarkMode ? 'border-slate-800 bg-slate-900/50' : 'border-white bg-[#f8fafc]'}`}>
-                                <div className="w-full h-full rounded-[36px] overflow-hidden">
+                            <div className={`relative rounded-[40px] shadow-xl overflow-hidden border-2 transition-colors p-3 ${isDarkMode ? 'border-slate-800 bg-slate-900/50' : 'border-white bg-[#f8fafc]'}`}>
+                                <div className="w-full h-full rounded-[28px] overflow-hidden">
                                     <img
                                         src="/profile-pic.jpg"
                                         alt="Ritesh Kumar"

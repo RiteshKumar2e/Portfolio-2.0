@@ -101,16 +101,16 @@ function ImageWireframeGlobes() {
 const DarkCosmosFinal = () => (
     <>
         <color attach="background" args={['#050510']} />
-        <fogExp2 attach="fog" args={['#050510', 0.012]} />
+        <fogExp2 attach="fog" args={['#050510', 0.015]} />
 
-        <Stars radius={150} depth={50} count={6000} factor={4} saturation={0} fade speed={1.5} />
-        <CosmicStars count={15000} />
+        <Stars radius={100} depth={50} count={3000} factor={3} saturation={0} fade speed={1} />
+        <CosmicStars count={8000} />
 
         <Suspense fallback={null}>
             <NebulaVibe />
             <ImageWireframeGlobes />
-            <pointLight position={[50, 50, -20]} intensity={5} color="#818cf8" />
-            <pointLight position={[-50, -50, -20]} intensity={3} color="#db2777" />
+            <pointLight position={[50, 50, -20]} intensity={3} color="#818cf8" />
+            <pointLight position={[-50, -50, -20]} intensity={2} color="#db2777" />
         </Suspense>
 
         <ambientLight intensity={0.5} />
@@ -123,24 +123,24 @@ function LiquidCrystal() {
     const meshRef = useRef();
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
-        meshRef.current.rotation.x = time * 0.1;
-        meshRef.current.rotation.y = time * 0.15;
+        meshRef.current.rotation.x = time * 0.05;
+        meshRef.current.rotation.y = time * 0.08;
     });
 
     return (
         <group position={[20, 10, -40]}>
-            <Float speed={2} rotationIntensity={2} floatIntensity={2}>
+            <Float speed={1.5} rotationIntensity={1} floatIntensity={1}>
                 <mesh ref={meshRef}>
-                    <torusKnotGeometry args={[10, 3, 128, 32]} />
+                    <torusKnotGeometry args={[10, 3, 64, 16]} />
                     <MeshDistortMaterial
                         color="#818cf8"
-                        speed={3}
-                        distort={0.4}
+                        speed={2}
+                        distort={0.3}
                         radius={1}
                         metalness={0.8}
                         roughness={0.2}
                         transparent
-                        opacity={0.5}
+                        opacity={0.4}
                     />
                 </mesh>
             </Float>
@@ -151,14 +151,14 @@ function LiquidCrystal() {
 function CyberHorizon() {
     const gridRef = useRef();
     useFrame((state) => {
-        gridRef.current.position.z = (state.clock.getElapsedTime() * 10) % 50;
+        gridRef.current.position.z = (state.clock.getElapsedTime() * 5) % 50;
     });
 
     return (
         <group position={[0, -25, 0]}>
             <group ref={gridRef}>
-                <gridHelper args={[200, 40, "#e2e8f0", "#cbd5e1"]} />
-                <gridHelper args={[200, 40, "#e2e8f0", "#cbd5e1"]} position={[0, 0, -200]} />
+                <gridHelper args={[200, 20, "#e2e8f0", "#cbd5e1"]} />
+                <gridHelper args={[200, 20, "#e2e8f0", "#cbd5e1"]} position={[0, 0, -200]} />
             </group>
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -100]}>
                 <planeGeometry args={[200, 100]} />
@@ -171,14 +171,14 @@ function CyberHorizon() {
 const LightFuturismFinal = () => (
     <>
         <color attach="background" args={['#ffffff']} />
-        <fog attach="fog" args={['#ffffff', 30, 120]} />
+        <fog attach="fog" args={['#ffffff', 30, 100]} />
         <Suspense fallback={null}>
             <LiquidCrystal />
             <CyberHorizon />
-            <directionalLight position={[5, 10, 5]} intensity={1.5} color="#ffffff" />
-            <pointLight position={[-10, 10, -10]} intensity={1} color="#c7d2fe" />
+            <directionalLight position={[5, 10, 5]} intensity={1.2} color="#ffffff" />
+            <pointLight position={[-10, 10, -10]} intensity={0.8} color="#c7d2fe" />
         </Suspense>
-        <ambientLight intensity={1.2} />
+        <ambientLight intensity={1} />
     </>
 );
 
@@ -188,8 +188,9 @@ function Rig() {
     const { camera, mouse } = useThree();
     const vec = new THREE.Vector3();
     return useFrame(() => {
-        camera.position.lerp(vec.set(mouse.x * 12, mouse.y * 12, 60), 0.08);
-        camera.lookAt(0, 0, -20);
+        // Optimized lerp for better performance
+        camera.position.lerp(vec.set(mouse.x * 8, mouse.y * 8, 60), 0.05);
+        camera.lookAt(0, 0, -10);
     });
 }
 
@@ -203,13 +204,12 @@ const LayoutBackground = () => {
                 camera={{ position: [0, 0, 60], fov: 60 }}
                 style={{ width: '100vw', height: '100vh' }}
                 gl={{
-                    antialias: true,
+                    antialias: false, // Turn off for performance boost
                     alpha: true,
                     powerPreference: 'high-performance',
-                    toneMapping: THREE.ACESFilmicToneMapping,
-                    toneMappingExposure: 1.5
+                    precision: 'lowp', // Reduced precision for background elements
                 }}
-                dpr={[1, 2]}
+                dpr={[1, 1.5]}
             >
                 {isDarkMode ? <DarkCosmosFinal /> : <LightFuturismFinal />}
                 <Rig />

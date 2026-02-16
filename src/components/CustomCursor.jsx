@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 const CustomCursor = () => {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isHovering, setIsHovering] = useState(false);
     const [isClicked, setIsClicked] = useState(false);
 
+    // High-performance MotionValues for direct DOM manipulation
+    const cursorX = useMotionValue(-100);
+    const cursorY = useMotionValue(-100);
+
+    // Liquid-smooth spring follower config
+    const springConfig = { damping: 25, stiffness: 250, mass: 0.5 };
+    const springX = useSpring(cursorX, springConfig);
+    const springY = useSpring(cursorY, springConfig);
+
     useEffect(() => {
         const updateMousePosition = (e) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
+            cursorX.set(e.clientX);
+            cursorY.set(e.clientY);
         };
 
         const handleMouseOver = (e) => {
             const target = e.target;
-            // Check for clickable elements: links, buttons, inputs, or anything with pointer cursor
+            if (!target || !(target instanceof HTMLElement)) return;
+
             if (
                 target.tagName === 'A' ||
                 target.tagName === 'BUTTON' ||
@@ -30,77 +40,65 @@ const CustomCursor = () => {
         const handleMouseDown = () => setIsClicked(true);
         const handleMouseUp = () => setIsClicked(false);
 
-        window.addEventListener('mousemove', updateMousePosition);
+        window.addEventListener('mousemove', updateMousePosition, { passive: true });
         window.addEventListener('mouseover', handleMouseOver);
         window.addEventListener('mousedown', handleMouseDown);
         window.addEventListener('mouseup', handleMouseUp);
-
-        // Hide default cursor
-        document.body.style.cursor = 'none';
 
         return () => {
             window.removeEventListener('mousemove', updateMousePosition);
             window.removeEventListener('mouseover', handleMouseOver);
             window.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mouseup', handleMouseUp);
-            document.body.style.cursor = 'auto';
         };
-    }, []);
+    }, [cursorX, cursorY]);
 
-    // Strictly hide on touch devices
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-
     useEffect(() => {
-        const checkTouch = () => {
-            return (('ontouchstart' in window) ||
-                (navigator.maxTouchPoints > 0) ||
-                (navigator.msMaxTouchPoints > 0));
-        };
-        setIsTouchDevice(checkTouch());
+        setIsTouchDevice(('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
     }, []);
 
     if (isTouchDevice) return null;
 
-    // Only render on devices that support hover (desktop/mouse users)
-    if (typeof window !== 'undefined' && window.matchMedia && !window.matchMedia('(hover: hover)').matches) {
-        return null;
-    }
-
     return (
-        <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-[99999] overflow-hidden">
-            {/* Inner Dot - The precise cursor */}
+        <div className="fixed inset-0 pointer-events-none z-[99999] overflow-hidden">
+            {/* Ultra-Responsive Inner Dot */}
             <motion.div
-                className="absolute w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]"
+                className="absolute w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.8)]"
                 style={{
-                    x: mousePosition.x - 4, // Center the 8px dot (half width)
-                    y: mousePosition.y - 4,
-                    pointerEvents: 'none'
+                    x: cursorX,
+                    y: cursorY,
+                    translateX: '-50%',
+                    translateY: '-50%',
                 }}
             />
 
-            {/* Outer Ring - The follower */}
+            {/* Premium Liquid Follower */}
             <motion.div
-                className="absolute w-8 h-8 border-[1.5px] border-cyan-400 rounded-full opacity-60 flex items-center justify-center mix-blend-screen"
+                className="absolute w-10 h-10 border-[1.5px] border-cyan-400/40 rounded-full flex items-center justify-center mix-blend-screen"
+                style={{
+                    x: springX,
+                    y: springY,
+                    translateX: '-50%',
+                    translateY: '-50%',
+                }}
                 animate={{
-                    x: mousePosition.x - 16, // Center the 32px ring
-                    y: mousePosition.y - 16,
-                    scale: isHovering ? 1.5 : (isClicked ? 0.8 : 1),
-                    borderColor: isClicked ? '#22d3ee' : '#22d3ee',
-                    backgroundColor: isHovering ? 'rgba(34, 211, 238, 0.1)' : 'transparent'
+                    scale: isHovering ? 1.6 : (isClicked ? 0.8 : 1),
+                    backgroundColor: isHovering ? 'rgba(34, 211, 238, 0.15)' : 'rgba(34, 211, 238, 0)',
+                    borderColor: isHovering ? 'rgba(255, 255, 255, 0.9)' : 'rgba(34, 211, 238, 0.4)',
                 }}
                 transition={{
-                    type: "spring",
-                    stiffness: 800,
-                    damping: 30,
-                    mass: 0.5
+                    scale: { type: "spring", stiffness: 400, damping: 20 },
+                    backgroundColor: { duration: 0.15 },
+                    borderColor: { duration: 0.15 }
                 }}
             >
-                {/* Optional trailing particles decoration matching the image vibe */}
-                <div className={`absolute -right-2 top-0 w-1 h-1 bg-cyan-400 rounded-full opacity-50 ${isHovering ? 'hidden' : 'block'}`} />
-                <div className={`absolute -left-1 bottom-1 w-0.5 h-0.5 bg-cyan-400 rounded-full opacity-30 ${isHovering ? 'hidden' : 'block'}`} />
+                {/* Secondary Orbit Dot */}
+                <div className={`absolute -right-1 -top-1 w-1 h-1 bg-cyan-400 rounded-full opacity-30 ${isHovering ? 'hidden' : 'block'}`} />
             </motion.div>
         </div>
     );
 };
 
 export default CustomCursor;
+
