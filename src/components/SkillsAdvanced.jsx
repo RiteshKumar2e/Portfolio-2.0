@@ -18,9 +18,9 @@ const HoverSkillPill = ({ name, icon: Icon, color, index }) => {
 
     return (
         <motion.div
-            className={`relative flex items-center justify-center w-20 h-14 md:w-24 md:h-16 rounded-2xl border cursor-pointer transition-all duration-300 ${isDarkMode
-                ? 'bg-white/5 border-white/5 hover:border-indigo-500/50 hover:bg-white/10'
-                : 'bg-slate-100 border-slate-200 hover:border-indigo-400 hover:bg-white hover:shadow-xl'
+            className={`relative flex items-center justify-center w-20 h-14 md:w-24 md:h-16 rounded-2xl border cursor-pointer transition-all duration-200 ${isDarkMode
+                ? 'bg-white/5 border-white/5 hover:border-cyan-500/50 hover:bg-cyan-500/5 shadow-sm hover:shadow-[0_0_25px_rgba(34,211,238,0.15)]'
+                : 'bg-slate-50 border-slate-200 hover:border-indigo-400 hover:bg-white hover:shadow-xl'
                 }`}
             whileHover={{ scale: 1.15, y: -5 }}
             whileTap={{ scale: 0.95 }}
@@ -28,7 +28,7 @@ const HoverSkillPill = ({ name, icon: Icon, color, index }) => {
             onHoverEnd={() => setIsHovered(false)}
             onClick={() => setIsHovered(!isHovered)}
         >
-            <div className={`flex items-center justify-center text-2xl md:text-4xl transition-colors duration-300 ${color}`}>
+            <div className={`flex items-center justify-center text-2xl md:text-4xl transition-colors duration-200 ${color}`}>
                 <Icon />
             </div>
 
@@ -38,7 +38,7 @@ const HoverSkillPill = ({ name, icon: Icon, color, index }) => {
                         initial={{ opacity: 0, y: 10, x: "-50%", scale: 0.8 }}
                         animate={{ opacity: 1, y: -10, x: "-50%", scale: 1 }}
                         exit={{ opacity: 0, y: 5, x: "-50%", scale: 0.8 }}
-                        transition={{ duration: 0.2, ease: "backOut" }}
+                        transition={{ duration: 0.15, ease: "easeOut" }}
                         className={`absolute -top-14 left-1/2 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap shadow-xl z-50 border ${isDarkMode
                             ? 'bg-slate-900 border-indigo-500/30 text-white'
                             : 'bg-white border-indigo-100 text-slate-900'
@@ -70,8 +70,8 @@ const SkillCategory = ({ title, icon: Icon, skills, index }) => {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className={`rounded-3xl p-6 md:p-8 border transition-all duration-300 hover:-translate-y-1 ${isDarkMode
-                ? 'bg-slate-900/40 border-white/10 cyber-card-glow hover:border-indigo-500/30'
+            className={`rounded-3xl p-6 md:p-8 border transition-all duration-200 hover:-translate-y-1 ${isDarkMode
+                ? 'bg-slate-900/40 border-white/10 hover:border-cyan-500/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:shadow-[0_20px_40px_rgba(34,211,238,0.05)]'
                 : 'bg-white border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10'
                 }`}
         >

@@ -15,25 +15,26 @@ const About = () => {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.2
+                staggerChildren: 0.1
             }
         }
     };
 
     const itemVariants = {
-        hidden: { y: 30, opacity: 0 },
+        hidden: { y: 20, opacity: 0 },
         visible: {
             y: 0,
             opacity: 1,
             transition: {
                 type: 'spring',
-                stiffness: 100
+                stiffness: 300,
+                damping: 25
             }
         }
     };
 
     return (
-        <section id="about" className={`py-12 px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto relative transition-colors duration-700 ${isDarkMode ? 'bg-transparent' : 'bg-transparent'}`}>
+        <section id="about" className={`py-12 px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto relative transition-colors duration-300 ${isDarkMode ? 'bg-transparent' : 'bg-transparent'}`}>
             <motion.div
                 ref={ref}
                 variants={containerVariants}
@@ -56,7 +57,7 @@ const About = () => {
                         <div className="relative aspect-[4/5] max-w-[380px] mx-auto group">
                             {/* Decorative Background Elements */}
                             <div className="absolute inset-0 rounded-[40px] -rotate-2 glass-card shadow-xl" />
-                            <div className={`absolute inset-0 rounded-[40px] rotate-2 border transition-colors duration-700 ${isDarkMode ? 'bg-indigo-900/10 border-indigo-500/20' : 'bg-white border-indigo-100'}`} />
+                            <div className={`absolute inset-0 rounded-[40px] rotate-2 border transition-colors duration-300 ${isDarkMode ? 'bg-indigo-900/10 border-indigo-500/20' : 'bg-white border-indigo-100'}`} />
 
                             {/* Main Image Container */}
                             <div className={`relative rounded-[40px] shadow-xl overflow-hidden border-2 transition-colors p-3 ${isDarkMode ? 'border-slate-800 bg-slate-900/50' : 'border-white bg-[#f8fafc]'}`}>
@@ -64,13 +65,13 @@ const About = () => {
                                     <img
                                         src="/profile-pic.jpg"
                                         alt="Ritesh Kumar"
-                                        className="w-full h-full object-cover object-top transform hover:scale-110 transition-transform duration-700 origin-top"
+                                        className="w-full h-full object-cover object-top transform hover:scale-110 transition-transform duration-400 origin-top"
                                     />
                                 </div>
                             </div>
 
                             {/* Tech Stamp */}
-                            <div className="absolute -bottom-4 -right-4 sm:-bottom-8 sm:-right-8 w-24 h-24 sm:w-28 sm:h-28 rounded-full shadow-2xl p-4 flex items-center justify-center border-4 sm:border-8 rotate-12 transition-all duration-500 group-hover:rotate-0 glass-card">
+                            <div className="absolute -bottom-4 -right-4 sm:-bottom-8 sm:-right-8 w-24 h-24 sm:w-28 sm:h-28 rounded-full shadow-2xl p-4 flex items-center justify-center border-4 sm:border-8 rotate-12 transition-all duration-300 group-hover:rotate-0 glass-card">
                                 <div className="text-center">
                                     <div className="text-2xl sm:text-3xl mb-1">🎓</div>
                                     <div className={`text-[12px] font-black uppercase ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>CSE</div>
@@ -90,7 +91,7 @@ const About = () => {
                                 I'm a <span className={`${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'} font-bold`}>Computer Science Engineer</span> on a mission to build software that matters. Currently focused on deep learning architecture and enterprise-ready web platforms.
                             </p>
                             <div className="h-1 w-20 bg-indigo-600 rounded-full mx-auto lg:mx-0" />
-                            <p className={`leading-relaxed italic border-l-4 border-indigo-500/20 pl-6 transition-opacity duration-1000 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'} ${inView ? 'opacity-100' : 'opacity-0'}`}>
+                            <p className={`leading-relaxed italic border-l-4 border-indigo-500/20 pl-6 transition-opacity duration-400 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'} ${inView ? 'opacity-100' : 'opacity-0'}`}>
                                 "Solving complex problems with simple, elegant code is my primary objective."
                             </p>
                         </div>

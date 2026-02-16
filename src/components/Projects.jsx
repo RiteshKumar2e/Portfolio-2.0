@@ -50,16 +50,16 @@ const ProjectCard = ({ project, index }) => {
             className="group relative perspective-1000"
         >
             {/* Cyber Corner Accents */}
-            <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-indigo-500 z-30 transition-all duration-500 group-hover:-top-4 group-hover:-left-4 opacity-50" />
-            <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-purple-500 z-30 transition-all duration-500 group-hover:-bottom-4 group-hover:-right-4 opacity-50" />
+            <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-indigo-500 z-30 transition-all duration-200 group-hover:-top-4 group-hover:-left-4 opacity-50" />
+            <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-purple-500 z-30 transition-all duration-200 group-hover:-bottom-4 group-hover:-right-4 opacity-50" />
 
-            <div className={`relative rounded-3xl overflow-hidden border transition-all duration-700 h-full flex flex-col ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'bg-white border-slate-100 shadow-lg'}`}>
+            <div className={`relative rounded-3xl overflow-hidden border transition-all duration-300 h-full flex flex-col ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'bg-white border-slate-100 shadow-lg'}`}>
                 {/* Glow Effect - Subtler for performance */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-1000 pointer-events-none" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-400 pointer-events-none" />
 
                 {/* Header Image/Icon Area */}
                 <div className={`relative h-48 sm:h-56 bg-gradient-to-br ${project.gradient} ${project.image ? 'p-0' : 'p-8'} flex items-center justify-center overflow-hidden`}>
-                    <div className={`relative z-10 ${project.image ? 'w-full h-full' : 'text-7xl sm:text-8xl'} group-hover:scale-110 transition-transform duration-1000 filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.4)] flex items-center justify-center`}>
+                    <div className={`relative z-10 ${project.image ? 'w-full h-full' : 'text-7xl sm:text-8xl'} group-hover:scale-110 transition-transform duration-400 filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.4)] flex items-center justify-center`}>
                         {project.image ? (
                             <img
                                 src={project.image}

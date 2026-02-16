@@ -25,7 +25,7 @@
   }
 
   .dark body {
-    @apply bg-[#020617] text-slate-100 selection:bg-indigo-500/30 selection:text-indigo-200;
+    @apply bg-[#020617] text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200;
   }
 }
 
@@ -33,7 +33,7 @@
 
   /* Premium Glassmorphism */
   .glass-card {
-    @apply backdrop-blur-xl border transition-all duration-500;
+    @apply backdrop-blur-xl border transition-all duration-200;
     background: rgba(var(--glass-bg), 0.8);
     border-color: rgba(var(--glass-border), 0.2);
   }
@@ -62,14 +62,14 @@
 
   /* Animated Buttons */
   .btn-premium {
-    @apply relative px-8 py-3.5 rounded-2xl font-semibold overflow-hidden transition-all duration-300 active:scale-95;
+    @apply relative px-8 py-3.5 rounded-2xl font-semibold overflow-hidden transition-all duration-200 active:scale-95;
     background: linear-gradient(135deg, rgb(99, 102, 241) 0%, rgb(168, 85, 247) 100%);
     color: white;
   }
 
   .btn-premium::before {
     content: '';
-    @apply absolute inset-0 bg-white/20 translate-x-[-100%] transition-transform duration-500 ease-out;
+    @apply absolute inset-0 bg-white/20 translate-x-[-100%] transition-transform duration-300 ease-out;
   }
 
   .btn-premium:hover::before {
@@ -81,7 +81,7 @@
   }
 
   .btn-outline {
-    @apply relative px-8 py-3.5 rounded-2xl font-semibold border-2 border-indigo-500/20 backdrop-blur-md transition-all duration-300 hover:border-indigo-500/50 hover:bg-indigo-500/5 active:scale-95;
+    @apply relative px-8 py-3.5 rounded-2xl font-semibold border-2 border-indigo-500/20 backdrop-blur-md transition-all duration-200 hover:border-indigo-500/50 hover:bg-indigo-500/5 active:scale-95;
   }
 
   /* Main Content Containers */
@@ -191,7 +191,13 @@
 
 /* Hide Default Cursor on Desktop */
 @media (hover: hover) and (pointer: fine) {
-  body, a, button, input, select, textarea {
+
+  body,
+  a,
+  button,
+  input,
+  select,
+  textarea {
     cursor: none !important;
   }
 }

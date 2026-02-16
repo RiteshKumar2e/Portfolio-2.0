@@ -88,7 +88,7 @@ const Navbar = () => {
         if (element) {
             if (lenis) {
                 lenis.start(); // Ensure scrolling is enabled
-                lenis.scrollTo(href, { offset: -80, duration: 1.2 });
+                lenis.scrollTo(href, { offset: -80, duration: 0.6 });
             } else {
                 const offset = 80;
                 const bodyRect = document.body.getBoundingClientRect().top;
@@ -162,16 +162,18 @@ const Navbar = () => {
                                         e.preventDefault();
                                         scrollToSection(item.href);
                                     }}
-                                    className={`nav-link-magnetic px-6 py-2 rounded-xl text-sm font-bold transition-all duration-300 relative ${activeSection === item.href.substring(1)
-                                        ? 'text-indigo-600'
-                                        : isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                                    className={`nav-link-magnetic px-6 py-2 rounded-xl text-sm font-black transition-all duration-200 relative tracking-wide ${activeSection === item.href.substring(1)
+                                        ? isDarkMode ? 'text-cyan-400' : 'text-indigo-600'
+                                        : isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'
                                         }`}
                                 >
                                     {activeSection === item.href.substring(1) && (
                                         <motion.div
                                             layoutId="nav-pill"
-                                            className={`absolute inset-0 rounded-xl shadow-sm -z-10 ${isDarkMode ? 'bg-white/10' : 'bg-white'}`}
-                                            transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                            className={`absolute inset-0 rounded-xl -z-10 border shadow-sm ${isDarkMode
+                                                ? 'bg-indigo-500/10 border-indigo-500/20 shadow-[0_0_15px_rgba(34,211,238,0.1)]'
+                                                : 'bg-white border-slate-200 shadow-md shadow-indigo-500/5'}`}
+                                            transition={{ type: 'spring', stiffness: 500, damping: 35 }}
                                         />
                                     )}
                                     {item.name}
@@ -194,8 +196,10 @@ const Navbar = () => {
                             <div className="hidden md:block">
                                 <motion.button
                                     onClick={() => scrollToSection('#contact')}
-                                    className={`px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-md ${isDarkMode ? 'bg-white text-slate-900 hover:bg-indigo-500 hover:text-white' : 'bg-slate-900 text-white hover:bg-indigo-600'}`}
-                                    whileHover={{ scale: 1.05 }}
+                                    className={`px-8 py-3 rounded-xl text-sm font-black transition-all shadow-lg tracking-tight ${isDarkMode
+                                        ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-indigo-500/20 hover:shadow-cyan-500/30 hover:scale-[1.02]'
+                                        : 'bg-slate-900 text-white hover:bg-indigo-600 hover:shadow-indigo-500/30'}`}
+                                    whileHover={{ y: -2 }}
                                     whileTap={{ scale: 0.95 }}
                                 >
                                     Let's Talk
@@ -279,12 +283,14 @@ const Navbar = () => {
                                                 e.preventDefault();
                                                 scrollToSection(item.href);
                                             }}
-                                            className={`relative py-4 px-4 flex items-center rounded-xl transition-all active:scale-[0.98] ${activeSection === item.href.substring(1)
-                                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
-                                                : isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:bg-slate-50'
+                                            className={`relative py-4 px-5 flex items-center rounded-xl transition-all active:scale-[0.98] border ${activeSection === item.href.substring(1)
+                                                ? isDarkMode
+                                                    ? 'bg-indigo-600/20 border-indigo-500/40 text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.1)]'
+                                                    : 'bg-indigo-600 border-indigo-700 text-white shadow-lg shadow-indigo-600/20'
+                                                : isDarkMode ? 'text-slate-400 border-transparent hover:text-white hover:bg-white/5' : 'text-slate-600 border-transparent hover:bg-slate-50'
                                                 }`}
                                         >
-                                            <span className="text-sm font-black uppercase tracking-widest">{item.name}</span>
+                                            <span className="text-xs font-black uppercase tracking-[0.2em]">{item.name}</span>
 
 
                                             {activeSection === item.href.substring(1) && (
