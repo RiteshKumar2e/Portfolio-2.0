@@ -86,8 +86,8 @@ const CustomCursor = () => {
 
     if (isTouchDevice) return null;
 
-    const primaryColor = isDarkMode ? '#22d3ee' : '#4f46e5';
-    const auraColor = isDarkMode ? 'rgba(34, 211, 238, 0.15)' : 'rgba(79, 70, 229, 0.15)';
+    const primaryColor = isDarkMode ? '#22d3ee' : '#111827'; // Cyan for Dark, Deep Charcoal for Light
+    const auraColor = isDarkMode ? 'rgba(34, 211, 238, 0.15)' : 'rgba(17, 24, 39, 0.1)';
 
     return (
         <div className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden">
