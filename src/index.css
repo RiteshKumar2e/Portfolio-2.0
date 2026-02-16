@@ -188,16 +188,3 @@
 .content-mask {
   mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
 }
-
-/* Hide Default Cursor on Desktop */
-@media (hover: hover) and (pointer: fine) {
-
-  body,
-  a,
-  button,
-  input,
-  select,
-  textarea {
-    cursor: none !important;
-  }
-}

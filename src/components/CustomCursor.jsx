@@ -1,65 +1,60 @@
-import React, { useEffect, useState, memo } from 'react';
-import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState, memo, useRef } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 
 const CustomCursor = () => {
     const [isHovering, setIsHovering] = useState(false);
-    const [isClicked, setIsClicked] = useState(false);
     const { isDarkMode } = useTheme();
 
-    // 1. Direct MotionValues for ZERO-LAG tracking
-    // Using MotionValues bypasses React's render cycle for position updates
-    const cursorX = useMotionValue(-100);
-    const cursorY = useMotionValue(-100);
+    // 1. Position Tracking (Raw Motion Values)
+    const mouseX = useMotionValue(-100);
+    const mouseY = useMotionValue(-100);
 
-    // 2. Optimized Spring Physics for "Liquid" smoothness
-    // Higher damping and stiffness with lower mass for instant but smooth response
-    const springConfig = { damping: 35, stiffness: 400, mass: 0.3 };
-    const springX = useSpring(cursorX, springConfig);
-    const springY = useSpring(cursorY, springConfig);
+    // 2. High-Response Physics (Ultra-snappy for zero perceived lag)
+    // Low mass and high stiffness makes it follow the pointer like it's "glued"
+    const springConfig = { damping: 35, stiffness: 450, mass: 0.2 };
+    const springX = useSpring(mouseX, springConfig);
+    const springY = useSpring(mouseY, springConfig);
+
+    // Refs for direct DOM positioning (even faster than MotionValue binding)
+    const dotRef = useRef(null);
 
     useEffect(() => {
-        const updateMousePosition = (e) => {
-            // Using requestAnimationFrame is not needed with useMotionValue, 
-            // but we ensure direct updates here.
-            cursorX.set(e.clientX);
-            cursorY.set(e.clientY);
+        const handleMouseMove = (e) => {
+            const { clientX, clientY } = e;
+
+            // Update MotionValues (for spring-based halo)
+            mouseX.set(clientX);
+            mouseY.set(clientY);
+
+            // Direct DOM update for the precision dot (Atomic Zero Lag)
+            if (dotRef.current) {
+                dotRef.current.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
+            }
         };
 
         const handleMouseOver = (e) => {
             const target = e.target;
-            if (!target || !(target instanceof HTMLElement)) return;
+            if (!target) return;
 
-            // Efficient check for interactive elements
-            if (
+            const isInteractive =
                 target.tagName === 'A' ||
                 target.tagName === 'BUTTON' ||
                 target.closest('a') ||
                 target.closest('button') ||
-                window.getComputedStyle(target).cursor === 'pointer'
-            ) {
-                setIsHovering(true);
-            } else {
-                setIsHovering(false);
-            }
+                window.getComputedStyle(target).cursor === 'pointer';
+
+            if (isInteractive !== isHovering) setIsHovering(isInteractive);
         };
 
-        const handleMouseDown = () => setIsClicked(true);
-        const handleMouseUp = () => setIsClicked(false);
-
-        // Passive listeners are crucial for performance
-        window.addEventListener('mousemove', updateMousePosition, { passive: true });
+        window.addEventListener('mousemove', handleMouseMove, { passive: true });
         window.addEventListener('mouseover', handleMouseOver, { passive: true });
-        window.addEventListener('mousedown', handleMouseDown, { passive: true });
-        window.addEventListener('mouseup', handleMouseUp, { passive: true });
 
         return () => {
-            window.removeEventListener('mousemove', updateMousePosition);
+            window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseover', handleMouseOver);
-            window.removeEventListener('mousedown', handleMouseDown);
-            window.removeEventListener('mouseup', handleMouseUp);
         };
-    }, [cursorX, cursorY]);
+    }, [isHovering, mouseX, mouseY]);
 
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     useEffect(() => {
@@ -68,11 +63,15 @@ const CustomCursor = () => {
 
     if (isTouchDevice) return null;
 
+    // Theme Colors
+    const primaryColor = isDarkMode ? '#22d3ee' : '#4f46e5';
+    const auraColor = isDarkMode ? 'rgba(34, 211, 238, 0.15)' : 'rgba(79, 70, 229, 0.15)';
+
     return (
-        <div className="fixed inset-0 pointer-events-none z-[99999] overflow-hidden">
-            {/* 1. ULTRA-SMOOTH FOLLOWER (Spring-based) */}
+        <div className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden">
+            {/* 1. BREATHING OUTER HALO (Modern & Animated) */}
             <motion.div
-                className={`absolute rounded-full border border-opacity-30 ${isDarkMode ? 'mix-blend-screen' : 'mix-blend-difference'}`}
+                className="absolute rounded-full border-2 transform-gpu"
                 style={{
                     x: springX,
                     y: springY,
@@ -80,60 +79,67 @@ const CustomCursor = () => {
                     translateY: '-50%',
                     width: 40,
                     height: 40,
-                    borderColor: isDarkMode ? 'rgba(34, 211, 238, 0.5)' : '#fff',
+                    borderColor: primaryColor,
+                    willChange: 'transform',
                 }}
                 animate={{
-                    scale: isHovering ? 1.5 : (isClicked ? 0.8 : 1),
-                    backgroundColor: isHovering
-                        ? (isDarkMode ? 'rgba(34, 211, 238, 0.1)' : 'rgba(255, 255, 255, 0.1)')
-                        : 'rgba(34, 211, 238, 0)',
+                    scale: isHovering ? 1.6 : [1, 1.08, 1], // Breathing preserved
+                    rotate: isHovering ? 180 : 0,
+                    borderRadius: isHovering ? "30%" : "50%", // Morphing preserved
+                    borderStyle: isHovering ? 'dashed' : 'solid',
                 }}
                 transition={{
-                    scale: { type: 'spring', stiffness: 400, damping: 25 },
-                    backgroundColor: { duration: 0.2 }
+                    scale: {
+                        repeat: isHovering ? 0 : Infinity,
+                        duration: 2,
+                        ease: "easeInOut"
+                    },
+                    rotate: { duration: 0.5 },
+                    borderRadius: { duration: 0.4 },
+                    default: { type: 'spring', stiffness: 300, damping: 25 }
                 }}
             />
 
-            {/* 2. ZERO-LAG CENTRAL DOT (Direct Tracking) */}
+            {/* 2. CORE PULSE GHOST (The "Animated" part) */}
             <motion.div
-                className="absolute w-1.5 h-1.5 rounded-full z-10"
+                className="absolute rounded-full transform-gpu"
                 style={{
-                    x: cursorX,
-                    y: cursorY,
+                    x: springX,
+                    y: springY,
                     translateX: '-50%',
                     translateY: '-50%',
-                    backgroundColor: isDarkMode ? '#22d3ee' : '#fff',
-                    boxShadow: isDarkMode ? '0 0 10px rgba(34, 211, 238, 0.8)' : 'none',
-                    // Disable shadow in light mode for performance
+                    width: 40,
+                    height: 40,
+                    backgroundColor: auraColor,
+                    willChange: 'transform',
                 }}
                 animate={{
-                    scale: isHovering ? 0 : 1,
+                    scale: [1, 1.8],
+                    opacity: [0.4, 0],
+                }}
+                transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "easeOut"
                 }}
             />
 
-            {/* 3. MINIMALIST CROSSHAIR (Only on Hover) */}
-            <AnimatePresence>
-                {isHovering && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.5 }}
-                        className="absolute flex items-center justify-center"
-                        style={{
-                            x: cursorX,
-                            y: cursorY,
-                            translateX: '-50%',
-                            translateY: '-50%',
-                        }}
-                    >
-                        <div className={`w-[1px] h-3 absolute ${isDarkMode ? 'bg-cyan-400' : 'bg-white'}`} />
-                        <div className={`w-3 h-[1px] absolute ${isDarkMode ? 'bg-cyan-400' : 'bg-white'}`} />
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* 3. PRECISION SNAP DOT (Direct DOM for Zero Lag) */}
+            <div
+                ref={dotRef}
+                className="absolute rounded-full z-10 transform-gpu"
+                style={{
+                    width: 6,
+                    height: 6,
+                    backgroundColor: primaryColor,
+                    boxShadow: isDarkMode ? '0 0 10px #22d3ee' : '0 0 8px #4f46e5',
+                    left: 0,
+                    top: 0,
+                    willChange: 'transform',
+                }}
+            />
         </div>
     );
 };
 
-// Memoize to prevent unnecessary re-renders
 export default memo(CustomCursor);
