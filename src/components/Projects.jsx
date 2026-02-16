@@ -58,7 +58,12 @@ const ProjectCard = ({ project, index }) => {
                 <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-400 pointer-events-none" />
 
                 {/* Header Image/Icon Area */}
-                <div className={`relative h-48 sm:h-56 bg-gradient-to-br ${project.gradient} ${project.image ? 'p-0' : 'p-8'} flex items-center justify-center overflow-hidden`}>
+                <a
+                    href={project.demo !== '#' ? project.demo : undefined}
+                    target={project.demo !== '#' ? "_blank" : undefined}
+                    rel={project.demo !== '#' ? "noopener noreferrer" : undefined}
+                    className={`relative h-48 sm:h-56 bg-gradient-to-br ${project.gradient} ${project.image ? 'p-0' : 'p-8'} flex items-center justify-center overflow-hidden ${project.demo !== '#' ? 'cursor-pointer' : 'cursor-default'}`}
+                >
                     <div className={`relative z-10 ${project.image ? 'w-full h-full' : 'text-7xl sm:text-8xl'} group-hover:scale-110 transition-transform duration-400 filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.4)] flex items-center justify-center`}>
                         {project.image ? (
                             <img
@@ -83,7 +88,7 @@ const ProjectCard = ({ project, index }) => {
                             ARCHIVE-ID: 0{index + 1}
                         </div>
                     </div>
-                </div>
+                </a>
 
                 {/* Content Area */}
                 <div className="p-8 sm:p-10 flex-1 flex flex-col relative z-20">
