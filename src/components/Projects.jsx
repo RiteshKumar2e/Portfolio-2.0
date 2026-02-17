@@ -172,8 +172,8 @@ const Projects = () => {
         },
         {
             title: 'QuickFix AI Customer Agent',
-            description: 'Enterprise-grade AI platform with 7+ specialized agents. Built with Google Gemini AI, FastAPI, and React for millisecond responses.',
-            tech: ['Gemini AI', 'FastAPI', 'React', 'PostgreSQL'],
+            description: "I developed this platform to tackle complex customer support challenges by orchestrating over 30 specialized AI agents in a single pipeline. It's designed to handle everything from sentiment analysis to policy-aware resolutions using RAG, delivering smart and empathetic responses in under a second while maintaining the reliability needed for a production environment.",
+            tech: ['FastAPI', 'React 19', 'Gemini 2.0', 'Groq LLaMA', 'MariaDB'],
             gradient: 'from-indigo-600 via-indigo-500 to-purple-600',
             github: 'https://github.com/RiteshKumar2e/customer-complaint-agent_new',
             demo: 'https://riteshkr.online',
