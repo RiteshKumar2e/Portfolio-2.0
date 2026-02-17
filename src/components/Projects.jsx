@@ -65,11 +65,12 @@ const ProjectCard = ({ project, index }) => {
                     href={project.demo !== '#' ? project.demo : undefined}
                     target={project.demo !== '#' ? "_blank" : undefined}
                     rel={project.demo !== '#' ? "noopener noreferrer" : undefined}
-                    className={`relative h-56 sm:h-64 bg-gradient-to-br ${project.gradient} overflow-hidden flex items-center justify-center ${project.demo !== '#' ? 'cursor-pointer' : 'cursor-default'}`}
+                    className={`relative h-56 sm:h-64 overflow-hidden flex items-center justify-center ${project.image
+                            ? 'bg-slate-100 dark:bg-slate-800'
+                            : `bg-gradient-to-br ${project.gradient}`
+                        } ${project.demo !== '#' ? 'cursor-pointer' : 'cursor-default'}`}
                 >
-                    <div className="absolute inset-0 bg-black/10 transition-opacity group-hover:opacity-0" />
-
-                    <div className={`relative z-10 ${project.image ? 'w-full h-full' : 'scale-110'} group-hover:scale-125 transition-transform duration-700 flex items-center justify-center`}>
+                    <div className={`relative z-10 ${project.image ? 'w-full h-full' : 'scale-110'}`}>
                         {project.image ? (
                             <img
                                 src={project.image}
@@ -83,7 +84,9 @@ const ProjectCard = ({ project, index }) => {
 
                     {/* Meta Archive Badge */}
                     <div className="absolute top-6 left-6 z-20">
-                        <div className={`px-4 py-2 backdrop-blur-xl rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border shadow-2xl ${isDarkMode ? 'bg-black/40 border-white/10 text-cyan-400' : 'bg-white/40 border-white/30 text-indigo-700'
+                        <div className={`px-4 py-2 backdrop-blur-xl rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border shadow-xl ${isDarkMode
+                                ? 'bg-black/40 border-white/10 text-cyan-400'
+                                : 'bg-indigo-600 border-indigo-500 text-white'
                             }`}>
                             ID // 0{index + 1}
                         </div>
@@ -174,6 +177,7 @@ const Projects = () => {
             gradient: 'from-indigo-600 via-indigo-500 to-purple-600',
             github: 'https://github.com/RiteshKumar2e/customer-complaint-agent_new',
             demo: 'https://riteshkr.online',
+            image: '/projects/Quickfix.png',
             icon: <Bot className="w-16 h-16 text-white" />
         },
         {
