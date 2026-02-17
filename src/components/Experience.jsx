@@ -123,57 +123,73 @@ const Experience = () => {
                         <motion.div
                             key={index}
                             variants={itemVariants}
-                            className="glass-card rounded-[40px] p-8 relative group overflow-hidden"
+                            className={`relative group rounded-[2.5rem] p-8 transition-all duration-500 border ${isDarkMode
+                                ? 'bg-slate-900/95 border-white/10 hover:border-indigo-500/40 shadow-2xl shadow-black/50'
+                                : 'bg-white border-slate-100 hover:border-indigo-200 shadow-xl shadow-slate-200/50'
+                                }`}
                         >
-                            {/* Decorative Background Icon */}
-                            <div className="absolute -top-4 -right-4 text-9xl opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-500 pointer-events-none">
-                                {internship.icon}
-                            </div>
+                            {/* Accent Glow */}
+                            <div className={`absolute -inset-0.5 rounded-[2.6rem] bg-gradient-to-br ${internship.color} opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-500`} />
 
                             <div className="relative z-10">
-                                {/* Header */}
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`w-16 h-16 rounded-[24px] bg-gradient-to-br ${internship.color} flex items-center justify-center text-3xl shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6`}>
-                                            <span className="text-white drop-shadow-md">{internship.icon}</span>
+                                {/* Header Section */}
+                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 mb-8">
+                                    <div className="flex items-center gap-5">
+                                        <div className={`w-20 h-20 rounded-3xl bg-gradient-to-br ${internship.color} p-0.5 flex items-center justify-center shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-rotate-3`}>
+                                            <div className="w-full h-full bg-slate-900/10 rounded-[1.4rem] flex items-center justify-center text-3xl backdrop-blur-sm">
+                                                <span className="drop-shadow-lg">{internship.icon}</span>
+                                            </div>
                                         </div>
                                         <div>
-                                            <h3 className={`text-2xl font-black leading-tight ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
+                                            <h3 className={`text-2xl font-black tracking-tight mb-1 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                                                 {internship.title}
                                             </h3>
-                                            <p className="text-indigo-600 dark:text-indigo-400 font-black text-xs tracking-widest uppercase mt-1">
-                                                {internship.company}
-                                            </p>
+                                            <div className="flex items-center gap-2">
+                                                <span className={`h-1 w-6 rounded-full bg-gradient-to-r ${internship.color}`} />
+                                                <p className="text-indigo-500 font-bold text-xs tracking-widest uppercase">
+                                                    {internship.company}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex flex-col items-start sm:items-end gap-1">
-                                        <div className={`px-3 py-1 border rounded-full text-[10px] font-bold flex items-center gap-1.5 uppercase tracking-wider ${isDarkMode ? 'bg-white/10 border-white/20 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-600'}`}>
-                                            <FaCalendar className="text-indigo-500" />
+
+                                    <div className="flex flex-col gap-2 shrink-0">
+                                        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-2xl border text-[11px] font-bold uppercase tracking-wider ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
+                                            }`}>
+                                            <FaCalendar className="text-indigo-500 text-sm" />
                                             {internship.duration}
                                         </div>
-                                        <div className={`px-3 py-1 text-[10px] font-bold flex items-center gap-1.5 uppercase tracking-wider ${isDarkMode ? 'text-slate-300 font-black shadow-sm' : 'text-slate-500 font-bold'}`}>
-                                            <FaMapMarkerAlt className="text-rose-500" />
+                                        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-2xl border text-[11px] font-bold uppercase tracking-wider ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500'
+                                            }`}>
+                                            <FaMapMarkerAlt className="text-rose-500 text-sm" />
                                             {internship.location}
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Description */}
+                                {/* Project Description Points */}
                                 <div className="space-y-4 mb-10">
                                     {internship.description.map((point, idx) => (
                                         <div key={idx} className="flex items-start gap-4">
-                                            <div className="mt-2 w-2 h-2 rounded-full bg-indigo-500 shrink-0 shadow-lg shadow-indigo-500/40" />
-                                            <p className={`text-base font-medium leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-700'}`}>{point}</p>
+                                            <div className="flex-none mt-2.5">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 ring-4 ring-indigo-500/10" />
+                                            </div>
+                                            <p className={`text-[15px] font-medium leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                                                {point}
+                                            </p>
                                         </div>
                                     ))}
                                 </div>
 
-                                {/* Skills */}
-                                <div className={`flex flex-wrap gap-2 pt-6 border-t ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
+                                {/* Tech Stack Tags - Enhanced Pills */}
+                                <div className={`flex flex-wrap gap-2.5 pt-8 border-t ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
                                     {internship.skills.map((skill, idx) => (
                                         <span
                                             key={idx}
-                                            className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${isDarkMode ? 'bg-indigo-500/20 text-indigo-100 border-indigo-500/40 group-hover:bg-indigo-500/30 group-hover:text-white' : 'bg-indigo-50 text-indigo-700 border-indigo-100 group-hover:bg-indigo-100'}`}
+                                            className={`px-5 py-2 rounded-2xl text-[11px] font-black uppercase tracking-[0.15em] border transition-all duration-300 ${isDarkMode
+                                                ? 'bg-slate-800/40 text-cyan-400 border-white/5 group-hover:border-cyan-500/30'
+                                                : 'bg-indigo-50 text-indigo-700 border-indigo-100/50 group-hover:bg-indigo-600 group-hover:text-white'
+                                                }`}
                                         >
                                             {skill}
                                         </span>

@@ -57,7 +57,7 @@ const HoverSkillPill = ({ name, icon: Icon, color, index }) => {
     );
 };
 
-const SkillCategory = ({ title, icon: Icon, skills, index }) => {
+const SkillCategory = ({ title, icon: Icon, skills, index, category }) => {
     const { isDarkMode } = useTheme();
     const [ref, inView] = useInView({
         triggerOnce: true,
@@ -70,13 +70,13 @@ const SkillCategory = ({ title, icon: Icon, skills, index }) => {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className={`rounded-3xl p-6 md:p-8 border transition-all duration-200 hover:-translate-y-1 ${isDarkMode
-                ? 'bg-slate-900/40 border-white/10 hover:border-cyan-500/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:shadow-[0_20px_40px_rgba(34,211,238,0.05)]'
-                : 'bg-white border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10'
+            className={`rounded-3xl p-6 md:p-8 border transition-all duration-300 hover:-translate-y-1 ${isDarkMode
+                ? `bg-slate-900/80 border-white/10 hover:border-${category.color}-500/40 shadow-2xl`
+                : `bg-white border-slate-100 shadow-xl hover:shadow-${category.color}-500/10`
                 }`}
         >
             <div className="flex items-center gap-4 mb-6">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg ${isDarkMode ? 'bg-indigo-600/20 text-indigo-400' : 'bg-indigo-50 text-indigo-600'
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg transition-colors duration-300 ${isDarkMode ? `bg-${category.color}-500/10 text-${category.color}-400 border border-${category.color}-500/20` : `bg-${category.color}-50 text-${category.color}-600 border border-${category.color}-100`
                     }`}>
                     <Icon />
                 </div>
@@ -106,6 +106,7 @@ const SkillsAdvanced = () => {
         {
             title: "Frontend Development",
             icon: FaLaptopCode,
+            color: "cyan",
             skills: [
                 { name: "React.js", icon: SiReact, color: "text-[#61DAFB]" },
                 { name: "JavaScript", icon: SiJavascript, color: "text-[#F7DF1E]" },
@@ -116,6 +117,7 @@ const SkillsAdvanced = () => {
         {
             title: "Backend Development",
             icon: FaServer,
+            color: "emerald",
             skills: [
                 { name: "Node.js", icon: SiNodedotjs, color: "text-[#339933]" },
                 { name: "FastAPI", icon: SiFastapi, color: "text-[#009688]" },
@@ -128,6 +130,7 @@ const SkillsAdvanced = () => {
         {
             title: "Database & Cloud",
             icon: FaCloud,
+            color: "amber",
             skills: [
                 { name: "PostgreSQL", icon: SiPostgresql, color: "text-[#336791]" },
                 { name: "MongoDB", icon: SiMongodb, color: "text-[#47A248]" },
@@ -140,6 +143,7 @@ const SkillsAdvanced = () => {
         {
             title: "Data Science & AI",
             icon: FaBrain,
+            color: "rose",
             skills: [
                 { name: "Deep Learning", icon: FaBrain, color: "text-[#FF6F00]" },
                 { name: "TensorFlow", icon: SiTensorflow, color: "text-[#FF6F00]" },
@@ -154,6 +158,7 @@ const SkillsAdvanced = () => {
         {
             title: "Developer Tools",
             icon: FaTools,
+            color: "purple",
             skills: [
                 { name: "Git", icon: SiGit, color: "text-[#F05032]" },
                 { name: "GitHub", icon: SiGithub, color: "text-slate-900 dark:text-white" },
@@ -211,6 +216,7 @@ const SkillsAdvanced = () => {
                             icon={category.icon}
                             skills={category.skills}
                             index={index}
+                            category={category}
                         />
                     ))}
                 </div>

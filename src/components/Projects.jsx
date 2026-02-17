@@ -53,18 +53,23 @@ const ProjectCard = ({ project, index }) => {
             <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-indigo-500 z-30 transition-all duration-200 group-hover:-top-4 group-hover:-left-4 opacity-50" />
             <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-purple-500 z-30 transition-all duration-200 group-hover:-bottom-4 group-hover:-right-4 opacity-50" />
 
-            <div className={`relative rounded-3xl overflow-hidden border transition-all duration-300 h-full flex flex-col ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'bg-white border-slate-100 shadow-lg'}`}>
-                {/* Glow Effect - Subtler for performance */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-400 pointer-events-none" />
+            <div className={`relative rounded-[2.5rem] overflow-hidden border transition-all duration-500 h-full flex flex-col group/card ${isDarkMode
+                ? 'bg-slate-900/90 border-white/10 hover:border-indigo-500/40 shadow-2xl shadow-black/50'
+                : 'bg-white border-slate-100 shadow-2xl shadow-slate-200/40 hover:border-indigo-200'
+                }`}>
+                {/* Visual Glass Glow Layer */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-700 pointer-events-none" />
 
-                {/* Header Image/Icon Area */}
+                {/* Media Header Area */}
                 <a
                     href={project.demo !== '#' ? project.demo : undefined}
                     target={project.demo !== '#' ? "_blank" : undefined}
                     rel={project.demo !== '#' ? "noopener noreferrer" : undefined}
-                    className={`relative h-48 sm:h-56 bg-gradient-to-br ${project.gradient} ${project.image ? 'p-0' : 'p-8'} flex items-center justify-center overflow-hidden ${project.demo !== '#' ? 'cursor-pointer' : 'cursor-default'}`}
+                    className={`relative h-56 sm:h-64 bg-gradient-to-br ${project.gradient} overflow-hidden flex items-center justify-center ${project.demo !== '#' ? 'cursor-pointer' : 'cursor-default'}`}
                 >
-                    <div className={`relative z-10 ${project.image ? 'w-full h-full' : 'text-7xl sm:text-8xl'} group-hover:scale-110 transition-transform duration-400 filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.4)] flex items-center justify-center`}>
+                    <div className="absolute inset-0 bg-black/10 transition-opacity group-hover:opacity-0" />
+
+                    <div className={`relative z-10 ${project.image ? 'w-full h-full' : 'scale-110'} group-hover:scale-125 transition-transform duration-700 flex items-center justify-center`}>
                         {project.image ? (
                             <img
                                 src={project.image}
@@ -72,55 +77,58 @@ const ProjectCard = ({ project, index }) => {
                                 className="w-full h-full object-cover"
                             />
                         ) : (
-                            project.icon
+                            <div className="text-white drop-shadow-2xl opacity-90">{project.icon}</div>
                         )}
                     </div>
 
-                    {/* Data Scanning Animation - Throttled duration */}
-                    <motion.div
-                        className="absolute inset-x-0 h-[3px] bg-white/30 blur-[3px] z-20"
-                        animate={{ top: ['0%', '100%', '0%'] }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                    />
-
-                    <div className="absolute top-6 left-6">
-                        <div className={`px-4 py-1.5 backdrop-blur-md rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-xl border ${isDarkMode ? 'bg-black/40 border-white/20 text-indigo-400' : 'bg-white/40 border-white/30 text-indigo-700'}`}>
-                            ARCHIVE-ID: 0{index + 1}
+                    {/* Meta Archive Badge */}
+                    <div className="absolute top-6 left-6 z-20">
+                        <div className={`px-4 py-2 backdrop-blur-xl rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border shadow-2xl ${isDarkMode ? 'bg-black/40 border-white/10 text-cyan-400' : 'bg-white/40 border-white/30 text-indigo-700'
+                            }`}>
+                            ID // 0{index + 1}
                         </div>
                     </div>
                 </a>
 
-                {/* Content Area */}
-                <div className="p-8 sm:p-10 flex-1 flex flex-col relative z-20">
-                    <h3 className={`text-2xl sm:text-3xl font-black mb-4 tracking-tighter leading-tight ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
-                        {project.title}
-                    </h3>
+                {/* Content Deep Analysis */}
+                <div className="p-8 sm:p-10 flex-1 flex flex-col relative z-10">
+                    <div className="mb-6">
+                        <h3 className={`text-3xl font-black mb-3 tracking-tight leading-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                            {project.title}
+                        </h3>
+                        <div className="h-1 w-12 rounded-full bg-gradient-to-r from-indigo-600 to-transparent" />
+                    </div>
 
-                    <p className={`text-[13px] sm:text-sm leading-relaxed mb-6 flex-1 font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                    <p className={`text-[15px] leading-relaxed mb-8 flex-1 font-medium ${isDarkMode ? 'text-slate-200' : 'text-slate-600'}`}>
                         {project.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-2 mb-8">
+                    {/* High-Contrast Tech Pills */}
+                    <div className="flex flex-wrap gap-2.5 mb-10">
                         {project.tech.map((tech, idx) => (
                             <span
                                 key={idx}
-                                className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${isDarkMode ? 'bg-indigo-600/30 text-white border border-indigo-500/40' : 'bg-indigo-100 text-indigo-800 border border-indigo-200'}`}
+                                className={`px-4 py-1.5 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all duration-300 ${isDarkMode
+                                    ? 'bg-slate-800/40 text-indigo-300 border-white/5 hover:border-indigo-500/30'
+                                    : 'bg-indigo-50 text-indigo-700 border-indigo-100/50'
+                                    }`}
                             >
                                 {tech}
                             </span>
                         ))}
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    {/* Interactive Actions */}
+                    <div className="flex items-center gap-4">
                         <motion.a
                             href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-transparent ${isDarkMode ? 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20' : 'bg-slate-900 text-white hover:bg-indigo-600'}`}
-                            whileHover={{ y: -3 }}
+                            className="flex-1 flex items-center justify-center gap-3 h-14 rounded-2xl bg-indigo-600 text-white text-[11px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-600/20"
+                            whileHover={{ y: -4, scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                         >
-                            <LucidGithub size={16} /> SOURCE
+                            <LucidGithub size={18} /> CODE
                         </motion.a>
 
                         {project.demo !== '#' && (
@@ -128,11 +136,14 @@ const ProjectCard = ({ project, index }) => {
                                 href={project.demo}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl border transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-indigo-600 hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-600/20' : 'bg-white border-slate-200 text-slate-800 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 shadow-sm'}`}
-                                whileHover={{ y: -3 }}
+                                className={`flex-1 flex items-center justify-center gap-3 h-14 rounded-2xl border font-black text-[11px] uppercase tracking-widest transition-all ${isDarkMode
+                                    ? 'bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-white/20'
+                                    : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-50 shadow-sm'
+                                    }`}
+                                whileHover={{ y: -4, scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                <Globe size={16} /> LIVE
+                                <Globe size={18} /> LIVE
                             </motion.a>
                         )}
                     </div>
