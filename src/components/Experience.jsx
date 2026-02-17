@@ -147,11 +147,11 @@ const Experience = () => {
                                         </div>
                                     </div>
                                     <div className="flex flex-col items-start sm:items-end gap-1">
-                                        <div className={`px-3 py-1 border rounded-full text-[10px] font-bold flex items-center gap-1.5 uppercase tracking-wider ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500'}`}>
+                                        <div className={`px-3 py-1 border rounded-full text-[10px] font-bold flex items-center gap-1.5 uppercase tracking-wider ${isDarkMode ? 'bg-white/10 border-white/20 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-600'}`}>
                                             <FaCalendar className="text-indigo-500" />
                                             {internship.duration}
                                         </div>
-                                        <div className={`px-3 py-1 text-[10px] font-bold flex items-center gap-1.5 uppercase tracking-wider ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`}>
+                                        <div className={`px-3 py-1 text-[10px] font-bold flex items-center gap-1.5 uppercase tracking-wider ${isDarkMode ? 'text-slate-300 font-black shadow-sm' : 'text-slate-500 font-bold'}`}>
                                             <FaMapMarkerAlt className="text-rose-500" />
                                             {internship.location}
                                         </div>
@@ -173,7 +173,7 @@ const Experience = () => {
                                     {internship.skills.map((skill, idx) => (
                                         <span
                                             key={idx}
-                                            className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${isDarkMode ? 'bg-white/5 text-slate-300 border-white/10 group-hover:border-indigo-500 group-hover:text-indigo-400' : 'bg-slate-50 text-slate-600 border-slate-200 group-hover:border-indigo-200 group-hover:text-indigo-600'}`}
+                                            className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${isDarkMode ? 'bg-indigo-500/20 text-indigo-100 border-indigo-500/40 group-hover:bg-indigo-500/30 group-hover:text-white' : 'bg-indigo-50 text-indigo-700 border-indigo-100 group-hover:bg-indigo-100'}`}
                                         >
                                             {skill}
                                         </span>
@@ -198,7 +198,7 @@ const Experience = () => {
                             <span className="text-2xl">{stat.icon}</span>
                             <div className="text-left">
                                 <div className="text-xl font-black">{stat.number}</div>
-                                <div className={`text-[10px] uppercase font-bold tracking-tighter ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{stat.label}</div>
+                                <div className={`text-[10px] uppercase font-bold tracking-tighter ${isDarkMode ? 'text-indigo-400/80' : 'text-slate-400'}`}>{stat.label}</div>
                             </div>
                         </div>
                     ))}

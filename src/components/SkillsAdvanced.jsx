@@ -224,7 +224,7 @@ const SkillsAdvanced = () => {
                     {/* Coursework */}
                     <div className={`w-full max-w-4xl p-6 rounded-3xl border ${isDarkMode ? 'bg-slate-900/40 border-white/5' : 'bg-white border-slate-100 shadow-lg'}`}>
                         <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
-                            <span className={`text-sm font-black uppercase tracking-widest whitespace-nowrap ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                            <span className={`text-sm font-black uppercase tracking-widest whitespace-nowrap ${isDarkMode ? 'text-indigo-400' : 'text-slate-500'}`}>
                                 Core Coursework:
                             </span>
                             <div className="flex flex-wrap justify-center gap-3">
@@ -244,7 +244,7 @@ const SkillsAdvanced = () => {
                     {/* Interests */}
                     <div className={`w-full max-w-4xl p-6 rounded-3xl border ${isDarkMode ? 'bg-slate-900/40 border-white/5' : 'bg-white border-slate-100 shadow-lg'}`}>
                         <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
-                            <span className={`text-sm font-black uppercase tracking-widest whitespace-nowrap ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                            <span className={`text-sm font-black uppercase tracking-widest whitespace-nowrap ${isDarkMode ? 'text-indigo-400' : 'text-slate-500'}`}>
                                 Key Interests:
                             </span>
                             <div className="flex flex-wrap justify-center gap-3">

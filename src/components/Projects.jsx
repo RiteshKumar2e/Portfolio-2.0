@@ -104,7 +104,7 @@ const ProjectCard = ({ project, index }) => {
                         {project.tech.map((tech, idx) => (
                             <span
                                 key={idx}
-                                className={`px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${isDarkMode ? 'bg-white/5 text-slate-500 border border-white/5 group-hover:bg-indigo-500/10 group-hover:text-white' : 'bg-slate-50 text-slate-400 border border-slate-100 group-hover:text-indigo-600'}`}
+                                className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${isDarkMode ? 'bg-indigo-600/30 text-white border border-indigo-500/40' : 'bg-indigo-100 text-indigo-800 border border-indigo-200'}`}
                             >
                                 {tech}
                             </span>
