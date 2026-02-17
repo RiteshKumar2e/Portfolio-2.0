@@ -25,45 +25,43 @@ const CustomCursor = () => {
         const handleMouseMove = (e) => {
             mouseX.current = e.clientX;
             mouseY.current = e.clientY;
-        };
 
-        const handleMouseOver = (e) => {
+            // Optional: Move hover check here to keep it out of a separate mouseover listener
             const target = e.target;
-            if (!target) return;
-            const isInteractive =
-                target.tagName === 'A' ||
-                target.tagName === 'BUTTON' ||
-                target.closest('a') ||
-                target.closest('button') ||
-                window.getComputedStyle(target).cursor === 'pointer';
-            if (isInteractive !== isHovering) setIsHovering(isInteractive);
+            if (target) {
+                const isInteractive =
+                    target.tagName === 'A' ||
+                    target.tagName === 'BUTTON' ||
+                    target.closest('a') ||
+                    target.closest('button') ||
+                    window.getComputedStyle(target).cursor === 'pointer';
+
+                if (isInteractive !== isHovering) {
+                    setIsHovering(isInteractive);
+                }
+            }
         };
 
         window.addEventListener('mousemove', handleMouseMove, { passive: true });
-        window.addEventListener('mouseover', handleMouseOver, { passive: true });
 
         let rafId;
         const render = () => {
-            // Target coordinates
             const tx = mouseX.current;
             const ty = mouseY.current;
 
-            // Direct DOM update for Precision Core (Atomic 1:1 follow)
             if (dotRef.current) {
                 dotRef.current.style.transform = `translate3d(${tx}px, ${ty}px, 0) translate(-50%, -50%)`;
             }
 
-            // High-Precision Linear Interpolation (Lerp) for Butter Smooth Trail
-            // Factor 0.15 makes it feel liquid and organic but never "heavy"
-            haloX.current += (tx - haloX.current) * 0.15;
-            haloY.current += (ty - haloY.current) * 0.15;
+            // Increased Lerp to 0.25 (from 0.15) for a tighter, more responsive follow
+            haloX.current += (tx - haloX.current) * 0.25;
+            haloY.current += (ty - haloY.current) * 0.25;
             if (haloRef.current) {
                 haloRef.current.style.transform = `translate3d(${haloX.current}px, ${haloY.current}px, 0) translate(-50%, -50%)`;
             }
 
-            // Secondary ghost trail with a different factor for complexity
-            ghostX.current += (tx - ghostX.current) * 0.08;
-            ghostY.current += (ty - ghostY.current) * 0.08;
+            ghostX.current += (tx - ghostX.current) * 0.12;
+            ghostY.current += (ty - ghostY.current) * 0.12;
             if (ghostRef.current) {
                 ghostRef.current.style.transform = `translate3d(${ghostX.current}px, ${ghostY.current}px, 0) translate(-50%, -50%)`;
             }
@@ -74,7 +72,6 @@ const CustomCursor = () => {
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseover', handleMouseOver);
             cancelAnimationFrame(rafId);
         };
     }, [isHovering]);
