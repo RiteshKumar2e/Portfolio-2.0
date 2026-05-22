@@ -88,7 +88,7 @@ const Navbar = () => {
         if (element) {
             if (lenis) {
                 lenis.start(); // Ensure scrolling is enabled
-                lenis.scrollTo(href, { offset: -80, duration: 0.6 });
+                lenis.scrollTo(element, { offset: -80, duration: 0.6 });
             } else {
                 const offset = 80;
                 const bodyRect = document.body.getBoundingClientRect().top;
@@ -101,6 +101,8 @@ const Navbar = () => {
                     behavior: 'smooth'
                 });
             }
+            // Prevent URL hash from showing
+            window.history.replaceState(null, null, window.location.pathname);
             setIsMobileMenuOpen(false);
         }
     };

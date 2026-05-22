@@ -1,10 +1,35 @@
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaHeart, FaChevronRight } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
+import { useLenis } from '@studio-freight/react-lenis';
 
 const Footer = () => {
     const { isDarkMode } = useTheme();
+    const lenis = useLenis();
     const currentYear = new Date().getFullYear();
+
+    const scrollToSection = (href) => {
+        const element = document.querySelector(href);
+        if (element) {
+            if (lenis) {
+                lenis.start();
+                lenis.scrollTo(element, { offset: -80, duration: 0.6 });
+            } else {
+                const offset = 80;
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = element.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+            // Prevent URL hash from showing
+            window.history.replaceState(null, null, window.location.pathname);
+        }
+    };
 
     const quickLinks = [
         { name: 'Home', href: '#home' },
@@ -32,7 +57,12 @@ const Footer = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h3 className={`text-3xl font-black mb-6 ${isDarkMode ? 'text-white text-glow' : 'gradient-text'}`}>Ritesh.</h3>
+                        <button
+                            onClick={() => scrollToSection('#home')}
+                            className="cursor-pointer"
+                        >
+                            <h3 className={`text-3xl font-black mb-6 ${isDarkMode ? 'text-white text-glow' : 'gradient-text'}`}>Ritesh.</h3>
+                        </button>
                         <p className={`font-medium leading-relaxed mb-8 max-w-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                             Architecting the future of web and AI through clean code and innovative design.
                         </p>
@@ -65,14 +95,17 @@ const Footer = () => {
                         <ul className="grid grid-cols-2 gap-y-4 gap-x-2">
                             {quickLinks.map((link, index) => (
                                 <li key={index}>
-                                    <motion.a
-                                        href={link.href}
-                                        className={`font-bold text-sm flex items-center gap-2 group transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-indigo-600'}`}
+                                    <motion.button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            scrollToSection(link.href);
+                                        }}
+                                        className={`font-bold text-sm flex items-center gap-2 group transition-colors cursor-pointer ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-indigo-600'}`}
                                         whileHover={{ x: 5 }}
                                     >
                                         <FaChevronRight className="text-[10px] opacity-0 group-hover:opacity-100 transition-all text-indigo-400" />
                                         {link.name}
-                                    </motion.a>
+                                    </motion.button>
                                 </li>
                             ))}
                         </ul>
