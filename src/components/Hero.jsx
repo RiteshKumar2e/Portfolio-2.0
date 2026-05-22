@@ -1,10 +1,21 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { TypeAnimation } from 'react-type-animation';
 import { useTheme } from '../context/ThemeContext';
 
 const Hero = () => {
     const { isDarkMode } = useTheme();
+
+    const handleDownloadCV = () => {
+        const link = document.createElement('a');
+        link.href = '/Ritesh_Kumar_resume.pdf';
+        link.download = 'Ritesh_Kumar_Resume.pdf';
+        link.setAttribute('target', '_blank');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -57,13 +68,29 @@ const Hero = () => {
                             </h1>
                         </motion.div>
 
-                        <motion.p
+                        <motion.div
                             variants={itemVariants}
                             className={`text-lg md:text-xl leading-relaxed max-w-2xl mx-auto font-medium text-balance ${isDarkMode ? 'text-slate-400' : 'text-slate-700'}`}
                         >
-                            A passionate <span className={isDarkMode ? 'text-white font-black' : 'text-slate-900 font-black'}>Computer Science Engineer</span> crafting
+                            A passionate <span className={isDarkMode ? 'text-white font-black inline-block min-w-[280px]' : 'text-slate-900 font-black inline-block min-w-[280px]'}>
+                                <TypeAnimation
+                                    sequence={[
+                                        'Computer Science Engineer',
+                                        2000,
+                                        'Full Stack Developer',
+                                        2000,
+                                        'AI/ML Enthusiast',
+                                        2000,
+                                        'Open Source Contributor',
+                                        2000
+                                    ]}
+                                    wrapper="span"
+                                    speed={50}
+                                    repeat={Infinity}
+                                />
+                            </span> crafting
                             intelligent digital experiences at the intersection of <span className="text-indigo-600 dark:text-indigo-400 font-bold">Code, Design, & Intelligence.</span>
-                        </motion.p>
+                        </motion.div>
 
                         <motion.div
                             variants={itemVariants}
@@ -77,15 +104,14 @@ const Hero = () => {
                             >
                                 VIEW PROJECTS
                             </motion.a>
-                            <motion.a
-                                href="/Ritesh_Kumar_Resume.pdf"
-                                download
+                            <motion.button
+                                onClick={handleDownloadCV}
                                 className="btn-outline flex items-center justify-center gap-3 tracking-widest"
                                 whileHover={{ y: -5 }}
                                 whileTap={{ scale: 0.95 }}
                             >
                                 DOWNLOAD CV
-                            </motion.a>
+                            </motion.button>
                         </motion.div>
 
                         {/* Social Links */}

@@ -15,6 +15,7 @@ import AdvancedBackground from './components/3D/AdvancedBackground';
 import ScrollProgress from './components/ScrollProgress';
 import ScrollToTop from './components/ScrollToTop';
 import LoadingScreen from './components/LoadingScreen';
+import { Toaster } from 'sonner';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -32,17 +33,21 @@ function AppContent() {
         }, 2000);
 
         const sections = document.querySelectorAll('section');
-        sections.forEach(section => {
+        sections.forEach((section, index) => {
+            const isEven = index % 2 === 0;
+            const xOffset = isEven ? -50 : 50;
+
             gsap.fromTo(section,
-                { opacity: 0, y: 50 },
+                { opacity: 0, x: xOffset, y: 30 },
                 {
                     opacity: 1,
+                    x: 0,
                     y: 0,
-                    duration: 0.8,
-                    ease: 'power2.out',
+                    duration: 1,
+                    ease: 'power3.out',
                     scrollTrigger: {
                         trigger: section,
-                        start: 'top 90%',
+                        start: 'top 85%',
                         toggleActions: 'play none none none'
                     }
                 }
@@ -62,6 +67,7 @@ function AppContent() {
         }}>
             <div className="relative min-h-screen">
                 <CustomCursor />
+                <Toaster position="top-right" theme={isDarkMode ? 'dark' : 'light'} richColors closeButton />
                 {/* Global Theme Overlays */}
                 <div className="fixed inset-0 bg-grid -z-10" />
                 <div className="blur-overlay blur-purple" />

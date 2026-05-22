@@ -50,13 +50,15 @@
   }
 
   /* Advanced Gradient Text */
-  .text-gradient {
+  .text-gradient,
+  .gradient-text {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 font-black;
     background-size: 200% auto;
     animation: shine 5s linear infinite;
   }
 
-  .dark .text-gradient {
+  .dark .text-gradient,
+  .dark .gradient-text {
     @apply from-indigo-400 via-cyan-400 to-emerald-400;
   }
 
@@ -103,6 +105,22 @@
 
   .magnetic-card:hover::after {
     @apply opacity-100;
+  }
+
+  .cyber-card-glow {
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.1), inset 0 0 20px rgba(99, 102, 241, 0.05);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  }
+
+  .dark .text-glow {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+
+  .focus-glow:focus {
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
   }
 }
 
