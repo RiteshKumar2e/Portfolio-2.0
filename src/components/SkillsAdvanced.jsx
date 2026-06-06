@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import {
-    SiReact, SiJavascript, SiNodedotjs, SiMongodb, SiHtml5, SiCss3,
+    SiReact, SiJavascript, SiNodedotjs, SiMongodb, SiHtml5, SiCss,
     SiPython, SiTensorflow, SiCplusplus, SiPytorch, SiPandas, SiNumpy,
     SiMysql, SiGit, SiGithub, SiGooglecloud, SiJupyter, SiOpencv,
     SiExpress, SiScikitlearn, SiKeras, SiFastapi, SiPostgresql,
@@ -111,7 +111,7 @@ const SkillsAdvanced = () => {
                 { name: "React.js", icon: SiReact, color: "text-[#61DAFB]" },
                 { name: "JavaScript", icon: SiJavascript, color: "text-[#F7DF1E]" },
                 { name: "HTML5", icon: SiHtml5, color: "text-[#E34F26]" },
-                { name: "CSS3", icon: SiCss3, color: "text-[#1572B6]" }
+                { name: "CSS3", icon: SiCss, color: "text-[#1572B6]" }
             ]
         },
         {
