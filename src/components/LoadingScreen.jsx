@@ -29,7 +29,7 @@ const LoadingScreen = () => {
         >
             <div className="absolute inset-0 pointer-events-none">
                 <div className={`absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full blur-[100px] opacity-60 ${isDarkMode ? 'bg-indigo-900/40' : 'bg-indigo-50'}`} />
-                <div className={`absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full blur-[100px] opacity-60 ${isDarkMode ? 'bg-purple-900/40' : 'bg-purple-50'}`} />
+                <div className={`absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full blur-[100px] opacity-60 ${isDarkMode ? 'bg-blue-900/40' : 'bg-blue-50'}`} />
             </div>
 
             <div className="text-center relative z-10 flex flex-col items-center">
@@ -40,7 +40,7 @@ const LoadingScreen = () => {
                 >
                     <div className={`w-24 h-24 rounded-3xl border flex items-center justify-center shadow-2xl relative overflow-hidden ${isDarkMode ? 'bg-slate-900 border-white/10 shadow-indigo-500/20' : 'bg-indigo-50 border-indigo-100 shadow-indigo-200/50'}`}>
                         <motion.div
-                            className={`absolute inset-0 opacity-20 ${isDarkMode ? 'bg-gradient-to-tr from-cyan-400 to-indigo-500' : 'bg-gradient-to-tr from-indigo-500 to-purple-600'}`}
+                            className={`absolute inset-0 opacity-20 ${isDarkMode ? 'bg-gradient-to-tr from-indigo-400 to-indigo-600' : 'bg-gradient-to-tr from-indigo-500 to-blue-600'}`}
                             animate={{ rotate: 360 }}
                             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                         />
@@ -66,15 +66,15 @@ const LoadingScreen = () => {
                     transition={{ delay: 0.6 }}
                 >
                     <div className="flex items-center gap-2">
-                        <h2 className={`text-xs font-black uppercase tracking-[0.4em] ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Initializing System</h2>
-                        <span className={`text-xs font-black ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
+                        <h2 className={`text-xs font-bold uppercase tracking-[0.35em] ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Loading Portfolio</h2>
+                        <span className={`text-xs font-bold ${isDarkMode ? 'text-indigo-300' : 'text-indigo-600'}`}>
                             <CountUp end={100} duration={1.8} />%
                         </span>
                     </div>
-                    
+
                     <div className={`w-40 h-1.5 rounded-full overflow-hidden ${isDarkMode ? 'bg-slate-800' : 'bg-slate-100'}`}>
                         <motion.div
-                            className={`h-full ${isDarkMode ? 'bg-gradient-to-r from-indigo-500 via-cyan-400 to-indigo-500' : 'bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500'}`}
+                            className={`h-full ${isDarkMode ? 'bg-gradient-to-r from-indigo-500 via-indigo-300 to-indigo-500' : 'bg-gradient-to-r from-indigo-500 via-blue-500 to-indigo-500'}`}
                             animate={{ x: ["-100%", "100%"] }}
                             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
                             style={{ width: "100%" }}

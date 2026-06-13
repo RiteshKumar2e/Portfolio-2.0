@@ -164,17 +164,17 @@ const Navbar = () => {
                                         e.preventDefault();
                                         scrollToSection(item.href);
                                     }}
-                                    className={`nav-link-magnetic px-6 py-2 rounded-xl text-sm font-black transition-all duration-200 relative tracking-wide ${activeSection === item.href.substring(1)
-                                        ? isDarkMode ? 'text-cyan-400' : 'text-indigo-600'
+                                    className={`nav-link-magnetic px-6 py-2 rounded-xl text-sm font-bold transition-all duration-200 relative tracking-wide ${activeSection === item.href.substring(1)
+                                        ? isDarkMode ? 'text-indigo-300' : 'text-indigo-600'
                                         : isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'
                                         }`}
                                 >
                                     {activeSection === item.href.substring(1) && (
                                         <motion.div
                                             layoutId="nav-pill"
-                                            className={`absolute inset-0 rounded-xl -z-10 border shadow-sm ${isDarkMode
-                                                ? 'bg-indigo-500/10 border-indigo-500/20 shadow-[0_0_15px_rgba(34,211,238,0.1)]'
-                                                : 'bg-white border-slate-200 shadow-md shadow-indigo-500/5'}`}
+                                            className={`absolute inset-0 rounded-xl -z-10 border ${isDarkMode
+                                                ? 'bg-indigo-500/15 border-indigo-500/25'
+                                                : 'bg-white border-slate-200 shadow-sm'}`}
                                             transition={{ type: 'spring', stiffness: 500, damping: 35 }}
                                         />
                                     )}
@@ -198,8 +198,8 @@ const Navbar = () => {
                             <div className="hidden md:block">
                                 <motion.button
                                     onClick={() => scrollToSection('#contact')}
-                                    className={`px-8 py-3 rounded-xl text-sm font-black transition-all shadow-lg tracking-tight ${isDarkMode
-                                        ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-indigo-500/20 hover:shadow-cyan-500/30 hover:scale-[1.02]'
+                                    className={`px-7 py-3 rounded-xl text-sm font-bold transition-all shadow-lg tracking-tight ${isDarkMode
+                                        ? 'bg-indigo-600 text-white shadow-indigo-500/20 hover:bg-indigo-500 hover:scale-[1.02]'
                                         : 'bg-slate-900 text-white hover:bg-indigo-600 hover:shadow-indigo-500/30'}`}
                                     whileHover={{ y: -2 }}
                                     whileTap={{ scale: 0.95 }}
@@ -287,7 +287,7 @@ const Navbar = () => {
                                             }}
                                             className={`relative py-4 px-5 flex items-center rounded-xl transition-all active:scale-[0.98] border ${activeSection === item.href.substring(1)
                                                 ? isDarkMode
-                                                    ? 'bg-indigo-600/20 border-indigo-500/40 text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.1)]'
+                                                    ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-300'
                                                     : 'bg-indigo-600 border-indigo-700 text-white shadow-lg shadow-indigo-600/20'
                                                 : isDarkMode ? 'text-slate-400 border-transparent hover:text-white hover:bg-white/5' : 'text-slate-600 border-transparent hover:bg-slate-50'
                                                 }`}

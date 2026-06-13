@@ -260,10 +260,10 @@ const Achievements = () => {
                             <motion.button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm md:text-base font-black transition-all shadow-lg ${activeTab === tab.id
+                                className={`px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm md:text-base font-bold transition-all shadow-sm ${activeTab === tab.id
                                     ? isDarkMode
-                                        ? 'bg-gradient-to-r from-cyan-500 to-indigo-600 text-white shadow-cyan-500/20'
-                                        : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
+                                        ? 'bg-indigo-600 text-white shadow-indigo-500/20'
+                                        : 'bg-slate-900 text-white shadow-md'
                                     : isDarkMode ? 'bg-white/5 text-slate-400 border border-white/10 hover:border-indigo-500/50 hover:text-white' : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-400 hover:text-indigo-600'
                                     }`}
                                 whileHover={{ scale: 1.05 }}

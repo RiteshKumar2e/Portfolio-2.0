@@ -46,7 +46,7 @@ const Contact = () => {
                     particleCount: 150,
                     spread: 70,
                     origin: { y: 0.6 },
-                    colors: ['#6366f1', '#a855f7', '#3b82f6']
+                    colors: ['#4f46e5', '#6366f1', '#3b82f6']
                 });
                 setFormData({ name: '', email: '', subject: '', message: '' });
 
@@ -84,7 +84,7 @@ const Contact = () => {
         <section id="contact" className={`py-12 relative overflow-hidden transition-colors duration-700 ${isDarkMode ? 'bg-transparent' : 'bg-white'}`}>
             {/* Artistic Background blobs */}
             <div className={`absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2 opacity-60 ${isDarkMode ? 'bg-indigo-900/20' : 'bg-indigo-50'}`} />
-            <div className={`absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px] -z-10 -translate-x-1/2 translate-y-1/2 opacity-40 ${isDarkMode ? 'bg-purple-900/20' : 'bg-purple-50'}`} />
+            <div className={`absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px] -z-10 -translate-x-1/2 translate-y-1/2 opacity-40 ${isDarkMode ? 'bg-blue-900/20' : 'bg-blue-50'}`} />
 
             <div className="container-custom relative z-10" ref={ref}>
                 <div className="grid lg:grid-cols-2 gap-20 items-center">
@@ -114,7 +114,7 @@ const Contact = () => {
                         className="relative w-full"
                     >
                         {/* Decorative background for form */}
-                        <div className={`absolute -inset-4 rounded-[50px] -z-10 blur-2xl opacity-50 ${isDarkMode ? 'bg-indigo-500/10' : 'bg-gradient-to-tr from-indigo-50 to-purple-50'}`} />
+                        <div className={`absolute -inset-4 rounded-[50px] -z-10 blur-2xl opacity-50 ${isDarkMode ? 'bg-indigo-500/10' : 'bg-gradient-to-tr from-indigo-50 to-blue-50'}`} />
 
                         <div className={`p-8 md:p-12 rounded-[48px] border transition-all duration-500 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'bg-white border-slate-200 shadow-2xl shadow-indigo-100/50'}`}>
                             <form onSubmit={handleSubmit} className="space-y-8">

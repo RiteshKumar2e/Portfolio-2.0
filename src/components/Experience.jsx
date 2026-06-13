@@ -14,15 +14,15 @@ const Experience = () => {
     const internships = [
             {
             title: 'Research Intern',
-            company: 'NIT Jamshedpur',
+            company: 'Machine Vision and Intelligence Lab, NIT Jamshedpur',
             duration: 'May 2025 - Present',
-            location: 'Offline',
+            location: 'Onsite',
             description: [
                 'Promoted to Research Intern from Machine Learning Intern.',
                 'Developed AMFF-CNN for steel surface defect detection.',
                 'Secured 99.72% accuracy on the NEU-DET dataset.'
             ],
-            skills: ['Python', 'Computer Vision', 'PyTorch', 'OpenCV'],
+            skills: ['Python',  'PyTorch', 'OpenCV','Deep Learning', 'MobileNetV2', 'Attention Mechanism'],
             icon: '🔬',
             color: 'from-purple-500 to-pink-600'
         },
@@ -187,8 +187,8 @@ const Experience = () => {
                                     {internship.skills.map((skill, idx) => (
                                         <span
                                             key={idx}
-                                            className={`px-5 py-2 rounded-2xl text-[11px] font-black uppercase tracking-[0.15em] border transition-all duration-300 ${isDarkMode
-                                                ? 'bg-slate-800/40 text-cyan-400 border-white/5 group-hover:border-cyan-500/30'
+                                            className={`px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-[0.12em] border transition-all duration-300 ${isDarkMode
+                                                ? 'bg-white/5 text-indigo-300 border-white/5 group-hover:border-indigo-500/30'
                                                 : 'bg-indigo-50 text-indigo-700 border-indigo-100/50 group-hover:bg-indigo-600 group-hover:text-white'
                                                 }`}
                                         >

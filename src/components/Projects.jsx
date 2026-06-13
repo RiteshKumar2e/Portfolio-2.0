@@ -57,16 +57,12 @@ const ProjectCard = ({ project, index }) => {
             }}
             className="group relative perspective-1000"
         >
-            {/* Cyber Corner Accents */}
-            <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-indigo-500 z-30 transition-all duration-200 group-hover:-top-4 group-hover:-left-4 opacity-50" />
-            <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-purple-500 z-30 transition-all duration-200 group-hover:-bottom-4 group-hover:-right-4 opacity-50" />
-
-            <div className={`relative rounded-[2.5rem] overflow-hidden border transition-all duration-500 h-full flex flex-col group/card ${isDarkMode
-                ? 'bg-slate-900/90 border-white/10 hover:border-indigo-500/40 shadow-2xl shadow-black/50'
-                : 'bg-white border-slate-100 shadow-2xl shadow-slate-200/40 hover:border-indigo-200'
+            <div className={`relative rounded-3xl overflow-hidden border transition-all duration-500 h-full flex flex-col group/card ${isDarkMode
+                ? 'bg-slate-900/70 border-white/10 hover:border-indigo-500/30 shadow-xl shadow-black/30'
+                : 'bg-white border-slate-200/70 shadow-soft hover:border-indigo-200 hover:shadow-premium'
                 }`}>
-                {/* Visual Glass Glow Layer */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-700 pointer-events-none" />
+                {/* Subtle hover wash */}
+                <div className="absolute -inset-1 bg-indigo-500/5 opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-700 pointer-events-none" />
 
                 {/* Media Header Area */}
                 <a
@@ -90,18 +86,18 @@ const ProjectCard = ({ project, index }) => {
                         )}
                     </div>
 
-                    {/* Live status badge — make impact/trust visible up front (Rule 21) */}
-                    <div className="absolute top-6 left-6 z-20">
-                        <div className={`px-4 py-2 backdrop-blur-xl rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border shadow-xl flex items-center gap-2 ${project.demo !== '#'
-                            ? 'bg-emerald-600 border-emerald-500 text-white'
-                            : 'bg-indigo-600 border-indigo-500 text-white'
+                    {/* Status badge — surface live/impact up front */}
+                    <div className="absolute top-5 left-5 z-20">
+                        <div className={`px-3.5 py-1.5 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-[0.15em] border shadow-sm flex items-center gap-2 ${project.demo !== '#'
+                            ? 'bg-emerald-600/90 border-emerald-400/50 text-white'
+                            : 'bg-slate-900/80 border-white/10 text-slate-200'
                             }`}>
                             {project.demo !== '#' ? (
                                 <>
                                     <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" /> Live
                                 </>
                             ) : (
-                                <>ID // 0{index + 1}</>
+                                <>Case Study</>
                             )}
                         </div>
                     </div>
@@ -311,7 +307,7 @@ const Projects = () => {
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className={`inline-block px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-6 border ${isDarkMode ? 'bg-white/5 text-indigo-400 border-white/10' : 'bg-indigo-50 text-indigo-600 border-indigo-100'}`}
+                        className={`inline-block px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.25em] mb-6 border ${isDarkMode ? 'bg-white/5 text-indigo-300 border-white/10' : 'bg-indigo-50 text-indigo-600 border-indigo-100'}`}
                     >
                         Selected Work
                     </motion.div>
@@ -319,9 +315,9 @@ const Projects = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className={`text-4xl sm:text-6xl md:text-8xl font-black mb-6 tracking-tighter transition-all duration-300 ${isDarkMode ? 'text-white text-glow' : 'text-slate-800'}`}
+                        className={`text-4xl sm:text-6xl md:text-7xl font-black mb-6 tracking-tight transition-all duration-300 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
                     >
-                        Pioneering <span className="gradient-text">Digital Futures</span>
+                        Featured <span className="gradient-text">Projects</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}

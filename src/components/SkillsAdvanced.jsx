@@ -19,8 +19,8 @@ const HoverSkillPill = ({ name, icon: Icon, color, index }) => {
     return (
         <motion.div
             className={`relative flex items-center justify-center w-20 h-14 md:w-24 md:h-16 rounded-2xl border cursor-pointer transition-all duration-200 ${isDarkMode
-                ? 'bg-white/5 border-white/5 hover:border-cyan-500/50 hover:bg-cyan-500/5 shadow-sm hover:shadow-[0_0_25px_rgba(34,211,238,0.15)]'
-                : 'bg-slate-50 border-slate-200 hover:border-indigo-400 hover:bg-white hover:shadow-xl'
+                ? 'bg-white/5 border-white/5 hover:border-indigo-400/50 hover:bg-indigo-500/10 shadow-sm'
+                : 'bg-slate-50 border-slate-200 hover:border-indigo-400 hover:bg-white hover:shadow-lg'
                 }`}
             whileHover={{ scale: 1.15, y: -5 }}
             whileTap={{ scale: 0.95 }}
@@ -71,16 +71,16 @@ const SkillCategory = ({ title, icon: Icon, skills, index, category }) => {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             className={`rounded-3xl p-6 md:p-8 border transition-all duration-300 hover:-translate-y-1 ${isDarkMode
-                ? `bg-slate-900/80 border-white/10 hover:border-${category.color}-500/40 shadow-2xl`
-                : `bg-white border-slate-100 shadow-xl hover:shadow-${category.color}-500/10`
+                ? 'bg-slate-900/60 border-white/10 hover:border-indigo-500/30 shadow-xl shadow-black/20'
+                : 'bg-white border-slate-200/70 shadow-soft hover:border-indigo-200 hover:shadow-premium'
                 }`}
         >
             <div className="flex items-center gap-4 mb-6">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg transition-colors duration-300 ${isDarkMode ? `bg-${category.color}-500/10 text-${category.color}-400 border border-${category.color}-500/20` : `bg-${category.color}-50 text-${category.color}-600 border border-${category.color}-100`
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-colors duration-300 border ${isDarkMode ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20' : 'bg-indigo-50 text-indigo-600 border-indigo-100'
                     }`}>
                     <Icon />
                 </div>
-                <h3 className={`text-xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{title}</h3>
+                <h3 className={`text-xl font-bold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{title}</h3>
             </div>
 
             <div className="flex flex-wrap gap-3">
@@ -194,17 +194,17 @@ const SkillsAdvanced = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className={`inline-block px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-6 border ${isDarkMode ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' : 'bg-indigo-50 border-indigo-100 text-indigo-600'}`}
+                        className={`inline-block px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.25em] mb-6 border ${isDarkMode ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-300' : 'bg-indigo-50 border-indigo-100 text-indigo-600'}`}
                     >
-                        Technical Arsenal
+                        Tech Stack
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className={`text-5xl md:text-7xl font-black mb-8 tracking-tighter ${isDarkMode ? 'text-white text-glow' : 'text-slate-900'}`}
+                        className={`text-5xl md:text-7xl font-black mb-8 tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
                     >
-                        Skills & <span className="gradient-text">Expertise</span>
+                        Skills & <span className="gradient-text">Tools</span>
                     </motion.h2>
                 </div>
 

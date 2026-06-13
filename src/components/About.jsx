@@ -65,7 +65,7 @@ const About = () => {
                                     <img
                                         src="/profile-pic.jpg"
                                         alt="Ritesh Kumar"
-                                        className="w-full h-full object-cover object-top transform hover:scale-110 transition-transform duration-400 origin-top"
+                                        className="w-full h-full object-cover object-top"
                                     />
                                 </div>
                             </div>

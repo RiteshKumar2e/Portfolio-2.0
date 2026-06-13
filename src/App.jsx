@@ -33,21 +33,17 @@ function AppContent() {
         }, 2000);
 
         const sections = document.querySelectorAll('section');
-        sections.forEach((section, index) => {
-            const isEven = index % 2 === 0;
-            const xOffset = isEven ? -50 : 50;
-
+        sections.forEach((section) => {
             gsap.fromTo(section,
-                { opacity: 0, x: xOffset, y: 30 },
+                { opacity: 0, y: 32 },
                 {
                     opacity: 1,
-                    x: 0,
                     y: 0,
-                    duration: 1,
-                    ease: 'power3.out',
+                    duration: 0.9,
+                    ease: 'power2.out',
                     scrollTrigger: {
                         trigger: section,
-                        start: 'top 85%',
+                        start: 'top 88%',
                         toggleActions: 'play none none none'
                     }
                 }
