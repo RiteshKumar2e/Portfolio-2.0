@@ -16,13 +16,13 @@ const Experience = () => {
             title: 'Research Intern',
             company: 'Machine Vision and Intelligence Lab, NIT Jamshedpur',
             duration: 'May 2025 - Present',
-            location: 'Onsite',
+            location: 'Jamshedpur (On-Site)',
             description: [
-                'Promoted to Research Intern from Machine Learning Intern.',
-                'Developed AMFF-CNN for steel surface defect detection.',
-                'Secured 99.72% accuracy on the NEU-DET dataset.'
+                'Developed a lightweight steel surface defect detection model using MobileNetV2, Feature Pyramid Network (FPN), and attention-based multi-scale feature fusion on the NEU-DET dataset.',
+                'Achieved 98.33% classification accuracy and 0.85 mAP on NEU-DET.',
+                'Optimized the architecture for real-time edge deployment in industrial manufacturing environments.'
             ],
-            skills: ['Python',  'PyTorch', 'OpenCV','Deep Learning', 'MobileNetV2', 'Attention Mechanism'],
+            skills: ['Python', 'PyTorch', 'OpenCV', 'Deep Learning', 'MobileNetV2', 'FPN', 'Attention Mechanism'],
             icon: '🔬',
             color: 'from-purple-500 to-pink-600'
         },
@@ -30,13 +30,13 @@ const Experience = () => {
             title: 'Web Development Intern',
             company: 'TechMantra Global',
             duration: 'May 2024 - July 2024',
-            location: 'Remote',
+            location: 'Noida (Remote)',
             description: [
-                'Gained in-depth understanding of SpringBoot for backend development.',
-                'Proficient in designing, deploying, and managing scalable applications.',
-                'Implemented responsive UI using modern web standards.'
+                'Developed a Food & Recipe API website using Node.js and MySQL, implementing 10+ RESTful APIs.',
+                'Reduced data retrieval latency by ~35% and optimized database query performance.',
+                'Built a full-stack web app with a responsive UI (HTML, CSS, Bootstrap) and backend integration.'
             ],
-            skills: ['HTML', 'CSS', 'Bootstrap', 'JavaScript'],
+            skills: ['Node.js', 'MySQL', 'REST API', 'JavaScript', 'Bootstrap', 'HTML', 'CSS'],
             icon: '🚀',
             color: 'from-blue-500 to-indigo-600'
         },
@@ -209,7 +209,7 @@ const Experience = () => {
                     {[
                         { number: '4', label: 'Internships', icon: '💼' },
                         { number: '12+', label: 'Months Active', icon: '⏰' },
-                        { number: '99%+', label: 'Accuracy', icon: '🎯' }
+                        { number: '98.33%', label: 'Accuracy', icon: '🎯' }
                     ].map((stat, index) => (
                         <div key={index} className={`px-6 py-4 rounded-2xl border flex items-center gap-4 transition-all duration-500 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow text-white' : 'bg-white border-slate-100 shadow-sm hover:shadow-md text-slate-800'}`}>
                             <span className="text-2xl">{stat.icon}</span>

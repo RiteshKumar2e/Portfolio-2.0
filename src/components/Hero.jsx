@@ -122,7 +122,7 @@ const Hero = () => {
                             {[
                                 '4 Internships',
                                 '10+ Projects',
-                                '99%+ Model Accuracy',
+                                '98.33% Model Accuracy',
                                 'National Hackathon Finalist'
                             ].map((stat, index) => (
                                 <span

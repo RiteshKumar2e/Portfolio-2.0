@@ -66,6 +66,14 @@ const Achievements = () => {
                 color: 'from-indigo-500 to-purple-500',
                 gradient: 'bg-gradient-to-br from-indigo-500/10 to-purple-500/10',
                 category: 'Achievements'
+            },
+              {
+                icon: FaHandshake,
+                title: 'Organized Hack Horizon 2.0(2026)',
+                description: 'National-level hackathon fostering innovation and collaboration among tech enthusiasts with 170+ teams and 750+ participants.',
+                color: 'from-indigo-500 to-purple-500',
+                gradient: 'bg-gradient-to-br from-indigo-500/10 to-purple-500/10',
+                category: 'Achievements'
             }
         ],
         strengths: [
@@ -147,16 +155,16 @@ const Achievements = () => {
         technical: [
             {
                 icon: FaTrophy,
-                title: '99.72% Accuracy',
-                description: 'Achieved exceptional accuracy on NEU-DET dataset for steel surface defect detection using AMFF-CNN',
+                title: '98.33% Accuracy',
+                description: 'Classification accuracy on the NEU-DET dataset for steel surface defect detection using a MobileNetV2 + FPN architecture with attention-based multi-scale feature fusion (AMFF-CNN).',
                 color: 'from-amber-600 to-orange-600',
                 gradient: 'bg-gradient-to-br from-amber-600/10 to-orange-600/10',
                 category: 'Technical'
             },
             {
                 icon: FaMedal,
-                title: '99.31% Accuracy',
-                description: 'High accuracy on 7-class steel surface dataset using advanced computer vision techniques',
+                title: '0.85 mAP',
+                description: 'Detection performance on NEU-DET, with the architecture optimized for real-time edge deployment in industrial manufacturing environments.',
                 color: 'from-blue-600 to-indigo-600',
                 gradient: 'bg-gradient-to-br from-blue-600/10 to-indigo-600/10',
                 category: 'Technical'
@@ -336,7 +344,7 @@ const Achievements = () => {
                 >
                     {[
                         { number: '98.61%', label: 'Naukri Score', icon: '🏆' },
-                        { number: '99.72%', label: 'Best Accuracy', icon: '🎯' },
+                        { number: '98.33%', label: 'Best Accuracy', icon: '🎯' },
                         { number: '10+', label: 'Projects', icon: '🚀' },
                         { number: '4', label: 'Internships', icon: '💼' },
                         { number: '4', label: 'Lead Roles', icon: '👑' },
