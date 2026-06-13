@@ -68,11 +68,8 @@ const Hero = () => {
                             </h1>
                         </motion.div>
 
-                        <motion.div
-                            variants={itemVariants}
-                            className={`text-lg md:text-xl leading-relaxed max-w-2xl mx-auto font-medium text-balance ${isDarkMode ? 'text-slate-400' : 'text-slate-700'}`}
-                        >
-                            A <span className={isDarkMode ? 'text-white font-black inline-block min-w-[280px]' : 'text-slate-900 font-black inline-block min-w-[280px]'}>
+                        <motion.div variants={itemVariants} className="space-y-3">
+                            <div className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                                 <TypeAnimation
                                     sequence={[
                                         'Computer Science Engineer',
@@ -87,9 +84,12 @@ const Hero = () => {
                                     wrapper="span"
                                     speed={50}
                                     repeat={Infinity}
+                                    className="text-indigo-600 dark:text-indigo-300"
                                 />
-                            </span> who builds
-                            full-stack web platforms and <span className="text-indigo-600 dark:text-indigo-400 font-bold">AI/ML systems</span> — from FastAPI backends to deep-learning models that ship to real users.
+                            </div>
+                            <p className={`text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-medium text-balance ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                                I build full-stack web platforms and <span className="text-indigo-600 dark:text-indigo-400 font-bold">AI/ML systems</span> — from FastAPI backends to deep-learning models that ship to real users.
+                            </p>
                         </motion.div>
 
                         <motion.div

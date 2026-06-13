@@ -180,7 +180,7 @@ const Achievements = () => {
             {
                 icon: FaCode,
                 title: 'Full Stack Developer',
-                description: 'Proficient in React, Node.js, SpringBoot, MongoDB, MySQL with modern web development practices',
+                description: 'Proficient in React, Node.js, Express, FastAPI, MongoDB, and MySQL with modern web development practices',
                 color: 'from-indigo-600 to-violet-600',
                 gradient: 'bg-gradient-to-br from-indigo-600/10 to-violet-600/10',
                 category: 'Technical'
