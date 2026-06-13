@@ -27,7 +27,7 @@ const Experience = () => {
             color: 'from-purple-500 to-pink-600'
         },
         {
-            title: 'Backend Intern',
+            title: 'Web Development Intern',
             company: 'TechMantra Global',
             duration: 'May 2024 - July 2024',
             location: 'Remote',
