@@ -134,35 +134,37 @@ const Experience = () => {
 
                             <div className="relative z-10">
                                 {/* Header Section */}
-                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 mb-8">
-                                    <div className="flex items-center gap-5">
-                                        <div className={`w-20 h-20 rounded-3xl bg-gradient-to-br ${internship.color} p-0.5 flex items-center justify-center shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-rotate-3`}>
-                                            <div className="w-full h-full bg-slate-900/10 rounded-[1.4rem] flex items-center justify-center text-3xl backdrop-blur-sm">
+                                <div className="flex flex-col gap-5 mb-8">
+                                    {/* Title + company */}
+                                    <div className="flex items-center gap-4">
+                                        <div className={`w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-3xl bg-gradient-to-br ${internship.color} p-0.5 flex items-center justify-center shadow-xl transition-all duration-500 group-hover:scale-105 group-hover:-rotate-3`}>
+                                            <div className="w-full h-full bg-slate-900/10 rounded-[1.4rem] flex items-center justify-center text-2xl sm:text-3xl backdrop-blur-sm">
                                                 <span className="drop-shadow-lg">{internship.icon}</span>
                                             </div>
                                         </div>
-                                        <div>
-                                            <h3 className={`text-2xl font-black tracking-tight mb-1 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                        <div className="min-w-0">
+                                            <h3 className={`text-xl sm:text-2xl font-black tracking-tight mb-1.5 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                                                 {internship.title}
                                             </h3>
-                                            <div className="flex items-center gap-2">
-                                                <span className={`h-1 w-6 rounded-full bg-gradient-to-r ${internship.color}`} />
-                                                <p className="text-indigo-500 font-bold text-xs tracking-widest uppercase">
+                                            <div className="flex items-start gap-2">
+                                                <span className={`h-1 w-5 mt-1.5 shrink-0 rounded-full bg-gradient-to-r ${internship.color}`} />
+                                                <p className="text-indigo-500 font-bold text-[11px] leading-snug tracking-[0.12em] uppercase">
                                                     {internship.company}
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-2 shrink-0">
-                                        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-2xl border text-[11px] font-bold uppercase tracking-wider ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
+                                    {/* Meta pills — wrap, never overflow */}
+                                    <div className="flex flex-wrap gap-2">
+                                        <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-[11px] font-bold uppercase tracking-wider whitespace-nowrap ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
                                             }`}>
-                                            <FaCalendar className="text-indigo-500 text-sm" />
+                                            <FaCalendar className="text-indigo-500 text-sm shrink-0" />
                                             {internship.duration}
                                         </div>
-                                        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-2xl border text-[11px] font-bold uppercase tracking-wider ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500'
+                                        <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-[11px] font-bold uppercase tracking-wider whitespace-nowrap ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500'
                                             }`}>
-                                            <FaMapMarkerAlt className="text-rose-500 text-sm" />
+                                            <FaMapMarkerAlt className="text-rose-500 text-sm shrink-0" />
                                             {internship.location}
                                         </div>
                                     </div>
