@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
 import {
-    ExternalLink, Code2, Globe, Github as LucidGithub,
-    Bot, Cpu, Brain, FileCheck, LayoutDashboard, ShoppingBag,
-    ShieldCheck, ScanSearch
+    Code2, Globe, Github as LucidGithub,
+    Bot, Cpu, FileCheck, LayoutDashboard, ShoppingBag,
+    ScanSearch, User, Zap
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+
+const SectionLabel = ({ children }) => {
+    const { isDarkMode } = useTheme();
+    return (
+        <span className={`block text-[10px] font-black uppercase tracking-[0.25em] mb-2 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
+            {children}
+        </span>
+    );
+};
 
 const ProjectCard = ({ project, index }) => {
     const { isDarkMode } = useTheme();
@@ -82,29 +90,71 @@ const ProjectCard = ({ project, index }) => {
                         )}
                     </div>
 
-                    {/* Meta Archive Badge */}
+                    {/* Live status badge — make impact/trust visible up front (Rule 21) */}
                     <div className="absolute top-6 left-6 z-20">
-                        <div className={`px-4 py-2 backdrop-blur-xl rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border shadow-xl ${isDarkMode
-                            ? 'bg-indigo-600 border-indigo-500 text-white font-black'
+                        <div className={`px-4 py-2 backdrop-blur-xl rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border shadow-xl flex items-center gap-2 ${project.demo !== '#'
+                            ? 'bg-emerald-600 border-emerald-500 text-white'
                             : 'bg-indigo-600 border-indigo-500 text-white'
                             }`}>
-                            ID // 0{index + 1}
+                            {project.demo !== '#' ? (
+                                <>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" /> Live
+                                </>
+                            ) : (
+                                <>ID // 0{index + 1}</>
+                            )}
                         </div>
                     </div>
                 </a>
 
-                {/* Content Deep Analysis */}
+                {/* Content — structured as a scannable case study (Rule 9) */}
                 <div className="p-8 sm:p-10 flex-1 flex flex-col relative z-10">
+                    {/* Title + Role (Rule 7: write your role clearly) */}
                     <div className="mb-6">
                         <h3 className={`text-3xl font-black mb-3 tracking-tight leading-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                             {project.title}
                         </h3>
-                        <div className="h-1 w-12 rounded-full bg-gradient-to-r from-indigo-600 to-transparent" />
+                        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'}`}>
+                            <User size={11} className="text-indigo-500" /> {project.role}
+                        </div>
+                        <div className="h-1 w-12 rounded-full bg-gradient-to-r from-indigo-600 to-transparent mt-4" />
                     </div>
 
-                    <p className={`text-[15px] leading-relaxed mb-8 flex-1 font-medium ${isDarkMode ? 'text-slate-200' : 'text-slate-600'}`}>
-                        {project.description}
-                    </p>
+                    {/* Problem first (Rules 1 & 5) */}
+                    <div className="mb-5">
+                        <SectionLabel>The Problem</SectionLabel>
+                        <p className={`text-[15px] leading-relaxed font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                            {project.problem}
+                        </p>
+                    </div>
+
+                    {/* What I built (Rule 15: show how, not just claims) */}
+                    <div className="mb-6 flex-1">
+                        <SectionLabel>What I Built</SectionLabel>
+                        <p className={`text-[15px] leading-relaxed font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                            {project.approach}
+                        </p>
+                    </div>
+
+                    {/* Impact / outcome (Rules 13 & 14: numbers make it believable) */}
+                    {project.impact?.length > 0 && (
+                        <div className="mb-6">
+                            <SectionLabel>Impact</SectionLabel>
+                            <div className="flex flex-wrap gap-2.5">
+                                {project.impact.map((item, idx) => (
+                                    <span
+                                        key={idx}
+                                        className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-2xl text-[11px] font-black border ${isDarkMode
+                                            ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20'
+                                            : 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                                            }`}
+                                    >
+                                        <Zap size={12} /> {item}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* High-Contrast Tech Pills */}
                     <div className="flex flex-wrap gap-2.5 mb-10">
@@ -159,10 +209,15 @@ const ProjectCard = ({ project, index }) => {
 const Projects = () => {
     const { isDarkMode } = useTheme();
 
+    // Each project leads with the problem, my role, and the outcome — reworded
+    // from real project data only (no invented metrics).
     const projects = [
         {
             title: 'Community AI Platform',
-            description: 'Comprehensive AI ecosystem delivering government resources and opportunities to underserved communities. Engineered with high-performance async FastAPI backends, SQLAlchemy ORM, and JWT security. Features context-aware multilingual AI chat assistance and deep-learning driven recommendations.',
+            role: 'Full-Stack Developer',
+            problem: 'Underserved communities struggle to discover and access government resources and opportunities meant for them.',
+            approach: 'Built an AI ecosystem on async FastAPI + SQLAlchemy with JWT security, featuring context-aware multilingual chat assistance and deep-learning driven recommendations.',
+            impact: ['Live in production', 'Multilingual AI chat', 'DL recommendations'],
             tech: ['FastAPI', 'React', 'SQLAlchemy', 'JWT', 'Pydantic'],
             gradient: 'from-violet-600 via-indigo-600 to-purple-600',
             github: 'https://github.com/RiteshKumar2e/Community-Empowering-2.0',
@@ -172,7 +227,10 @@ const Projects = () => {
         },
         {
             title: 'QuickFix AI Customer Agent',
-            description: "I built this to automate complex support workflows using 30+ specialized AI agents. It leverages RAG for policy-aware intelligence, providing smart and empathetic resolutions in under a second.",
+            role: 'Solo Developer',
+            problem: 'Support teams are slow and inconsistent at resolving complex customer complaints across many policy edge-cases.',
+            approach: 'Built an agentic system of 30+ specialized AI agents using RAG for policy-aware intelligence, returning smart, empathetic resolutions.',
+            impact: ['30+ AI agents', 'Sub-second resolutions', 'RAG policy-aware'],
             tech: ['FastAPI', 'React 19', 'Gemini 2.0', 'Groq LLaMA', 'MariaDB'],
             gradient: 'from-indigo-600 via-indigo-500 to-purple-600',
             github: 'https://github.com/RiteshKumar2e/customer-complaint-agent_new',
@@ -182,7 +240,10 @@ const Projects = () => {
         },
         {
             title: 'Steel Surface Defect Detection',
-            description: 'AMFF-CNN model achieving 99.65% accuracy in industrial quality control using advanced computer vision pipeline.',
+            role: 'ML Research · NIT Jamshedpur',
+            problem: 'Manual quality control on steel surfaces is slow and inconsistent for spotting fine defects on the production line.',
+            approach: 'Designed an AMFF-CNN computer-vision pipeline to automatically classify steel surface defects for industrial quality control.',
+            impact: ['99.65% accuracy'],
             tech: ['Python', 'TensorFlow', 'OpenCV', 'Keras'],
             gradient: 'from-blue-600 via-blue-500 to-cyan-500',
             github: 'https://github.com/RiteshKumar2e/Steel_Surface_Defect',
@@ -191,7 +252,10 @@ const Projects = () => {
         },
         {
             title: 'Age Gender Prediction',
-            description: 'Real-time deep learning application for biometric identification using CNNs and Haarcascade classifiers.',
+            role: 'Solo Developer',
+            problem: 'Biometric identification needs fast, accurate age and gender estimation from a live camera feed.',
+            approach: 'Built a real-time deep-learning app using CNNs and Haarcascade classifiers for on-the-fly face detection and prediction.',
+            impact: ['Real-time inference'],
             tech: ['Deep Learning', 'PyTorch', 'Computer Vision'],
             gradient: 'from-emerald-500 via-teal-500 to-teal-600',
             github: 'https://github.com/RiteshKumar2e/AGE_GENDER_PREDECTION',
@@ -200,7 +264,10 @@ const Projects = () => {
         },
         {
             title: 'Combat Online Plagiarism',
-            description: 'NLP-driven system to identify duplicated content using cosine similarity and vector embeddings.',
+            role: 'Solo Developer',
+            problem: 'Exact-match checks miss paraphrased or reworded content, letting plagiarism slip through.',
+            approach: 'Built an NLP system that flags duplicated content using cosine similarity over vector embeddings rather than literal text matching.',
+            impact: [],
             tech: ['NLP', 'Python', 'ML', 'Transformers'],
             gradient: 'from-rose-500 via-pink-500 to-pink-600',
             github: 'https://github.com/RiteshKumar2e/Combat-Online-Plagiarism-with-AI',
@@ -209,7 +276,10 @@ const Projects = () => {
         },
         {
             title: 'Sentiment Analysis Pipeline',
-            description: 'End-to-end sentiment scoring system with high-speed processing and dynamic Plotly visualizations.',
+            role: 'Solo Developer',
+            problem: 'Teams need to read sentiment across large volumes of text quickly and see it, not just score it.',
+            approach: 'Built an end-to-end sentiment scoring pipeline using VADER with dynamic Plotly visualizations for fast, readable results.',
+            impact: ['High-speed processing'],
             tech: ['Python', 'VADER', 'Plotly', 'ML'],
             gradient: 'from-amber-500 via-orange-500 to-orange-600',
             github: 'https://github.com/RiteshKumar2e/Sentiment-Analysis',
@@ -218,7 +288,10 @@ const Projects = () => {
         },
         {
             title: 'Black Friday Sales Model',
-            description: 'Advanced prediction engine using XGBoost and LightGBM to forecast customer spending behavior.',
+            role: 'Solo Developer',
+            problem: 'Retailers need to forecast customer spending to plan inventory and campaigns ahead of high-demand sales.',
+            approach: 'Built a prediction engine using XGBoost and LightGBM to forecast customer spending behavior from historical sales data.',
+            impact: [],
             tech: ['XGBoost', 'LightGBM', 'Data Analysis'],
             gradient: 'from-blue-500 via-indigo-500 to-indigo-600',
             github: 'https://github.com/RiteshKumar2e/Black-Friday-Sales-Prediction',
@@ -233,14 +306,14 @@ const Projects = () => {
             <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full blur-[120px] pointer-events-none -z-10 ${isDarkMode ? 'bg-indigo-900/10' : 'bg-indigo-50/30'}`} />
 
             <div className="relative z-10 px-4">
-                <div className="text-center mb-20">
+                <div className="text-center mb-20 max-w-3xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         className={`inline-block px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-6 border ${isDarkMode ? 'bg-white/5 text-indigo-400 border-white/10' : 'bg-indigo-50 text-indigo-600 border-indigo-100'}`}
                     >
-                        Portfolio Showcase
+                        Selected Work
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -250,6 +323,14 @@ const Projects = () => {
                     >
                         Pioneering <span className="gradient-text">Digital Futures</span>
                     </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className={`text-base md:text-lg font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
+                    >
+                        Each project leads with the problem, my role, and the outcome — built to be scanned in seconds, not decoded.
+                    </motion.p>
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">

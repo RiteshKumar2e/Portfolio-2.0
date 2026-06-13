@@ -95,7 +95,7 @@ const Contact = () => {
                             animate={inView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: 0.8 }}
                         >
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-4 px-1">Transmission Channel</h4>
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-4 px-1">Get In Touch</h4>
                             <h2 className={`text-6xl md:text-7xl font-black tracking-tighter mb-8 leading-[0.9] ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                                 Let's build the <br /> <span className="text-gradient">Next Gen</span>
                             </h2>
@@ -120,7 +120,7 @@ const Contact = () => {
                             <form onSubmit={handleSubmit} className="space-y-8">
                                 <div className="grid md:grid-cols-2 gap-8">
                                     <div className="space-y-3">
-                                        <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Identity</label>
+                                        <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Name</label>
                                         <input
                                             type="text"
                                             name="name"
@@ -159,7 +159,7 @@ const Contact = () => {
                                 </div>
 
                                 <div className="space-y-3">
-                                    <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Message Transmission</label>
+                                    <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Message</label>
                                     <textarea
                                         name="message"
                                         value={formData.message}
@@ -196,7 +196,7 @@ const Contact = () => {
                                                 initial={{ scale: 0 }} animate={{ scale: 1 }}
                                                 className="flex items-center gap-2"
                                             >
-                                                <CheckCircle2 size={18} /> Transmitted Successfully
+                                                <CheckCircle2 size={18} /> Message Sent
                                             </motion.div>
                                         )}
                                         {status === 'error' && (
@@ -205,7 +205,7 @@ const Contact = () => {
                                                 initial={{ scale: 0 }} animate={{ scale: 1 }}
                                                 className="flex items-center gap-2"
                                             >
-                                                <AlertCircle size={18} /> Transmission Failed
+                                                <AlertCircle size={18} /> Something Went Wrong
                                             </motion.div>
                                         )}
                                         {status === 'idle' && (
@@ -214,7 +214,7 @@ const Contact = () => {
                                                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                                                 className="flex items-center gap-3"
                                             >
-                                                Initiate Transmission <FaPaperPlane className="text-xs" />
+                                                Send Message <FaPaperPlane className="text-xs" />
                                             </motion.div>
                                         )}
                                     </AnimatePresence>

@@ -72,14 +72,14 @@ const Hero = () => {
                             variants={itemVariants}
                             className={`text-lg md:text-xl leading-relaxed max-w-2xl mx-auto font-medium text-balance ${isDarkMode ? 'text-slate-400' : 'text-slate-700'}`}
                         >
-                            A passionate <span className={isDarkMode ? 'text-white font-black inline-block min-w-[280px]' : 'text-slate-900 font-black inline-block min-w-[280px]'}>
+                            A <span className={isDarkMode ? 'text-white font-black inline-block min-w-[280px]' : 'text-slate-900 font-black inline-block min-w-[280px]'}>
                                 <TypeAnimation
                                     sequence={[
                                         'Computer Science Engineer',
                                         2000,
                                         'Full Stack Developer',
                                         2000,
-                                        'AI/ML Enthusiast',
+                                        'AI/ML Engineer',
                                         2000,
                                         'Open Source Contributor',
                                         2000
@@ -88,8 +88,8 @@ const Hero = () => {
                                     speed={50}
                                     repeat={Infinity}
                                 />
-                            </span> crafting
-                            intelligent digital experiences at the intersection of <span className="text-indigo-600 dark:text-indigo-400 font-bold">Code, Design, & Intelligence.</span>
+                            </span> who builds
+                            full-stack web platforms and <span className="text-indigo-600 dark:text-indigo-400 font-bold">AI/ML systems</span> — from FastAPI backends to deep-learning models that ship to real users.
                         </motion.div>
 
                         <motion.div
@@ -112,6 +112,26 @@ const Hero = () => {
                             >
                                 DOWNLOAD CV
                             </motion.button>
+                        </motion.div>
+
+                        {/* Trust strip — real numbers up front (Rules 13, 17, 21) */}
+                        <motion.div
+                            variants={itemVariants}
+                            className="flex flex-wrap justify-center gap-3"
+                        >
+                            {[
+                                '4 Internships',
+                                '10+ Projects',
+                                '99%+ Model Accuracy',
+                                'National Hackathon Finalist'
+                            ].map((stat, index) => (
+                                <span
+                                    key={index}
+                                    className={`px-4 py-2 rounded-full text-xs font-bold border transition-colors duration-500 ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-white border-slate-200 text-slate-700 shadow-sm'}`}
+                                >
+                                    {stat}
+                                </span>
+                            ))}
                         </motion.div>
 
                         {/* Social Links */}

@@ -12,6 +12,20 @@ const Experience = () => {
     });
 
     const internships = [
+            {
+            title: 'Research Intern',
+            company: 'NIT Jamshedpur',
+            duration: 'May 2025 - Present',
+            location: 'Offline',
+            description: [
+                'Promoted to Research Intern from Machine Learning Intern.',
+                'Developed AMFF-CNN for steel surface defect detection.',
+                'Secured 99.72% accuracy on the NEU-DET dataset.'
+            ],
+            skills: ['Python', 'Computer Vision', 'PyTorch', 'OpenCV'],
+            icon: '🔬',
+            color: 'from-purple-500 to-pink-600'
+        },
         {
             title: 'Backend Intern',
             company: 'TechMantra Global',
@@ -26,20 +40,7 @@ const Experience = () => {
             icon: '🚀',
             color: 'from-blue-500 to-indigo-600'
         },
-        {
-            title: 'Research Intern',
-            company: 'NIT Jamshedpur',
-            duration: 'May 2025 - Present',
-            location: 'Offline',
-            description: [
-                'Promoted to Research Intern from Machine Learning Intern.',
-                'Developed AMFF-CNN for steel surface defect detection.',
-                'Secured 99.72% accuracy on the NEU-DET dataset.'
-            ],
-            skills: ['Python', 'Computer Vision', 'PyTorch', 'OpenCV'],
-            icon: '🔬',
-            color: 'from-purple-500 to-pink-600'
-        },
+    
         {
             title: 'Data Science Intern',
             company: 'AICTE–Slash Mark',
