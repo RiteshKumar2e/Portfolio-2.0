@@ -5,7 +5,6 @@ A modern, cutting-edge portfolio website built with React, Three.js, and advance
 ## 🔗 Live Demo
 **View Live Portfolio:** [riteshkr.info](https://riteshkr.info)
 
-
 ## ✨ Features
 
 - **3D Particle Background**: Interactive particle system using React Three Fiber
@@ -44,7 +43,6 @@ A modern, cutting-edge portfolio website built with React, Three.js, and advance
 git clone <repository-url>
 cd "Portfolio 2.0"
 ```
-
 2. Install dependencies:
 ```bash
 npm install
