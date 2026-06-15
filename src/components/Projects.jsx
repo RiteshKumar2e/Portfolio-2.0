@@ -242,7 +242,7 @@ const Projects = () => {
             impact: ['98.33% accuracy', '0.85 mAP', 'Edge-deployment ready'],
             tech: ['Python', 'PyTorch', 'OpenCV', 'MobileNetV2', 'FPN'],
             gradient: 'from-blue-600 via-blue-500 to-cyan-500',
-            github: 'https://github.com/RiteshKumar2e/Steel_Surface_Defect',
+            github: 'https://github.com/RiteshKumar2e/Steel_Surface_Defect_NEU_DET-DATASET',
             demo: '#',
             icon: <ScanSearch className="w-16 h-16 text-white" />
         },
