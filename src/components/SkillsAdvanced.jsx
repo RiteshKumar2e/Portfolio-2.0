@@ -7,13 +7,15 @@ import {
     SiPython, SiTensorflow, SiCplusplus, SiPytorch, SiPandas, SiNumpy,
     SiMysql, SiGit, SiGithub, SiGooglecloud, SiJupyter, SiOpencv,
     SiExpress, SiScikitlearn, SiKeras, SiFastapi, SiPostgresql,
-    SiJsonwebtokens, SiSqlalchemy
+    SiJsonwebtokens, SiSqlalchemy, SiPydantic, SiPlotly, SiHuggingface,
+    SiGooglegemini
 } from 'react-icons/si';
 import { VscVscode } from 'react-icons/vsc';
 import {
     FaLaptopCode, FaServer, FaDatabase, FaBrain, FaTools, FaCloud,
     FaCodeBranch, FaCube, FaGlobe, FaShapes, FaLayerGroup, FaTimes, FaArrowRight,
-    FaArrowLeft, FaGithub as FaGithubBrand, FaExternalLinkAlt
+    FaArrowLeft, FaGithub as FaGithubBrand, FaExternalLinkAlt,
+    FaRobot, FaEye, FaLanguage, FaNetworkWired, FaChartLine, FaChartBar, FaTree, FaSitemap
 } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
 
@@ -557,6 +559,13 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
+                    name: "Pydantic", icon: SiPydantic, color: "text-[#E92063]", level: "Intermediate",
+                    description: "Python data-validation library that enforces correct, typed data at the edges of an API.",
+                    usedIn: [
+                        { project: "Community AI Platform", detail: "Validated every incoming request before it ever reached the database." }
+                    ]
+                },
+                {
                     name: "C++", icon: SiCplusplus, color: "text-[#00599C]", level: "Intermediate",
                     description: "My language for data structures, algorithms, and performance-focused problem solving.",
                     usedIn: [
@@ -664,6 +673,82 @@ const SkillsAdvanced = () => {
                     description: "Numerical computing and array operations that underpin my ML pipelines.",
                     usedIn: [
                         { project: "All ML projects", detail: "Vectorized math and array handling across every model I build." }
+                    ]
+                },
+                {
+                    name: "Machine Learning", icon: FaChartLine, color: "text-[#FF6F00]", level: "Intermediate",
+                    description: "Training models that learn patterns from data to make predictions and classifications.",
+                    usedIn: [
+                        { project: "Black Friday Sales Model", detail: "Forecasted customer spending from historical sales data." },
+                        { project: "Sentiment Analysis Pipeline", detail: "Scored the mood of text at scale." },
+                        { project: "Combat Online Plagiarism", detail: "Detected reworded copying using meaning-based similarity." }
+                    ]
+                },
+                {
+                    name: "Generative AI (LLMs)", icon: SiGooglegemini, color: "text-[#8E75B2]", level: "Intermediate",
+                    description: "Building with large language models — Gemini and LLaMA — for chat, reasoning, and AI agents.",
+                    usedIn: [
+                        { project: "QuickFix AI Customer Agent", detail: "Powered 30+ support agents with Gemini 2.0 and Groq LLaMA." },
+                        { project: "Community AI Platform", detail: "Drove the context-aware multilingual chat assistant." }
+                    ]
+                },
+                {
+                    name: "RAG", icon: FaNetworkWired, color: "text-[#10A37F]", level: "Intermediate",
+                    description: "Retrieval-Augmented Generation — grounding an LLM's answers in real source documents so it doesn't guess.",
+                    usedIn: [
+                        { project: "QuickFix AI Customer Agent", detail: "Made every agent policy-aware by retrieving real policy docs before answering." }
+                    ]
+                },
+                {
+                    name: "NLP", icon: FaLanguage, color: "text-[#4B8BBE]", level: "Intermediate",
+                    description: "Natural Language Processing — teaching machines to understand, compare, and score human text.",
+                    usedIn: [
+                        { project: "Combat Online Plagiarism", detail: "Compared documents by meaning using vector embeddings." },
+                        { project: "Sentiment Analysis Pipeline", detail: "Processed and scored large volumes of text." }
+                    ]
+                },
+                {
+                    name: "Transformers", icon: SiHuggingface, color: "text-[#FFD21E]", level: "Intermediate",
+                    description: "Modern neural architectures (via Hugging Face) that turn text into meaning-rich embeddings.",
+                    usedIn: [
+                        { project: "Combat Online Plagiarism", detail: "Generated embeddings to catch paraphrased plagiarism." }
+                    ]
+                },
+                {
+                    name: "Computer Vision", icon: FaEye, color: "text-[#5C3EE8]", level: "Intermediate",
+                    description: "Enabling software to interpret images and live video — detection, recognition, and classification.",
+                    usedIn: [
+                        { project: "Steel Surface Defect Detection", detail: "Spotted fine surface defects from production-line images." },
+                        { project: "Age Gender Prediction", detail: "Detected faces and predicted age/gender from a live camera feed." }
+                    ]
+                },
+                {
+                    name: "XGBoost", icon: FaTree, color: "text-[#337AB7]", level: "Intermediate",
+                    description: "Gradient-boosted decision trees — a top performer for structured, tabular prediction.",
+                    usedIn: [
+                        { project: "Black Friday Sales Model", detail: "Forecast customer spending with high accuracy on tabular data." }
+                    ]
+                },
+                {
+                    name: "LightGBM", icon: FaSitemap, color: "text-[#02C39A]", level: "Intermediate",
+                    description: "A fast, efficient gradient-boosting framework for large tabular datasets.",
+                    usedIn: [
+                        { project: "Black Friday Sales Model", detail: "Paired with XGBoost to model spending patterns efficiently." }
+                    ]
+                },
+                {
+                    name: "Plotly", icon: SiPlotly, color: "text-[#3F4F75]", level: "Intermediate",
+                    description: "Interactive data-visualization library for turning results into readable, explorable charts.",
+                    usedIn: [
+                        { project: "Sentiment Analysis Pipeline", detail: "Built dynamic charts so anyone could read the sentiment at a glance." }
+                    ]
+                },
+                {
+                    name: "Data Analysis", icon: FaChartBar, color: "text-[#150458]", level: "Intermediate",
+                    description: "Cleaning, exploring, and drawing insight from raw datasets before any modeling begins.",
+                    usedIn: [
+                        { project: "Black Friday Sales Model", detail: "Explored and engineered features from historical sales data." },
+                        { project: "Sentiment Analysis Pipeline", detail: "Structured and summarised large text datasets." }
                     ]
                 }
             ]
