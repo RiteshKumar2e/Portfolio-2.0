@@ -9,7 +9,7 @@ const Hero = () => {
 
     const handleDownloadCV = () => {
         const link = document.createElement('a');
-        link.href = '/Ritesh_Kumar_resume.pdf';
+        link.href = '/Ritesh_Kumar_Resume.pdf?v=2';
         link.download = 'Ritesh_Kumar_Resume.pdf';
         link.setAttribute('target', '_blank');
         document.body.appendChild(link);
