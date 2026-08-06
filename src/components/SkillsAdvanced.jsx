@@ -595,17 +595,23 @@ const SkillsAdvanced = () => {
                 },
                 {
                     name: "HTML5", icon: SiHtml5, color: "text-[#E34F26]", level: "Intermediate",
-                    description: "Semantic, accessible markup as the structural foundation of every interface I build.",
+                    description: "HTML5 is the foundation of every web interface I build. I use semantic and well-structured markup to create accessible, responsive, and SEO-friendly web applications that work seamlessly across modern browsers.",
                     usedIn: [
-                        { project: "All web frontends", detail: "Document structure for my React apps and this portfolio." }
-                    ]
+                        {
+                            project: "All Projects",
+                            detail: "Used semantic HTML5 to build the structure of every web application, ensuring accessibility, responsiveness, and clean, maintainable code."
+                        }
+                ]
                 },
                 {
                     name: "CSS3", icon: SiCss, color: "text-[#1572B6]", level: "Intermediate",
                     description: "Modern responsive styling with flexbox, grid, and animations — usually via Tailwind CSS.",
                     usedIn: [
-                        { project: "This Portfolio", detail: "Responsive layouts, dark/light theming, and the glassmorphism effects throughout." }
-                    ]
+                {
+                    project: "All Projects",
+                    detail: "Used to build responsive layouts, modern user interfaces, reusable components, animations, and a consistent design across every project."
+                }
+]
                 }
             ]
         },
