@@ -490,11 +490,28 @@ const SkillsAdvanced = () => {
                 {
                     name: "React.js", icon: SiReact, color: "text-[#61DAFB]", level: "Intermediate",
                     description: "My core library for building fast, component-driven interfaces with hooks and clean state management.",
-                    usedIn: [
-                        { project: "Community AI Platform", detail: "Built the multilingual chat interface and the recommendation dashboard." },
-                        { project: "QuickFix AI Customer Agent", detail: "Developed the React 19 console that drives 30+ support agents." },
-                        { project: "This Portfolio", detail: "This entire site is a React app paired with Framer Motion animations." }
-                    ]
+                  usedIn: [
+        {
+            project: "SOEIT Achievement Portal",
+            detail: "Built responsive role-based dashboards, reusable components, and integrated REST APIs for the student achievement management system."
+        },
+        {
+            project: "QuickFix AI Customer Agent",
+            detail: "Developed the AI-powered customer support interface with React, dynamic ticket management, authentication, and real-time API communication."
+        },
+        {
+            project: "Community Empowering 2.0",
+            detail: "Created multilingual community dashboards, interactive user interfaces, and AI-powered features using reusable React components."
+        },
+        {
+            project: "Portfolio 2.0",
+            detail: "Designed and developed this portfolio with React, Framer Motion animations, reusable components, and a fully responsive layout."
+        },
+        {
+            project: "ArthaNova",
+            detail: "Built modern financial dashboards, interactive data visualizations, and responsive interfaces with seamless backend integration."
+        }
+    ]
                 },
                 {
                     name: "JavaScript", icon: SiJavascript, color: "text-[#F7DF1E]", level: "Intermediate",
