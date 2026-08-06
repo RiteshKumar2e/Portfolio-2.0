@@ -137,7 +137,79 @@ const projectDetails = {
             { title: "3D with React Three Fiber", text: "The floating particle background and hero visuals are genuine 3D, rendered with React Three Fiber and Three.js, adding depth without slowing the page down." },
             { title: "This interactive skill explorer", text: "The pop-up you are reading is itself a feature: click a skill, see where I used it, then click a project for the full story — all built to make my experience easy and enjoyable to explore." }
         ]
-    }
+    },
+    "SOEIT Achievement Portal": {
+    role: "Full Stack Developer",
+    code: "https://github.com/RiteshKumar2e/SOEIT-Acheivement-portal",
+    live: "",
+    summary: "Imagine a college where every student's achievements are scattered across emails, spreadsheets, and paperwork. SOEIT brings everything together into one platform where students can showcase their achievements and faculty can review, verify, and manage them with ease.",
+    steps: [
+        {
+            title: "The everyday challenge",
+            text: "Managing student achievements manually is slow, repetitive, and prone to errors. Students often struggle to keep track of their certificates, while faculty spend hours verifying and organizing records."
+        },
+        {
+            title: "A centralized achievement platform",
+            text: "I built a web application where students can submit academic, technical, sports, and extracurricular achievements in one place. Every submission follows a structured workflow, making records easy to manage."
+        },
+        {
+            title: "Role-based access for everyone",
+            text: "Different users have different responsibilities. Students can upload and monitor their achievements, faculty members can verify submissions, and administrators have complete control over managing users and records."
+        },
+        {
+            title: "Fast and responsive experience",
+            text: "The frontend is built with React, providing a clean and responsive interface that makes navigation simple across desktops and mobile devices."
+        },
+        {
+            title: "Reliable backend",
+            text: "The backend securely handles authentication, validation, and database operations while ensuring every achievement is stored safely and can be retrieved whenever needed."
+        },
+        {
+            title: "Smart organization",
+            text: "Achievements are categorized, searchable, and easy to filter, allowing users to quickly find records instead of searching through spreadsheets or paper files."
+        },
+        {
+            title: "The outcome",
+            text: "The portal replaces manual paperwork with a streamlined digital workflow, making achievement management faster, more organized, and easier for both students and faculty."
+        }
+    ]
+},
+"ArthaNova": {
+    role: "Frontend Developer",
+    code: "https://github.com/RiteshKumar2e/ArthaNova",
+    live: "",
+    summary: "Understanding personal finances should not require complicated spreadsheets. ArthaNova transforms financial data into simple dashboards, helping users track spending, monitor trends, and make better financial decisions.",
+    steps: [
+        {
+            title: "The everyday problem",
+            text: "Most people know where they earn money but struggle to understand where it actually goes. Traditional financial tools often feel overwhelming and difficult to use."
+        },
+        {
+            title: "Making financial data meaningful",
+            text: "I developed an intuitive dashboard that organizes financial information into simple charts, summaries, and visual reports so users can understand their finances at a glance."
+        },
+        {
+            title: "Interactive user experience",
+            text: "Using React, I built reusable components and responsive layouts that provide smooth navigation and real-time updates as users interact with the application."
+        },
+        {
+            title: "Connecting with live data",
+            text: "The frontend communicates with backend APIs to fetch, update, and display financial information dynamically, ensuring users always see the latest data."
+        },
+        {
+            title: "Designed for every device",
+            text: "The interface automatically adapts to desktops, tablets, and mobile devices, providing a consistent experience regardless of screen size."
+        },
+        {
+            title: "Clean and scalable architecture",
+            text: "The application is built using modular components, making it easier to maintain, extend, and introduce new financial features in the future."
+        },
+        {
+            title: "The outcome",
+            text: "ArthaNova makes personal finance easier to understand through modern dashboards, responsive design, and interactive visualizations that turn complex numbers into meaningful insights."
+        }
+    ]
+}
 };
 
 const HoverSkillPill = ({ name, icon: Icon, color, onClick }) => {
@@ -500,7 +572,7 @@ const SkillsAdvanced = () => {
             detail: "Developed the AI-powered customer support interface with React, dynamic ticket management, authentication, and real-time API communication."
         },
         {
-            project: "Community Empowering 2.0",
+            project: "Community AI Platform",
             detail: "Created multilingual community dashboards, interactive user interfaces, and AI-powered features using reusable React components."
         },
         {
