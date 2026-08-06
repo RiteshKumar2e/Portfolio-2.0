@@ -139,12 +139,12 @@ const projectDetails = {
         ]
     },
     "SOEIT Achievement Portal": {
-    role: "Full Stack Developer",
-    code: "https://github.com/RiteshKumar2e/SOEIT-Acheivement-portal",
-    live: "",
-    summary: "Imagine a college where every student's achievements are scattered across emails, spreadsheets, and paperwork. SOEIT brings everything together into one platform where students can showcase their achievements and faculty can review, verify, and manage them with ease.",
-    steps: [
-        {
+        role: "Full-Stack Developer",
+        code: "https://github.com/RiteshKumar2e/SOEIT-Acheivement-portal",
+        live: "https://soeit-acheivement-portal.vercel.app",
+        summary: "Imagine a college where every student's achievements are scattered across emails, spreadsheets, and paperwork. SOEIT brings everything together into one platform where students can showcase their achievements and faculty can review, verify, and manage them with ease.",
+        steps: [
+            {
             title: "The everyday challenge",
             text: "Managing student achievements manually is slow, repetitive, and prone to errors. Students often struggle to keep track of their certificates, while faculty spend hours verifying and organizing records."
         },
@@ -175,9 +175,9 @@ const projectDetails = {
     ]
 },
 "ArthaNova": {
-    role: "Full Stack Developer",
+    role: "Full-Stack Developer",
     code: "https://github.com/RiteshKumar2e/ArthaNova",
-    live: "",
+    live: "https://arthanova.vercel.app",
     summary: "Understanding personal finances should not require complicated spreadsheets. ArthaNova transforms financial data into simple dashboards, helping users track spending, monitor trends, and make better financial decisions.",
     steps: [
         {
