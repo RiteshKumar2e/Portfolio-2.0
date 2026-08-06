@@ -175,7 +175,7 @@ const projectDetails = {
     ]
 },
 "ArthaNova": {
-    role: "Frontend Developer",
+    role: "Full Stack Developer",
     code: "https://github.com/RiteshKumar2e/ArthaNova",
     live: "",
     summary: "Understanding personal finances should not require complicated spreadsheets. ArthaNova transforms financial data into simple dashboards, helping users track spending, monitor trends, and make better financial decisions.",
@@ -576,7 +576,7 @@ const SkillsAdvanced = () => {
             detail: "Created multilingual community dashboards, interactive user interfaces, and AI-powered features using reusable React components."
         },
         {
-            project: "Portfolio 2.0",
+            project: "This Portfolio",
             detail: "Designed and developed this portfolio with React, Framer Motion animations, reusable components, and a fully responsive layout."
         },
         {
