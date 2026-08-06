@@ -561,7 +561,7 @@ const SkillsAdvanced = () => {
             skills: [
                 {
                     name: "React.js", icon: SiReact, color: "text-[#61DAFB]", level: "Intermediate",
-                    description: "My core library for building fast, component-driven interfaces with hooks and clean state management.",
+                    description: "Most of my frontend projects are built with React because it makes developing scalable and maintainable applications easier. I regularly work with reusable components, React Hooks, routing, API integration, and responsive layouts to create modern user experiences.",
                   usedIn: [
         {
             project: "SOEIT Achievement Portal",
