@@ -5,8 +5,12 @@
  * stream and hand each token to a callback so the UI can type it out live.
  */
 
+// The deployed backend is the default for every environment — local dev at
+// localhost:3000 and production at riteshkr.info both talk to Render, so no
+// local Python process is needed. Override with VITE_AI_API_URL to point at a
+// backend running on your own machine.
 const API_BASE = (
-    import.meta.env.VITE_AI_API_URL || 'http://localhost:8000'
+    import.meta.env.VITE_AI_API_URL || 'https://portfolio-q17g.onrender.com'
 ).replace(/\/$/, '');
 
 export const AI_API_BASE = API_BASE;
