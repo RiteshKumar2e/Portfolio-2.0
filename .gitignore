@@ -12,6 +12,17 @@ dist
 dist-ssr
 *.local
 
+# Environment secrets — NEVER commit these (they hold the Groq API key)
+.env
+.env.*
+!.env.example
+
+# Python backend
+backend/.venv
+backend/.deps
+**/__pycache__/
+*.py[cod]
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

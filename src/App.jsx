@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Experience from './components/Experience';
+import AIRepresentative from './components/AIRepresentative';
 import Achievements from './components/Achievements';
 import SkillsAdvanced from './components/SkillsAdvanced';
 import Projects from './components/Projects';
@@ -90,6 +91,7 @@ function AppContent() {
                                     <Hero />
                                     <div className="space-y-10 md:space-y-16 lg:space-y-20">
                                         <About />
+                                        <AIRepresentative />
                                         <Experience />
                                         <Projects />
                                         <SkillsAdvanced />

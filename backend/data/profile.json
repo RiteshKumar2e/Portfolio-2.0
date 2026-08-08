@@ -1,0 +1,572 @@
+{
+  "meta": {
+    "last_updated": "2026-08-08",
+    "source": "Ritesh Kumar resume (Ritesh_Kumar_Resume.pdf) + riteshkr.info portfolio",
+    "notes": "Single source of truth for the AI representative. Anything not stated here is unknown and must not be invented."
+  },
+  "basics": {
+    "name": "Ritesh Kumar",
+    "headline": "Computer Science Engineer — Full-Stack & AI/ML",
+    "summary": "Computer Science engineering student (B.Tech, graduating May 2026) with internship experience in software application development, full-stack engineering, and REST API development at TechMantra Global and the Machine Vision and Intelligence Lab at NIT Jamshedpur. Builds scalable web applications and production AI systems — from async FastAPI backends to deep-learning models deployed for real users.",
+    "location": "Jamshedpur, Jharkhand, India",
+    "email": "riteshkumar90359@gmail.com",
+    "phone": "+91-6206269895",
+    "availability": "Open to new opportunities (full-time roles from mid-2026; internships earlier).",
+    "roles_targeted": [
+      "Software Engineer / Backend Engineer",
+      "Full-Stack Developer",
+      "AI/ML Engineer",
+      "Data Science / Applied ML"
+    ],
+    "work_preferences": {
+      "note": "Not specified in the source data.",
+      "known": [
+        "Has worked on-site (NIT Jamshedpur) and remote (TechMantra Global, Noida; AICTE–Slash Mark)."
+      ]
+    }
+  },
+  "education": [
+    {
+      "institution": "Arka Jain University, Jamshedpur",
+      "degree": "Bachelor of Technology (B.Tech)",
+      "field": "Computer Science and Engineering",
+      "cgpa": "8.47",
+      "start": "Aug 2022",
+      "end": "May 2026",
+      "status": "In progress — expected graduation May 2026",
+      "coursework": [
+        "Data Structures & Algorithms",
+        "Object-Oriented Programming",
+        "Database Management Systems"
+      ]
+    }
+  ],
+  "skills": {
+    "languages": ["Python", "C", "C++", "JavaScript", "SQL", "HTML", "CSS"],
+    "backend": [
+      "FastAPI",
+      "Node.js",
+      "Express.js",
+      "SQLAlchemy",
+      "REST API design",
+      "Pydantic",
+      "JWT authentication",
+      "Async / concurrent request handling"
+    ],
+    "frontend": ["React.js", "React 19", "Tailwind CSS", "MUI", "Vite", "Framer Motion", "Three.js / React Three Fiber"],
+    "databases": ["PostgreSQL", "MySQL", "MongoDB", "Turso (LibSQL)", "MariaDB"],
+    "ai_ml": [
+      "TensorFlow",
+      "Keras",
+      "PyTorch",
+      "scikit-learn",
+      "OpenCV",
+      "NumPy",
+      "Pandas",
+      "MobileNetV2",
+      "Feature Pyramid Network (FPN)",
+      "Attention mechanisms",
+      "RAG (Retrieval-Augmented Generation)",
+      "XGBoost",
+      "LightGBM",
+      "NLP / Transformers / embeddings",
+      "VADER sentiment analysis"
+    ],
+    "llm_apis": ["Groq API (LLaMA 3.3)", "Google Gemini 2.0 Flash", "Multi-model fallback pipelines"],
+    "google_technologies": ["Gemini API", "Google OAuth 2.0", "Google Colab / Jupyter"],
+    "tools_and_deployment": [
+      "Git",
+      "GitHub Actions (CI/CD)",
+      "Docker",
+      "Render",
+      "Vercel",
+      "VS Code",
+      "Jest (unit & integration testing)",
+      "Brevo (transactional email/SMTP)"
+    ],
+    "self_assessed_levels": {
+      "note": "Levels as stated on the portfolio site.",
+      "intermediate": [
+        "React.js",
+        "JavaScript",
+        "HTML5",
+        "CSS3",
+        "Node.js",
+        "FastAPI",
+        "Express.js",
+        "Python",
+        "JWT",
+        "Pydantic"
+      ]
+    }
+  },
+  "experience": [
+    {
+      "title": "Research Intern",
+      "organization": "Machine Vision and Intelligence Lab, NIT Jamshedpur",
+      "location": "Jamshedpur, India (On-site)",
+      "start": "May 2025",
+      "end": "Present",
+      "highlights": [
+        "Developed a modular Python-based industrial defect detection system using TensorFlow, PyTorch, OpenCV, MobileNetV2, Feature Pyramid Network (FPN) and attention-based fusion, with reusable preprocessing, training, evaluation and inference pipelines for the 6-class NEU-DET dataset.",
+        "Designed and optimized lightweight deep learning architectures for steel surface defect classification, reaching 98.33% classification accuracy and 0.85 mAP.",
+        "Enabled efficient edge deployment through multi-scale feature fusion and attention-based learning, targeting real-time use on industrial production lines."
+      ],
+      "stack": ["Python", "TensorFlow", "PyTorch", "OpenCV", "MobileNetV2", "FPN", "Deep Learning", "Computer Vision", "Git"]
+    },
+    {
+      "title": "Web Development Intern",
+      "organization": "TechMantra Global",
+      "location": "Noida, India (Remote)",
+      "start": "May 2024",
+      "end": "July 2024",
+      "highlights": [
+        "Engineered backend features for a full-stack web application (Food & Recipe API) using Node.js, Express.js, MySQL and REST APIs, implementing 10+ production-ready endpoints with input validation, exception handling and reusable code.",
+        "Reduced API response time by ~35% through SQL query optimization and database indexing.",
+        "Implemented unit and integration tests with Jest, and automated linting, testing and deployment via GitHub Actions CI/CD.",
+        "Built the responsive frontend using HTML, CSS and Bootstrap, integrated with the backend."
+      ],
+      "stack": ["Node.js", "Express.js", "MySQL", "REST API", "Jest", "GitHub Actions", "JavaScript", "Bootstrap", "HTML", "CSS"]
+    },
+    {
+      "title": "Data Science Intern",
+      "organization": "AICTE–Slash Mark",
+      "location": "Remote",
+      "start": "Dec 2024",
+      "end": "Jan 2025",
+      "highlights": [
+        "Practiced data cleaning and exploratory data analysis (EDA) on real-world datasets.",
+        "Built mini-projects addressing real-world data problems.",
+        "Produced advanced visualizations using Pandas and Seaborn."
+      ],
+      "stack": ["Python", "Pandas", "Seaborn", "Jupyter", "EDA"]
+    },
+    {
+      "title": "Machine Learning Intern",
+      "organization": "AICTE–Slash Mark",
+      "location": "Remote",
+      "start": "May 2024",
+      "end": "July 2024",
+      "highlights": [
+        "Implemented Regression, Decision Trees and K-Means algorithms.",
+        "Processed large datasets for model training.",
+        "Analyzed overfitting and bias-variance trade-offs."
+      ],
+      "stack": ["Python", "scikit-learn", "NumPy", "ML algorithms"]
+    }
+  ],
+  "project_guidance": {
+    "note": "How to talk about the projects. This is framing, not extra facts — every claim must still come from the project entries themselves.",
+    "tiers": {
+      "flagship": "The three strongest, each for a different reason: QuickFix (distributed AI systems engineering), Community AI Platform (full-stack product with real users), Steel Surface Defect Detection (ML research with a paper under review).",
+      "substantial": "Real, shipped applications that show breadth: SOEIT Student Achievement Portal, ArthaNova, 3D Interactive Portfolio.",
+      "supporting": "Smaller focused builds that demonstrate specific fundamentals: Age & Gender Prediction, Combat Online Plagiarism, Sentiment Analysis Pipeline, Black Friday Sales Prediction."
+    },
+    "answering_superlatives": "There is no single 'best' project on record. When asked for the strongest/best project, present the three flagships and say what each one demonstrates, then pick the most relevant one for the role being hired for. If the role is unknown, ask. Do not silently default to whichever project has the loudest numbers.",
+    "picking_by_role": {
+      "backend / distributed systems / AI engineering": "QuickFix",
+      "full-stack product / applied AI with real users": "Community AI Platform",
+      "ML / computer vision / research": "Steel Surface Defect Detection",
+      "full-stack with auth and role-based access": "SOEIT Student Achievement Portal",
+      "frontend / data visualisation": "ArthaNova or the 3D Interactive Portfolio",
+      "NLP": "Combat Online Plagiarism",
+      "classical ML on tabular data": "Black Friday Sales Prediction"
+    },
+    "honesty_note": "Tier and 'best for' labels are an organising assessment of the evidence below, not claims Ritesh has made. Say so if asked how the ranking was decided."
+  },
+  "projects": [
+    {
+      "name": "QuickFix — AI-Powered Customer Complaint Management System",
+      "tier": "flagship",
+      "status": "Live in production",
+      "best_for": "Backend engineering, AI/LLM systems, distributed architecture",
+      "why_it_stands_out": "The most architecturally ambitious build: an orchestrated system of 30+ specialised AI services with a 3-tier model fallback, sustaining 15,900+ requests a day at under 200ms.",
+      "hardest_part": "Making more than thirty specialised agents route correctly and answer consistently, while keeping every reply grounded in the company's real policy documents rather than guessed.",
+      "key_decisions": [
+        "Many small specialised agents instead of one general model — the system reads a complaint and routes it to the right expert, like a well-run call centre.",
+        "RAG so the AI 'reads the manual' before it speaks, giving policy-backed answers rather than plausible-sounding ones.",
+        "A 3-tier fallback (Groq LLaMA 3.3 → Gemini 2.0 Flash → local TF-IDF) so the system degrades gracefully instead of going down when a provider fails."
+      ],
+      "role": "Solo Developer",
+      "period": "Not specified",
+      "problem": "Support teams are slow and inconsistent at resolving complex customer complaints across many policy edge-cases.",
+      "what_was_built": "A full-stack complaint resolution platform with an async pipeline of 30+ specialized AI services (Orchestrator, Classifier, Sentiment Analyzer, Priority Detector, RAG Engine). A RAG engine grounds answers in the company's actual policy documents so replies are policy-backed rather than guessed.",
+      "engineering_details": [
+        "Sustains 15,900+ daily requests at <200ms response time.",
+        "3-tier LLM fallback chain: Groq LLaMA 3.3 → Gemini 2.0 Flash → local TF-IDF, so the system degrades gracefully instead of failing.",
+        "Google OAuth 2.0 + email OTP authentication, JWT-based role access control, Brevo SMTP notifications.",
+        "FastAPI backend orchestrates the agents; database stores every complaint and its history for conversational context."
+      ],
+      "impact": ["30+ AI agents", "Sub-second resolutions", "RAG policy-aware answers", "15,900+ daily requests at <200ms"],
+      "stack": ["FastAPI", "React 19", "Turso (LibSQL)", "Groq API (LLaMA 3.3)", "Gemini 2.0 Flash", "JWT", "REST APIs", "MariaDB"],
+      "links": {
+        "live": "https://riteshkr.online",
+        "github": "https://github.com/RiteshKumar2e/customer-complaint-agent_new"
+      }
+    },
+    {
+      "name": "Community AI Platform",
+      "tier": "flagship",
+      "status": "Live in production at communityai.co.in, serving real users",
+      "best_for": "Full-stack product engineering, applied AI, social-impact products",
+      "why_it_stands_out": "The project with the clearest real-world impact: a live multilingual platform that puts 50+ government schemes within reach of people who would never find them otherwise.",
+      "hardest_part": "Designing the whole product around one question an ordinary user actually asks — 'what am I eligible for, and how do I get it?' — when the underlying information is scattered across dozens of sites, written in complex English and buried in PDFs.",
+      "key_decisions": [
+        "Async FastAPI so a single service can serve many concurrent users on modest hosting.",
+        "SQLAlchemy models plus Pydantic validation so malformed or malicious input is rejected before it reaches the database, without writing raw SQL.",
+        "A multi-model pipeline (Groq → Gemini fallback) with source attribution, so answers can be traced back to where they came from.",
+        "A lightweight React frontend, because the target users are often on budget phones."
+      ],
+      "role": "Full-Stack Developer",
+      "period": "Not specified",
+      "problem": "Government help exists, but people never find it — details are spread across dozens of sites, written in complex English, and buried inside PDFs. Underserved communities can't discover the resources meant for them.",
+      "what_was_built": "A multilingual platform providing access to 50+ government schemes, learning resources and job opportunities across India, with a context-aware AI chat assistant and deep-learning-driven recommendations that surface relevant opportunities from a user's profile.",
+      "engineering_details": [
+        "Async FastAPI backend with SQLAlchemy models for users, schemes and chat history; Pydantic validates every request before it reaches the database.",
+        "JWT-based authentication for private pages.",
+        "Multi-model AI pipeline (Groq → Gemini fallback) for source-attributed Q&A.",
+        "Content ingestion via News and YouTube APIs.",
+        "Supports English, Hindi, Bengali, Telugu and Marathi.",
+        "Responsive React frontend designed to run well on low-end phones."
+      ],
+      "impact": ["Live in production", "50+ government schemes", "5 languages supported", "Source-attributed answers"],
+      "stack": ["FastAPI", "React", "SQLAlchemy", "Turso (LibSQL)", "Groq API", "Gemini", "Brevo API", "JWT", "Pydantic"],
+      "links": {
+        "live": "https://communityai.co.in",
+        "github": "https://github.com/RiteshKumar2e/Community-Empowering-2.0"
+      }
+    },
+    {
+      "name": "Steel Surface Defect Detection (AMFF-CNN)",
+      "tier": "flagship",
+      "status": "Ongoing research at NIT Jamshedpur; paper under review at Discover Artificial Intelligence (Springer Nature)",
+      "best_for": "Machine learning, computer vision, research roles, edge deployment",
+      "why_it_stands_out": "The only project with peer-reviewed research behind it — an original architecture (AMFF-CNN) with measured results, 98.33% accuracy and 0.85 mAP, and a paper under review.",
+      "hardest_part": "Detecting defects that range from large blotches to hairline cracks with one model, while keeping it small enough to run on cheap hardware beside the production line rather than on a server.",
+      "key_decisions": [
+        "MobileNetV2 as the backbone specifically because factories need models that run on small, cheap edge hardware next to the camera.",
+        "A Feature Pyramid Network plus attention-based multi-scale fusion so the model examines the image at several zoom levels and focuses on the regions that matter.",
+        "OpenCV preprocessing to standardise size, contrast and lighting across thousands of images, so the model always learns from consistent examples."
+      ],
+      "role": "ML Researcher — Machine Vision and Intelligence Lab, NIT Jamshedpur",
+      "period": "May 2025 – Present",
+      "problem": "Manual quality control on steel surfaces is slow, costly and inconsistent at spotting fine defects on a live production line.",
+      "what_was_built": "A lightweight defect detector combining a MobileNetV2 backbone, a Feature Pyramid Network and attention-based multi-scale feature fusion (the AMFF-CNN design), trained on the 6-class NEU-DET dataset for industrial quality control.",
+      "engineering_details": [
+        "OpenCV preprocessing pipeline to standardize size, contrast and lighting across thousands of steel-surface images.",
+        "MobileNetV2 backbone chosen so the model runs on cheap edge hardware next to the camera, not only on servers.",
+        "FPN + attention-based multi-scale fusion so both large blotches and hairline cracks are detected.",
+        "Trained and validated in PyTorch."
+      ],
+      "impact": ["98.33% classification accuracy on NEU-DET", "0.85 mAP", "Edge-deployment ready"],
+      "stack": ["Python", "PyTorch", "TensorFlow", "OpenCV", "MobileNetV2", "FPN", "Attention mechanisms"],
+      "links": {
+        "live": null,
+        "github": "https://github.com/RiteshKumar2e/Steel_Surface_Defect_NEU_DET-DATASET"
+      }
+    },
+    {
+      "name": "SOEIT Student Achievement Portal",
+      "tier": "substantial",
+      "status": "Live in production",
+      "best_for": "Full-stack engineering, role-based access control, product workflows",
+      "why_it_stands_out": "The clearest example of replacing a manual institutional process with software — three user roles, a verification workflow, and one-click ATS-compliant resume generation.",
+      "hardest_part": "Modelling one submission workflow that works for three different roles at once — students uploading, faculty verifying, admins managing — without the permissions leaking into each other.",
+      "key_decisions": [
+        "Role-based access control as the organising principle rather than an afterthought.",
+        "Categorised, searchable, filterable records so users find things instead of scrolling spreadsheets.",
+        "Docker for consistent deployment; Google OAuth and Brevo for auth and notifications rather than rolling both by hand."
+      ],
+      "role": "Full-Stack Developer",
+      "period": "Not specified",
+      "problem": "Student achievements are scattered across emails, spreadsheets and paperwork; students lose track of certificates and faculty spend hours verifying records.",
+      "what_was_built": "A full-stack academic platform with three roles (Student / Faculty / Admin) covering achievement submission and verification, certificate uploads, gamified leaderboards, bulk certificate export, and one-click ATS-compliant resume generation.",
+      "engineering_details": [
+        "Role-based access control: students submit and track, faculty verify, admins manage users and records.",
+        "React 19 frontend, responsive across desktop and mobile.",
+        "Node.js/Express backend handling authentication, validation and database operations.",
+        "Categorized, searchable and filterable achievement records replacing manual paperwork.",
+        "Containerized with Docker; Google OAuth and Brevo API integrated."
+      ],
+      "impact": ["Live in production", "3 role types", "One-click ATS resume generation"],
+      "stack": ["Node.js", "Express", "React 19", "Turso (LibSQL)", "Docker", "JWT", "Google OAuth", "Brevo API"],
+      "links": {
+        "live": "https://soeit-acheivement-portal.vercel.app",
+        "github": "https://github.com/RiteshKumar2e/SOEIT-Acheivement-portal"
+      }
+    },
+    {
+      "name": "ArthaNova — Personal Finance Dashboard",
+      "tier": "substantial",
+      "status": "Live deployment",
+      "best_for": "Frontend engineering, data visualisation, dashboard UX",
+      "why_it_stands_out": "A focused exercise in making numbers legible — turning raw financial data into charts and summaries a non-expert can read at a glance.",
+      "hardest_part": "Making financial data feel simple when most tools in the category overwhelm people with detail.",
+      "key_decisions": [
+        "Reusable React components with responsive layouts and real-time updates as the user interacts.",
+        "A modular architecture designed so new financial features can be added without rework."
+      ],
+      "role": "Full-Stack Developer",
+      "period": "Not specified",
+      "problem": "Most people know where they earn money but not where it goes; traditional finance tools feel overwhelming.",
+      "what_was_built": "An intuitive dashboard that turns financial data into simple charts, summaries and visual reports so users can understand spending and trends at a glance.",
+      "engineering_details": [
+        "Reusable React components with responsive layouts and real-time updates.",
+        "Frontend talks to backend APIs to fetch and update financial data dynamically.",
+        "Modular, scalable architecture designed for adding new financial features."
+      ],
+      "impact": ["Live deployment", "Interactive visualizations"],
+      "stack": ["React", "REST APIs", "JavaScript"],
+      "links": {
+        "live": "https://arthanova.vercel.app",
+        "github": "https://github.com/RiteshKumar2e/ArthaNova"
+      }
+    },
+    {
+      "name": "Age & Gender Prediction",
+      "tier": "supporting",
+      "status": "Working demo",
+      "best_for": "Computer vision fundamentals, real-time inference",
+      "why_it_stands_out": "Shows a trained model turned into something that runs live on a camera feed, not a result hidden inside a notebook.",
+      "hardest_part": "Doing detection and prediction fast enough per frame to feel instant, while coping with varied lighting and face angles.",
+      "key_decisions": [
+        "Haarcascade for face detection first — classic and very fast — so the CNN only ever sees a cropped face.",
+        "Optimising the loop for the speed/accuracy trade-off rather than chasing benchmark numbers."
+      ],
+      "what_was_learned": "How to balance speed against accuracy, and how much work it takes to move a trained model from test data to something that runs smoothly for a real user.",
+      "role": "Solo Developer",
+      "period": "Not specified",
+      "problem": "Biometric and analytics systems need fast, accurate age and gender estimation from a live camera feed.",
+      "what_was_built": "A real-time deep-learning app that detects faces with a Haarcascade classifier and predicts age range and gender with a CNN, drawing results onto the live video stream.",
+      "engineering_details": [
+        "Haarcascade face detection per video frame before prediction.",
+        "CNN built and trained in PyTorch on cropped faces.",
+        "Inference loop optimized so detection and prediction feel instant on a live feed."
+      ],
+      "impact": ["Real-time inference"],
+      "stack": ["Deep Learning", "PyTorch", "Computer Vision", "OpenCV"],
+      "links": {
+        "live": null,
+        "github": "https://github.com/RiteshKumar2e/AGE_GENDER_PREDECTION"
+      }
+    },
+    {
+      "name": "Combat Online Plagiarism with AI",
+      "tier": "supporting",
+      "status": "Working project",
+      "best_for": "NLP, embeddings, semantic similarity",
+      "why_it_stands_out": "Attacks a loophole rather than a task: catching reworded plagiarism that literal text-matching always misses.",
+      "hardest_part": "Judging similarity by meaning rather than wording, so swapping 'big' for 'large' no longer defeats the checker.",
+      "key_decisions": [
+        "Transformer embeddings so two sentences that say the same thing in different words end up with similar vectors.",
+        "Cosine similarity to score how aligned two ideas are, with high-scoring pairs flagged for a human to review rather than auto-judged."
+      ],
+      "what_was_learned": "How modern AI represents language as numbers, and how a simple, well-chosen mathematical comparison on top of those numbers can solve a problem exact matching never could.",
+      "role": "Solo Developer",
+      "period": "Not specified",
+      "problem": "Exact-match plagiarism checkers miss paraphrased or reworded content — swapping a few synonyms defeats them.",
+      "what_was_built": "An NLP system that converts text into Transformer embeddings and flags likely plagiarism using cosine similarity between meanings rather than literal text matching.",
+      "engineering_details": [
+        "Text converted to vector embeddings that capture meaning.",
+        "Cosine similarity scores how aligned two pieces of text are (0 = unrelated, 1 = essentially identical).",
+        "High-similarity pairs are flagged for human review."
+      ],
+      "impact": ["Catches paraphrased plagiarism that literal matching misses"],
+      "stack": ["NLP", "Python", "Transformers", "ML"],
+      "links": {
+        "live": null,
+        "github": "https://github.com/RiteshKumar2e/Combat-Online-Plagiarism-with-AI"
+      }
+    },
+    {
+      "name": "Sentiment Analysis Pipeline",
+      "tier": "supporting",
+      "status": "Working project",
+      "best_for": "Data pipelines, analytics, visualisation",
+      "why_it_stands_out": "Ends at a decision, not a score: interactive charts let a non-technical reader see sentiment trends instead of reading numbers.",
+      "hardest_part": "Turning a mountain of raw opinions into a story a decision-maker can act on in seconds.",
+      "key_decisions": [
+        "VADER because it handles everyday language including slang and emojis with no heavy training required.",
+        "Plotly charts so anyone can hover and filter — pairing a fast scorer with strong visualisation rather than chasing a bigger model."
+      ],
+      "role": "Solo Developer",
+      "period": "Not specified",
+      "problem": "Teams need to read sentiment across large volumes of text quickly, and see it rather than just score it.",
+      "what_was_built": "An end-to-end sentiment scoring pipeline using VADER with dynamic Plotly visualizations for fast, readable results.",
+      "engineering_details": [
+        "VADER handles everyday language including slang and emojis with no heavy training required.",
+        "Automated ingest → clean → score → organize flow for large batches.",
+        "Interactive Plotly charts let non-technical users hover and filter to see sentiment trends."
+      ],
+      "impact": ["High-speed batch processing"],
+      "stack": ["Python", "VADER", "Plotly", "ML"],
+      "links": {
+        "live": null,
+        "github": "https://github.com/RiteshKumar2e/Sentiment-Analysis"
+      }
+    },
+    {
+      "name": "Black Friday Sales Prediction",
+      "tier": "supporting",
+      "status": "Working project",
+      "best_for": "Classical ML on tabular data, feature engineering",
+      "why_it_stands_out": "Answers a concrete money question — how much will this customer spend — and covers the full data-science workflow end to end.",
+      "hardest_part": "Turning messy real sales records into features a model can actually learn from.",
+      "key_decisions": [
+        "Pandas feature engineering to convert raw records (age, product category, past purchases) into clear signals.",
+        "XGBoost and LightGBM because gradient boosting handles complex patterns in tabular data particularly well."
+      ],
+      "what_was_learned": "The full workflow — cleaning, feature engineering, modelling and evaluation — tied to a business question rather than a benchmark.",
+      "role": "Solo Developer",
+      "period": "Not specified",
+      "problem": "Retailers lose money on both overstock and stockouts; the fix is forecasting customer spend in advance.",
+      "what_was_built": "A prediction engine using XGBoost and LightGBM to forecast customer spending behavior from historical sales data.",
+      "engineering_details": [
+        "Pandas-based cleaning and feature engineering from raw records (age, product category, past purchases).",
+        "Gradient-boosting models (XGBoost, LightGBM) chosen for strong performance on tabular data.",
+        "Full data-science workflow: cleaning, feature engineering, modelling, evaluation."
+      ],
+      "impact": [],
+      "stack": ["XGBoost", "LightGBM", "Pandas", "Data Analysis"],
+      "links": {
+        "live": null,
+        "github": "https://github.com/RiteshKumar2e/Black-Friday-Sales-Prediction"
+      }
+    },
+    {
+      "name": "3D Interactive Portfolio (riteshkr.info)",
+      "tier": "substantial",
+      "status": "Live at riteshkr.info",
+      "best_for": "Frontend engineering, animation, 3D on the web",
+      "why_it_stands_out": "Demonstrates front-end skill on arrival instead of describing it — and now hosts this AI representative, which answers recruiter questions from a structured profile.",
+      "hardest_part": "Adding genuine 3D and heavy animation without making the page slow on an ordinary device.",
+      "key_decisions": [
+        "React + Vite for component reuse and a highly optimised production build.",
+        "Tailwind for a consistent design system and the dark/light theme.",
+        "Framer Motion for entry animation, GSAP ScrollTrigger for scroll reveals, React Three Fiber for the 3D layer.",
+        "A FastAPI backend for the AI chat, with answers grounded strictly in a validated profile file."
+      ],
+      "role": "Solo Developer",
+      "period": "Not specified",
+      "problem": "A portfolio should demonstrate front-end skill on arrival, not just describe it — while still loading fast on any device.",
+      "what_was_built": "A React + Vite portfolio with Tailwind CSS theming (dark/light), Framer Motion and GSAP scroll animations, genuine 3D particle backgrounds via React Three Fiber, and an interactive skill explorer, plus this AI chat representative.",
+      "engineering_details": [
+        "Component-driven React architecture built with Vite for optimised production bundles.",
+        "Tailwind CSS design system with a dark/light theme toggle.",
+        "Framer Motion for entry/modal animation, GSAP ScrollTrigger for scroll reveals.",
+        "React Three Fiber / Three.js for 3D visuals without hurting page performance."
+      ],
+      "impact": ["Live at riteshkr.info"],
+      "stack": ["React 18", "Vite", "Tailwind CSS", "Framer Motion", "GSAP", "Three.js", "React Three Fiber"],
+      "links": {
+        "live": "https://riteshkr.info",
+        "github": "https://github.com/RiteshKumar2e"
+      }
+    }
+  ],
+  "publications": [
+    {
+      "title": "Cross-Enhanced and Attention-Modulated Multi-Scale Feature Fusion for Efficient Industrial Surface Defect Identification",
+      "authors": "Ritesh Kumar, K. K. Singh",
+      "venue": "Discover Artificial Intelligence, Springer Nature",
+      "year": "2026",
+      "status": "Under Review"
+    }
+  ],
+  "achievements": [
+    {
+      "title": "AutonomousHacks '26 — Offline Finalist",
+      "detail": "Selected from 2,000+ participants for the offline finale of the Agentic AI track, organized by GDG Gandhinagar.",
+      "year": "2026"
+    },
+    {
+      "title": "IBM Hackathon 2025 — National Finalist",
+      "detail": "Qualified via the IBM HackerRank challenge and competed in a 24-hour national round.",
+      "year": "2025"
+    },
+    {
+      "title": "Naukri Campus Young Turks — 98.61 Percentile",
+      "detail": "Merit Certificate awarded in Round 1 (2025).",
+      "year": "2025"
+    },
+    {
+      "title": "CodeFest, Arka Jain University — 2nd Place",
+      "detail": "Runner-up in the Engineering Day coding competition.",
+      "year": "Not specified"
+    },
+    {
+      "title": "Organizer — Hack Horizon 2.0 (2026)",
+      "detail": "National-level hackathon with 170+ teams and 750+ participants; managed event planning, technical operations, participant engagement and cross-functional coordination.",
+      "year": "2026"
+    },
+    {
+      "title": "Organizer — Hack Horizon 2K25",
+      "detail": "University-level hackathon fostering innovation and collaboration among tech enthusiasts.",
+      "year": "2025"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Database Management Systems (DBMS)",
+      "issuer": "NPTEL",
+      "year": "Not specified"
+    },
+    {
+      "name": "Data Science Internship Certificate",
+      "issuer": "AICTE–Slash Mark",
+      "year": "2025"
+    },
+    {
+      "name": "Machine Learning Internship Certificate",
+      "issuer": "AICTE–Slash Mark",
+      "year": "2024"
+    }
+  ],
+  "leadership": [
+    {
+      "role": "President, Code & Compute Society (CCS)",
+      "organization": "Arka Jain University",
+      "detail": "Leads the university's coding community — organizing technical events, mentoring students, collaborating with faculty and promoting software development initiatives."
+    },
+    {
+      "role": "Community Lead, Google Developer Groups (GDG) on Campus",
+      "organization": "Arka Jain University",
+      "detail": "Organizes developer workshops, technical sessions and hands-on events on Google technologies, fostering collaboration and peer learning."
+    },
+    {
+      "role": "Class Representative",
+      "organization": "Arka Jain University",
+      "detail": "Bridge between faculty and students, ensuring effective communication and academic coordination."
+    },
+    {
+      "role": "Member, GATE Club",
+      "organization": "Arka Jain University",
+      "detail": "Organizes workshops and discussions supporting GATE exam preparation and peer learning."
+    }
+  ],
+  "strengths": [
+    "Analytical thinking — identifying patterns, interpreting data and solving problems logically.",
+    "Critical reasoning — assessing complex issues and making effective decisions.",
+    "Teamwork and collaboration across diverse teams.",
+    "Time management — prioritizing tasks and consistently meeting deadlines.",
+    "Professional, adaptable attitude with a bias toward continuous learning."
+  ],
+  "links": {
+    "portfolio": "https://riteshkr.info",
+    "github": "https://github.com/RiteshKumar2e",
+    "linkedin": "https://www.linkedin.com/in/riteshkumar-tech",
+    "linkedin_alt": "https://www.linkedin.com/in/ritesh-kumar-b5a1a0257/",
+    "email": "mailto:riteshkumar90359@gmail.com",
+    "resume_pdf": "/Ritesh_Kumar_Resume.pdf"
+  },
+  "languages_spoken": {
+    "note": "Not explicitly stated in the source data. Ritesh has built multilingual products supporting English, Hindi, Bengali, Telugu and Marathi, but that is a product feature, not a claim about his own fluency."
+  },
+  "not_in_profile": [
+    "Salary expectations",
+    "Notice period",
+    "Visa or relocation status",
+    "References",
+    "Date of birth and other personal details"
+  ]
+}
