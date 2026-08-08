@@ -71,12 +71,19 @@ Render dashboard me **Environment** tab → **Add Environment Variable**:
 | `GROQ_MODELS` | `llama-3.3-70b-versatile,openai/gpt-oss-120b,qwen/qwen3.6-27b,openai/gpt-oss-20b,llama-3.1-8b-instant,openai/gpt-oss-safeguard-20b` | recommended |
 | `GEMINI_API_KEY` | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) se free key | recommended |
 | `ALLOWED_ORIGINS` | `https://riteshkr.info,https://www.riteshkr.info` | **haan** |
-| `PYTHON_VERSION` | `3.11.9` | recommended |
 | `ADMIN_TOKEN` | `backend/.env` wala token | optional |
 
 **`GROQ_MODELS` zaroor daalo** — nahi to default chain chalegi (wahi 5 models), jo theek
 hai, par ek hi `GROQ_MODEL` (singular) **kabhi mat** daalna: usse rate-limit wala failover
 band ho jayega aur 429 seedhe visitor ko dikhega.
+
+> **Env var key type karke daalo, paste mat karo.** Agar Render "Environment
+> variable keys must consist of alphabetic characters, digits…" jaisa error de,
+> to key sahi hai — paste ke saath koi invisible character (trailing space ya
+> zero-width char) chala gaya hai. Field khali karke haath se type karo.
+>
+> Python version ke liye koi env var nahi chahiye — `backend/.python-version`
+> file me `3.11.9` likha hai, Render use khud padh leta hai.
 
 **`GEMINI_API_KEY` daalna bahut faydemand hai.** Google ka free tier Groq se bilkul alag
 quota hai, to jis din saare 6 Groq models ka daily budget khatam ho jayega, chat phir bhi
