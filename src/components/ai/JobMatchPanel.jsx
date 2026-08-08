@@ -160,7 +160,7 @@ const JobMatchPanel = ({ jobDescription, setJobDescription, onAskInChat }) => {
                     rows={8}
                     value={jobDescription}
                     onChange={(event) => setJobDescription(event.target.value)}
-                    data-lenis-prevent
+                    data-lenis-prevent-wheel
                     placeholder="Paste the full JD here — responsibilities, required skills, experience level. The AI will score the fit honestly, including what's missing."
                     className={inputClass}
                 />

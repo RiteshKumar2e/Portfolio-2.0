@@ -449,21 +449,26 @@ ${rows}
 
                         {/* Messages */}
                         <div className="relative">
-                            {/* data-lenis-prevent: the page uses Lenis smooth
-                                scrolling, which otherwise swallows the wheel
-                                here and scrolls the page instead of the chat.
-                                overscroll-contain stops the page from taking
-                                over once this list hits its end. */}
+                            {/* data-lenis-prevent-wheel: the page uses Lenis
+                                smooth scrolling, which otherwise swallows the
+                                wheel here and scrolls the page instead of the
+                                chat. Touch is deliberately left alone so phones
+                                keep native scrolling.
+
+                                Overscroll: contained on desktop (the pointer can
+                                just leave the box), but chained on touch — once
+                                the list hits its end a swipe keeps scrolling the
+                                page, the way every other site behaves. */}
                             <div
                                 ref={scrollRef}
                                 onScroll={handleScroll}
-                                data-lenis-prevent
-                                className="h-[min(60vh,520px)] overflow-y-auto overscroll-contain px-5 sm:px-6 py-6 space-y-6"
+                                data-lenis-prevent-wheel
+                                className="h-[min(55vh,400px)] sm:h-[min(60vh,520px)] overflow-y-auto touch-pan-y overscroll-y-auto sm:overscroll-y-contain px-5 sm:px-6 py-6 space-y-6"
                                 role="log"
                                 aria-live="polite"
                             >
                                 {messages.length === 0 ? (
-                                    <div className="h-full flex flex-col items-center justify-center text-center gap-6 py-6">
+                                    <div className="min-h-full flex flex-col items-center justify-center text-center gap-6 py-6">
                                         <div className="w-14 h-14 rounded-3xl bg-indigo-600/10 border border-indigo-500/20 grid place-items-center text-indigo-500">
                                             <Bot size={24} />
                                         </div>
@@ -554,8 +559,8 @@ ${rows}
                                     onKeyDown={handleKeyDown}
                                     placeholder={isListening ? 'Listening…' : 'Ask about projects, skills, availability…'}
                                     aria-label="Your question"
-                                    data-lenis-prevent
-                                    className={`flex-1 bg-transparent resize-none outline-none px-3 py-2.5 text-[15px] max-h-[140px] overflow-y-auto overscroll-contain ${
+                                    data-lenis-prevent-wheel
+                                    className={`flex-1 bg-transparent resize-none outline-none px-3 py-2.5 text-[15px] max-h-[140px] overflow-y-auto touch-pan-y overscroll-y-auto sm:overscroll-y-contain ${
                                         isDarkMode
                                             ? 'text-slate-200 placeholder:text-slate-600'
                                             : 'text-slate-800 placeholder:text-slate-400'

@@ -58,7 +58,7 @@ function AppContent() {
         <ReactLenis root options={{
             lerp: 0.05,
             duration: 0.8,
-            smoothTouch: false,
+            syncTouch: false, // phones keep native touch scrolling
             wheelMultiplier: 0.8,
             touchMultiplier: 1.5,
         }}>
