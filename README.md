@@ -24,6 +24,7 @@ Instead of reading a resume, recruiters chat with an AI that answers questions a
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
 - [Model Fallback Chain](#model-fallback-chain)
+- [Question Log](#question-log)
 - [Deployment](#deployment)
 - [Updating the Candidate Data](#updating-the-candidate-data)
 - [Tech Stack](#tech-stack)
@@ -53,6 +54,7 @@ The AI never invents facts. Every answer is grounded in a single structured prof
 | **Generates interview questions** | Questions anchored to real projects and metrics, each labelled with what it probes. |
 | **Speaks and listens** | Voice input via the Web Speech API, plus text-to-speech for answers. |
 | **Exports the chat** | Print-to-PDF transcript of the conversation. |
+| **Records who asked what** | Every question is logged server-side with the asker's details and downloadable as an Excel workbook — owner only. See [Question Log](#question-log). |
 
 ---
 
@@ -66,6 +68,8 @@ Portfolio 2.0/
 │   │   ├── prompts.py             # system prompt / anti-hallucination rules
 │   │   ├── llm.py                 # LLM client + model failover & cooldowns
 │   │   ├── profile_store.py       # loads / validates / renders the profile
+│   │   ├── chat_log.py            # question log + Excel/CSV export
+│   │   ├── geo.py                 # optional IP → city lookup for the log
 │   │   ├── schemas.py             # Pydantic models
 │   │   └── config.py              # env-driven settings
 │   ├── data/profile.json          # ← the single source of truth
@@ -82,8 +86,10 @@ Portfolio 2.0/
 │   │       ├── MarkdownLite.jsx    # dependency-free markdown renderer
 │   │       └── speech.js           # speech-to-text and text-to-speech hooks
 │   ├── lib/aiClient.js             # fetch + SSE stream parsing
+│   ├── lib/visitor.js              # who's asking — ids + optional contact card
 │   └── components/…                # rest of the portfolio (Hero, Projects, …)
 └── public/
+    └── admin.html                  # owner-only chat-log console (unlinked)
 ```
 
 ---
@@ -147,6 +153,28 @@ These six are every chat model Groq exposes that can serve this workload. The re
 | `canopylabs/orpheus-*` | Text-to-speech. |
 | `meta-llama/llama-prompt-guard-2-*` | 512-token classifiers. |
 | `allam-2-7b` | 4k context — smaller than the prompt itself. |
+
+---
+
+## Question Log
+
+A portfolio chat is only half useful if the questions evaporate. Every question a visitor asks — and every job description they paste — is appended to an append-only JSONL file the moment the answer finishes, and rendered on demand as a formatted **Excel workbook**: one row per question, 33 columns.
+
+Each row carries who asked, not just what they asked:
+
+| | |
+| --- | --- |
+| **Identity** | Name, email, company — if they filled in the optional *"who's asking?"* card in the chat toolbar. Nothing is required to use the chat. |
+| **Recognition** | A visitor id stable across visits, a session id per tab, plus conversation id and turn number, so a five-question conversation reads as one thread. |
+| **Origin** | IP address, city / region / country / ISP (with `GEO_LOOKUP_ENABLED`), the page they asked from, and where they arrived from. |
+| **Context** | Device, OS, browser, screen size, their timezone, browser language, and the reply language they picked. |
+| **The exchange** | Question, full answer, which model answered, status, and reply time. |
+
+**Access is owner-only.** Visitors can neither see nor delete the log — the chat UI has no delete-all button at all, and conversations stay put. Reading, exporting and erasing all require `ADMIN_TOKEN`, checked with a constant-time compare; deletion additionally needs an explicit `confirm=DELETE-ALL`.
+
+The console lives at **`/admin.html`** — a standalone page, unlinked from the site and `noindex`ed, that ships no portfolio code. Paste the token to get search, paging, one-click Excel download, and delete-everything. Full details, including the shell equivalents, are in [`backend/README.md`](backend/README.md#the-question-log).
+
+> On Render's free plan the filesystem is wiped on each deploy and cold start, so download the workbook regularly or mount a paid persistent disk and point `CHAT_LOG_PATH` at it.
 
 ---
 

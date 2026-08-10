@@ -94,6 +94,34 @@ class CandidateProfile(BaseModel):
 
 
 # --------------------------------------------------------------------------
+# Visitor identity — everything the browser can tell us about who is asking.
+# All of it is optional: the chat works exactly the same for someone who
+# supplies nothing, they just show up in the log as an anonymous visitor id.
+# --------------------------------------------------------------------------
+
+
+class VisitorInfo(BaseModel):
+    visitor_id: Optional[str] = Field(default=None, max_length=64)
+    session_id: Optional[str] = Field(default=None, max_length=64)
+    conversation_id: Optional[str] = Field(default=None, max_length=64)
+    turn: Optional[int] = Field(default=None, ge=0, le=10000)
+
+    # Self-declared, from the optional "who's asking?" form.
+    name: Optional[str] = Field(default=None, max_length=120)
+    email: Optional[str] = Field(default=None, max_length=180)
+    company: Optional[str] = Field(default=None, max_length=180)
+
+    # Ambient context the browser knows for free.
+    page: Optional[str] = Field(default=None, max_length=500)
+    referrer: Optional[str] = Field(default=None, max_length=500)
+    timezone: Optional[str] = Field(default=None, max_length=80)
+    screen: Optional[str] = Field(default=None, max_length=40)
+    browser_language: Optional[str] = Field(default=None, max_length=40)
+
+    model_config = {"extra": "ignore"}
+
+
+# --------------------------------------------------------------------------
 # Chat
 # --------------------------------------------------------------------------
 
@@ -108,6 +136,7 @@ class ChatRequest(BaseModel):
     history: list[ChatMessage] = Field(default_factory=list)
     job_description: Optional[str] = Field(default=None, max_length=12000)
     language: Literal["auto", "en", "hi"] = "auto"
+    visitor: Optional[VisitorInfo] = None
 
     @field_validator("message")
     @classmethod
@@ -125,6 +154,7 @@ class ChatRequest(BaseModel):
 
 class MatchRequest(BaseModel):
     job_description: str = Field(min_length=20, max_length=12000)
+    visitor: Optional[VisitorInfo] = None
 
     @field_validator("job_description")
     @classmethod

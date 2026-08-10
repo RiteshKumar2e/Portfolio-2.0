@@ -16,6 +16,13 @@ def _csv(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
 
 
+def _flag(name: str, default: bool) -> bool:
+    raw = os.getenv(name, "").strip().lower()
+    if not raw:
+        return default
+    return raw in {"1", "true", "yes", "on"}
+
+
 @dataclass(frozen=True)
 class ModelRef:
     """One model on one provider — a single link in the fallback chain."""
@@ -122,6 +129,23 @@ class Settings:
         self.rate_limit_window_seconds: int = int(
             os.getenv("RATE_LIMIT_WINDOW_SECONDS", "60")
         )
+
+        # Owner-only endpoints (profile edits, the chat log, deleting the log).
+        # Without a token every one of them answers 503 — the log still records,
+        # it simply cannot be read or cleared by anybody, including the owner.
+        self.admin_token: str = os.getenv("ADMIN_TOKEN", "").strip()
+
+        # Where the question log lives. On Render's free plan the filesystem is
+        # wiped on every deploy and cold start, so point this at a mounted disk
+        # (e.g. /var/data/chat_log.jsonl) if the history has to outlive a deploy.
+        self.chat_log_enabled: bool = _flag("CHAT_LOG_ENABLED", default=True)
+        self.chat_log_path: Path = Path(
+            os.getenv("CHAT_LOG_PATH", str(BASE_DIR / "data" / "chat_log.jsonl"))
+        )
+        # 0 keeps every question forever; anything else trims the oldest rows.
+        self.chat_log_max_rows: int = int(os.getenv("CHAT_LOG_MAX_ROWS", "20000"))
+        # Sends visitor IPs to ip-api.com to fill the City/Country columns.
+        self.geo_lookup_enabled: bool = _flag("GEO_LOOKUP_ENABLED", default=False)
 
     @property
     def chain(self) -> list[ModelRef]:

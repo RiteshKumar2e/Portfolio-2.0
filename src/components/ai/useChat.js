@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { streamChat } from '../../lib/aiClient';
+import { visitorContext } from '../../lib/visitor';
 
 const STORAGE_KEY = 'ai-portfolio-chats-v1';
 const LEGACY_KEY = 'ai-portfolio-chat-v1'; // single-thread format, pre-history
@@ -160,6 +161,12 @@ export function useChat({ jobDescription = null, language = 'auto' } = {}) {
                     history: historyPayload,
                     jobDescription,
                     language,
+                    // Who asked, which thread, and how far into it — the
+                    // backend files this alongside the question.
+                    visitor: visitorContext({
+                        conversationId,
+                        turn: historyPayload.filter((m) => m.role === 'user').length + 1,
+                    }),
                     signal: controller.signal,
                     onToken: (chunk) => {
                         updateConversation(conversationId, (prev) =>
@@ -249,31 +256,9 @@ export function useChat({ jobDescription = null, language = 'auto' } = {}) {
         });
     }, []);
 
-    const deleteConversation = useCallback((id) => {
-        setState((prev) => {
-            const remaining = prev.conversations.filter((c) => c.id !== id);
-            if (prev.activeId !== id) {
-                return { ...prev, conversations: remaining };
-            }
-            // Deleted the open one: fall back to the most recent, else a blank chat.
-            const next = remaining.slice().sort((a, b) => b.updatedAt - a.updatedAt)[0];
-            if (next) return { activeId: next.id, conversations: remaining };
-            const conversation = makeConversation();
-            return { activeId: conversation.id, conversations: [conversation] };
-        });
-    }, []);
-
-    const clearAll = useCallback(() => {
-        abortRef.current?.abort();
-        setError(null);
-        const conversation = makeConversation();
-        setState({ activeId: conversation.id, conversations: [conversation] });
-        try {
-            localStorage.removeItem(STORAGE_KEY);
-        } catch {
-            /* ignore */
-        }
-    }, []);
+    // There is deliberately no delete here. Conversations stay put: the visitor
+    // keeps their local copy, and the authoritative record on the server can
+    // only be read or erased by the site owner, through /admin.html.
 
     const retryLast = useCallback(() => {
         const lastUser = [...messages].reverse().find((m) => m.role === 'user');
@@ -297,7 +282,5 @@ export function useChat({ jobDescription = null, language = 'auto' } = {}) {
         activeId,
         newChat,
         openConversation,
-        deleteConversation,
-        clearAll,
     };
 }

@@ -20,6 +20,10 @@ dist-ssr
 # Python backend
 backend/.venv
 backend/.deps
+
+# Visitors' questions and their contact details — never commit this
+backend/data/chat_log.jsonl
+**/chat_log.jsonl
 **/__pycache__/
 *.py[cod]
 

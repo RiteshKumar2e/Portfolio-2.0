@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-    ArrowDown, Bot, Briefcase, Download, History, Languages, MessageSquare,
-    Mic, Plus, RotateCcw, Send, Square, Trash2,
+    ArrowDown, Bot, Briefcase, Check, Download, History, Languages, MessageSquare,
+    Mic, Plus, RotateCcw, Send, Square, UserRound,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { checkHealth } from '../lib/aiClient';
+import { hasIdentity, loadIdentity, saveIdentity } from '../lib/visitor';
 import ChatBubble from './ai/ChatBubble';
 import JobMatchPanel from './ai/JobMatchPanel';
 import { conversationTitle, useChat } from './ai/useChat';
@@ -28,10 +29,13 @@ const AIRepresentative = () => {
     const [health, setHealth] = useState({ state: 'checking' });
     const [pinned, setPinned] = useState(true);
     const [historyOpen, setHistoryOpen] = useState(false);
+    const [identityOpen, setIdentityOpen] = useState(false);
+    const [identity, setIdentity] = useState(loadIdentity);
 
     const scrollRef = useRef(null);
     const inputRef = useRef(null);
     const historyRef = useRef(null);
+    const identityRef = useRef(null);
 
     const {
         messages,
@@ -43,8 +47,6 @@ const AIRepresentative = () => {
         activeId,
         newChat,
         openConversation,
-        deleteConversation,
-        clearAll,
     } = useChat({
         jobDescription: jobDescription.trim() || null,
         language,
@@ -77,14 +79,19 @@ const AIRepresentative = () => {
         };
     }, []);
 
-    // -- close the history menu on outside click / Escape -------------------
+    // -- close the popovers on outside click / Escape -----------------------
     useEffect(() => {
-        if (!historyOpen) return undefined;
+        if (!historyOpen && !identityOpen) return undefined;
 
         const onPointerDown = (event) => {
-            if (!historyRef.current?.contains(event.target)) setHistoryOpen(false);
+            if (historyOpen && !historyRef.current?.contains(event.target)) setHistoryOpen(false);
+            if (identityOpen && !identityRef.current?.contains(event.target)) setIdentityOpen(false);
         };
-        const onKeyDown = (event) => event.key === 'Escape' && setHistoryOpen(false);
+        const onKeyDown = (event) => {
+            if (event.key !== 'Escape') return;
+            setHistoryOpen(false);
+            setIdentityOpen(false);
+        };
 
         document.addEventListener('mousedown', onPointerDown);
         document.addEventListener('keydown', onKeyDown);
@@ -92,7 +99,7 @@ const AIRepresentative = () => {
             document.removeEventListener('mousedown', onPointerDown);
             document.removeEventListener('keydown', onKeyDown);
         };
-    }, [historyOpen]);
+    }, [historyOpen, identityOpen]);
 
     // -- auto-scroll, unless the visitor has scrolled up to read ------------
     const handleScroll = useCallback(() => {
@@ -178,6 +185,8 @@ ${rows}
     };
 
     // -- styling helpers ---------------------------------------------------
+    const identified = hasIdentity(identity);
+
     const surface = isDarkMode
         ? 'bg-slate-900/60 border-white/10'
         : 'bg-white border-slate-200 shadow-sm';
@@ -374,7 +383,7 @@ ${rows}
                                                         {history.map((conversation) => (
                                                             <li key={conversation.id}>
                                                                 <div
-                                                                    className={`group flex items-center gap-2 px-2 mx-2 my-0.5 rounded-xl transition-colors ${
+                                                                    className={`flex items-center gap-2 px-2 mx-2 my-0.5 rounded-xl transition-colors ${
                                                                         conversation.id === activeId
                                                                             ? isDarkMode
                                                                                 ? 'bg-indigo-500/15'
@@ -409,15 +418,6 @@ ${rows}
                                                                             {timeAgo(conversation.updatedAt)}
                                                                         </span>
                                                                     </button>
-
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => deleteConversation(conversation.id)}
-                                                                        aria-label={`Delete chat: ${conversationTitle(conversation)}`}
-                                                                        className="shrink-0 w-8 h-8 rounded-lg grid place-items-center text-slate-400 opacity-0 group-hover:opacity-100 focus:opacity-100 hover:text-rose-500 hover:bg-rose-500/10 transition-all"
-                                                                    >
-                                                                        <Trash2 size={13} />
-                                                                    </button>
                                                                 </div>
                                                             </li>
                                                         ))}
@@ -425,22 +425,43 @@ ${rows}
                                                 )}
 
                                                 {history.length > 0 && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                            clearAll();
-                                                            setHistoryOpen(false);
-                                                        }}
-                                                        className={`w-full px-4 py-3 text-[10px] font-black uppercase tracking-widest border-t transition-colors ${
+                                                    <p
+                                                        className={`px-4 py-3 text-[11px] leading-relaxed border-t ${
                                                             isDarkMode
-                                                                ? 'border-white/10 text-slate-500 hover:text-rose-400 hover:bg-rose-500/5'
-                                                                : 'border-slate-100 text-slate-400 hover:text-rose-500 hover:bg-rose-50'
+                                                                ? 'border-white/10 text-slate-500'
+                                                                : 'border-slate-100 text-slate-400'
                                                         }`}
                                                     >
-                                                        Delete all chats
-                                                    </button>
+                                                        Chats are kept so Ritesh can see what people
+                                                        ask. They aren't deleted from here.
+                                                    </p>
                                                 )}
                                             </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+
+                                {/* Optional "who's asking" card */}
+                                <div className="relative" ref={identityRef}>
+                                    <ToolbarButton
+                                        label={identified ? `Asking as ${identity.name || identity.email}` : 'Introduce yourself'}
+                                        icon={UserRound}
+                                        onClick={() => setIdentityOpen((open) => !open)}
+                                        isDarkMode={isDarkMode}
+                                        active={identityOpen}
+                                        dot={identified}
+                                    />
+
+                                    <AnimatePresence>
+                                        {identityOpen && (
+                                            <IdentityCard
+                                                identity={identity}
+                                                isDarkMode={isDarkMode}
+                                                onSave={(next) => {
+                                                    setIdentity(saveIdentity(next));
+                                                    setIdentityOpen(false);
+                                                }}
+                                            />
                                         )}
                                     </AnimatePresence>
                                 </div>
@@ -617,6 +638,7 @@ const ToolbarButton = ({
     showLabel,
     active,
     badge,
+    dot,
 }) => (
     <button
         type="button"
@@ -642,8 +664,96 @@ const ToolbarButton = ({
                 {badge > 9 ? '9+' : badge}
             </span>
         )}
+        {dot && (
+            <span
+                className={`absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 ring-2 ${
+                    isDarkMode ? 'ring-slate-900' : 'ring-white'
+                }`}
+            />
+        )}
     </button>
 );
+
+/**
+ * Optional introduction. Entirely skippable — the chat behaves the same either
+ * way — but a recruiter who fills it in shows up by name in Ritesh's log
+ * instead of as an anonymous visitor id.
+ */
+const IdentityCard = ({ identity, isDarkMode, onSave }) => {
+    const [draft, setDraft] = useState(identity);
+
+    const field = `w-full px-3 h-9 rounded-xl text-[13px] border outline-none transition-colors focus:border-indigo-400 ${
+        isDarkMode
+            ? 'bg-slate-950/60 border-white/10 text-slate-200 placeholder:text-slate-600'
+            : 'bg-slate-50 border-slate-200 text-slate-800 placeholder:text-slate-400'
+    }`;
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.97 }}
+            transition={{ duration: 0.15 }}
+            className={`absolute right-0 top-11 z-30 w-[min(19rem,calc(100vw-3rem))] rounded-2xl border shadow-xl p-4 ${
+                isDarkMode
+                    ? 'bg-slate-900 border-white/10 shadow-black/50'
+                    : 'bg-white border-slate-200 shadow-slate-300/40'
+            }`}
+        >
+            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                Who's asking?
+            </p>
+            <p className="text-[11px] text-slate-500 mb-3 leading-relaxed">
+                Optional. If you leave your details, Ritesh knows who was interested
+                and can follow up.
+            </p>
+
+            <div className="space-y-2">
+                <input
+                    className={field}
+                    placeholder="Name"
+                    value={draft.name}
+                    maxLength={120}
+                    onChange={(event) => setDraft({ ...draft, name: event.target.value })}
+                />
+                <input
+                    className={field}
+                    type="email"
+                    placeholder="Email"
+                    value={draft.email}
+                    maxLength={180}
+                    onChange={(event) => setDraft({ ...draft, email: event.target.value })}
+                />
+                <input
+                    className={field}
+                    placeholder="Company / role"
+                    value={draft.company}
+                    maxLength={180}
+                    onChange={(event) => setDraft({ ...draft, company: event.target.value })}
+                />
+            </div>
+
+            <div className="flex items-center gap-2 mt-3">
+                <button
+                    type="button"
+                    onClick={() => onSave(draft)}
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 rounded-xl bg-indigo-600 text-white text-[11px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-colors"
+                >
+                    <Check size={13} /> Save
+                </button>
+                <button
+                    type="button"
+                    onClick={() => onSave({ name: '', email: '', company: '' })}
+                    className={`h-9 px-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-slate-500 transition-colors ${
+                        isDarkMode ? 'hover:text-slate-300' : 'hover:text-slate-700'
+                    }`}
+                >
+                    Clear
+                </button>
+            </div>
+        </motion.div>
+    );
+};
 
 /** "3m ago" / "2h ago" / "5d ago" — enough context to find an old chat. */
 function timeAgo(timestamp) {

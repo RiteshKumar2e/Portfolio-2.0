@@ -46,12 +46,15 @@ async function readError(response) {
  * @param {Function} [options.onDone]        Called with { model } — which model
  *                                           answered, after the fallback chain.
  * @param {AbortSignal} [options.signal]     Lets the UI stop generation.
+ * @param {object}   [options.visitor]       Who is asking — recorded in the
+ *                                           owner's question log.
  */
 export async function streamChat({
     message,
     history = [],
     jobDescription = null,
     language = 'auto',
+    visitor = null,
     onToken,
     onDone,
     signal,
@@ -64,6 +67,7 @@ export async function streamChat({
             history,
             job_description: jobDescription || null,
             language,
+            visitor,
         }),
         signal,
     });
@@ -127,8 +131,8 @@ async function postJson(path, body) {
 }
 
 /** Structured suitability report for a pasted job description. */
-export function matchJobDescription(jobDescription) {
-    return postJson('/api/match', { job_description: jobDescription });
+export function matchJobDescription(jobDescription, visitor = null) {
+    return postJson('/api/match', { job_description: jobDescription, visitor });
 }
 
 /** Interview questions grounded in the profile (optionally targeted at a JD). */
@@ -144,5 +148,45 @@ export function generateInterviewQuestions({ jobDescription = null, focus = 'mix
 export async function checkHealth() {
     const response = await fetch(`${API_BASE}/api/health`);
     if (!response.ok) throw new ApiError('Backend is unreachable.', response.status);
+    return response.json();
+}
+
+// --------------------------------------------------------------------------
+// Owner-only. Every call needs the ADMIN_TOKEN; the backend answers 401
+// without it, so these are useless to a visitor who finds them in the bundle.
+// --------------------------------------------------------------------------
+
+async function adminGet(path, token) {
+    const response = await fetch(`${API_BASE}${path}`, {
+        headers: { 'X-Admin-Token': token },
+    });
+    if (!response.ok) throw new ApiError(await readError(response), response.status);
+    return response.json();
+}
+
+/** Every question ever asked, newest first. */
+export function fetchChatLog({ token, limit = 50, offset = 0, search = '' }) {
+    const query = new URLSearchParams({ limit, offset, search });
+    return adminGet(`/api/admin/chats?${query}`, token);
+}
+
+export function fetchChatLogStats(token) {
+    return adminGet('/api/admin/chats/stats', token);
+}
+
+/** Download link for the Excel workbook (the token rides in the query string
+ *  because a plain browser download cannot send a header). */
+export function chatLogExportUrl(token, format = 'xlsx') {
+    const query = new URLSearchParams({ token, format });
+    return `${API_BASE}/api/admin/chats/export?${query}`;
+}
+
+/** Erase the entire log. Owner only — there is no visitor-facing path to this. */
+export async function deleteAllChatLogs(token) {
+    const response = await fetch(`${API_BASE}/api/admin/chats?confirm=DELETE-ALL`, {
+        method: 'DELETE',
+        headers: { 'X-Admin-Token': token },
+    });
+    if (!response.ok) throw new ApiError(await readError(response), response.status);
     return response.json();
 }

@@ -1,30 +1,41 @@
 """FastAPI app: an AI representative that answers questions about one candidate.
 
 Endpoints
-    GET  /api/health              — liveness + configuration status
-    GET  /api/profile             — the structured candidate profile
-    GET  /api/suggestions         — starter questions for the chat UI
-    POST /api/chat                — streaming answer (Server-Sent Events)
-    POST /api/match               — structured job-description suitability report
-    POST /api/interview-questions — interview questions grounded in the profile
-    POST /api/profile/reload      — re-read profile.json from disk (admin)
-    PUT  /api/profile             — replace the profile without a code change (admin)
+    GET    /api/health              — liveness + configuration status
+    GET    /api/profile             — the structured candidate profile
+    GET    /api/suggestions         — starter questions for the chat UI
+    POST   /api/chat                — streaming answer (Server-Sent Events)
+    POST   /api/match               — structured job-description suitability report
+    POST   /api/interview-questions — interview questions grounded in the profile
+    POST   /api/profile/reload      — re-read profile.json from disk (owner)
+    PUT    /api/profile             — replace the profile without a code change (owner)
+    GET    /api/admin/chats         — every question ever asked, with who asked it (owner)
+    GET    /api/admin/chats/stats   — totals for the admin console (owner)
+    GET    /api/admin/chats/export  — the same log as an Excel workbook (owner)
+    DELETE /api/admin/chats         — erase the whole log (owner)
 """
 
+import asyncio
 import json
 import logging
 import os
+import secrets
 import time
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
+from datetime import datetime, timezone
+from typing import Any, AsyncIterator, Optional
+from urllib.parse import unquote
 
-from fastapi import Body, Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi import Body, Depends, FastAPI, Header, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import ValidationError
+from starlette.concurrency import run_in_threadpool
 
+from .chat_log import XLSX_AVAILABLE, ChatLogStore, parse_user_agent
 from .config import Settings, get_settings
+from .geo import GeoLookup
 from .llm import LLMError, LLMRouter
 from .profile_store import ProfileStore
 from .prompts import build_interview_prompt, build_match_prompt, build_system_prompt
@@ -34,6 +45,7 @@ from .schemas import (
     InterviewRequest,
     MatchRequest,
     MatchResult,
+    VisitorInfo,
 )
 
 logging.basicConfig(
@@ -44,6 +56,8 @@ logger = logging.getLogger("ai-portfolio")
 
 settings: Settings = get_settings()
 store = ProfileStore(settings.profile_path)
+chat_log = ChatLogStore(settings.chat_log_path, max_rows=settings.chat_log_max_rows)
+geo = GeoLookup(enabled=settings.geo_lookup_enabled)
 
 
 @asynccontextmanager
@@ -55,8 +69,15 @@ async def lifespan(app: FastAPI):
         ", ".join(settings.providers) or "NONE — no API key set",
         " → ".join(ref.label for ref in settings.chain) or "(empty)",
     )
+    if not settings.admin_token:
+        logger.warning(
+            "ADMIN_TOKEN is not set — the chat log is being written to %s but "
+            "nobody can read, export or clear it until you set one.",
+            settings.chat_log_path,
+        )
     yield
     await app.state.llm.aclose()
+    await geo.aclose()
 
 
 app = FastAPI(
@@ -71,9 +92,9 @@ app.add_middleware(
     allow_origins=settings.allowed_origins,
     allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=False,
-    allow_methods=["GET", "POST", "PUT", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
-    expose_headers=["X-Model-Used"],
+    expose_headers=["X-Model-Used", "X-Export-Format", "Content-Disposition"],
 )
 
 
@@ -84,14 +105,21 @@ app.add_middleware(
 _hits: dict[str, deque[float]] = defaultdict(deque)
 
 
-def rate_limit(request: Request) -> None:
-    client_ip = (
-        request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+def client_ip(request: Request) -> str:
+    """The visitor's address as seen before Render/Cloudflare proxied it."""
+    forwarded = request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+    return (
+        forwarded
+        or request.headers.get("x-real-ip", "").strip()
         or (request.client.host if request.client else "unknown")
     )
+
+
+def rate_limit(request: Request) -> None:
+    ip = client_ip(request)
     now = time.monotonic()
     window = settings.rate_limit_window_seconds
-    bucket = _hits[client_ip]
+    bucket = _hits[ip]
 
     while bucket and now - bucket[0] > window:
         bucket.popleft()
@@ -108,12 +136,105 @@ def rate_limit(request: Request) -> None:
             _hits.pop(key, None)
 
 
-def require_admin(x_admin_token: str = Header(default="")) -> None:
-    expected = os.getenv("ADMIN_TOKEN", "").strip()
+def require_admin(
+    x_admin_token: str = Header(default=""),
+    token: str = Query(default="", description="Same token as the X-Admin-Token header."),
+) -> None:
+    """Owner-only gate.
+
+    The token normally travels in the X-Admin-Token header. It is also accepted
+    as a `?token=` query parameter, because a browser downloading the Excel file
+    through a plain link cannot set a header.
+    """
+    expected = settings.admin_token or os.getenv("ADMIN_TOKEN", "").strip()
     if not expected:
-        raise HTTPException(status_code=503, detail="Admin endpoints are disabled (ADMIN_TOKEN not set).")
-    if x_admin_token != expected:
+        raise HTTPException(
+            status_code=503, detail="Owner endpoints are disabled (ADMIN_TOKEN not set)."
+        )
+
+    supplied = x_admin_token or token
+    # Constant-time compare so the token can't be guessed a character at a time.
+    if not supplied or not secrets.compare_digest(supplied, expected):
         raise HTTPException(status_code=401, detail="Invalid admin token.")
+
+
+# --------------------------------------------------------------------------
+# Question logging — who asked what, kept for the owner's Excel export
+# --------------------------------------------------------------------------
+
+
+def asker_details(
+    request: Request, visitor: Optional[VisitorInfo], kind: str
+) -> dict[str, Any]:
+    """Everything we know about who is asking, before the answer exists.
+
+    Deliberately synchronous and cheap: it is called on the request path, and
+    the slow part (the IP lookup) is deferred to `record_question`.
+    """
+    headers = request.headers
+    agent = headers.get("user-agent", "")[:500]
+    details = visitor.model_dump() if visitor else {}
+
+    return {
+        "id": f"{int(time.time() * 1000)}-{secrets.token_hex(4)}",
+        "kind": kind,
+        "asked_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "visitor_id": details.get("visitor_id") or "",
+        "session_id": details.get("session_id") or "",
+        "conversation_id": details.get("conversation_id") or "",
+        "turn": details.get("turn") if details.get("turn") is not None else "",
+        "name": details.get("name") or "",
+        "email": details.get("email") or "",
+        "company": details.get("company") or "",
+        "ip": client_ip(request),
+        # Some hosts hand us the location directly; the rest is filled in later.
+        "city": _header(headers, "x-vercel-ip-city"),
+        "region": _header(headers, "x-vercel-ip-country-region"),
+        "country": headers.get("cf-ipcountry") or _header(headers, "x-vercel-ip-country"),
+        "isp": "",
+        "user_agent": agent,
+        **parse_user_agent(agent),
+        "page": details.get("page") or "",
+        "referrer": details.get("referrer") or headers.get("referer", "")[:500],
+        "timezone": details.get("timezone") or "",
+        "screen": details.get("screen") or "",
+        "browser_language": details.get("browser_language")
+        or headers.get("accept-language", "").split(",")[0],
+    }
+
+
+def _header(headers, name: str) -> str:
+    """Proxy geo headers arrive percent-encoded (e.g. `New%20Delhi`)."""
+    return unquote(headers.get(name, "")).strip()
+
+
+# Tasks are kept alive here; asyncio only holds a weak reference to them.
+_pending_writes: set[asyncio.Task] = set()
+
+
+def record_question(entry: dict[str, Any]) -> None:
+    """Persist one logged question without blocking the response.
+
+    Fire-and-forget on purpose. It is called from the `finally` of the SSE
+    generator, which may be running because the visitor pressed stop — awaiting
+    there would re-raise the cancellation and lose the row.
+    """
+    if not settings.chat_log_enabled:
+        return
+
+    async def write() -> None:
+        try:
+            if not (entry.get("city") and entry.get("country")):
+                entry.update(
+                    {k: v for k, v in (await geo.lookup(entry["ip"])).items() if v}
+                )
+            await run_in_threadpool(chat_log.append, entry)
+        except Exception:  # noqa: BLE001 — logging must never surface to a visitor
+            logger.exception("Could not record the question")
+
+    task = asyncio.create_task(write())
+    _pending_writes.add(task)
+    task.add_done_callback(_pending_writes.discard)
 
 
 @app.exception_handler(LLMError)
@@ -211,9 +332,14 @@ async def chat(payload: ChatRequest, request: Request) -> StreamingResponse:
     compact_messages = _build_messages(payload, store.facts_compact)
     llm: LLMRouter = request.app.state.llm
 
+    entry = asker_details(request, payload.visitor, kind="chat")
+
     async def event_stream() -> AsyncIterator[str]:
         # Which model actually answered — the router may have failed over.
         selected = {"model": None}
+        answer: list[str] = []
+        status = "ok"
+        started = time.monotonic()
         try:
             got_content = False
             async for chunk in llm.stream_chat(
@@ -222,15 +348,37 @@ async def chat(payload: ChatRequest, request: Request) -> StreamingResponse:
                 compact_messages=compact_messages,
             ):
                 got_content = True
+                answer.append(chunk)
                 yield _sse("token", {"text": chunk})
             if not got_content:
+                status = "empty"
                 yield _sse("error", {"detail": "The AI returned an empty response. Please try again."})
+        except asyncio.CancelledError:
+            # The visitor hit stop or closed the tab — still worth logging.
+            status = "stopped"
+            raise
         except LLMError as exc:
+            status = "error"
+            answer.append(str(exc))
             yield _sse("error", {"detail": str(exc)})
         except Exception:  # noqa: BLE001 — the stream must always terminate cleanly
+            status = "error"
             logger.exception("Unexpected failure while streaming chat")
             yield _sse("error", {"detail": "Something went wrong while answering. Please try again."})
         finally:
+            # Logged once the turn is over, so nothing sits in front of the
+            # visitor's first token.
+            entry.update(
+                question=payload.message,
+                answer="".join(answer),
+                model=selected["model"] or "",
+                status=status,
+                duration_s=round(time.monotonic() - started, 2),
+                language=payload.language,
+                job_description=(payload.job_description or "")[:4000],
+            )
+            record_question(entry)
+
             yield _sse("done", {"model": selected["model"] or settings.primary_model})
 
     return StreamingResponse(
@@ -261,16 +409,42 @@ async def match(payload: MatchRequest, request: Request, response: Response) -> 
         {"role": "system", "content": build_system_prompt(store.name, store.facts_compact)},
         messages[1],
     ]
+
+    # A pasted job description is the single most useful thing a recruiter can
+    # leave behind, so it lands in the log alongside the chat questions.
+    entry = asker_details(request, payload.visitor, kind="job_match")
+    started = time.monotonic()
+
     raw, model_used = await llm.complete_json(messages, max_tokens=1400, compact_messages=compact)
     response.headers["X-Model-Used"] = model_used
     try:
-        return MatchResult.model_validate(raw)
+        result = MatchResult.model_validate(raw)
     except ValidationError as exc:
         logger.error("Match result failed validation: %s", exc)
+        entry.update(
+            question="[Job description submitted]",
+            answer="",
+            model=model_used,
+            status="error",
+            duration_s=round(time.monotonic() - started, 2),
+            job_description=payload.job_description[:4000],
+        )
+        record_question(entry)
         raise HTTPException(
             status_code=502,
             detail="The AI's suitability report came back malformed. Please try again.",
         ) from exc
+
+    entry.update(
+        question=f"[Job description submitted] {result.role_title}",
+        answer=f"{result.suitability_score}/100 — {result.verdict}. {result.summary}",
+        model=model_used,
+        status="ok",
+        duration_s=round(time.monotonic() - started, 2),
+        job_description=payload.job_description[:4000],
+    )
+    record_question(entry)
+    return result
 
 
 @app.post(
@@ -309,7 +483,88 @@ async def interview_questions(
 
 
 # --------------------------------------------------------------------------
-# Admin — update the candidate data without touching code
+# Owner-only: the question log
+#
+# Visitors can never reach any of this. Their browser keeps a local copy of
+# their own conversation for convenience, but the record here is the site
+# owner's, and only the ADMIN_TOKEN holder can read, export or erase it.
+# --------------------------------------------------------------------------
+
+
+@app.get("/api/admin/chats", dependencies=[Depends(require_admin)])
+async def list_chats(
+    limit: int = Query(default=50, ge=1, le=500),
+    offset: int = Query(default=0, ge=0),
+    search: str = Query(default="", max_length=200),
+) -> dict:
+    entries, total = await run_in_threadpool(chat_log.page, limit, offset, search)
+    return {
+        "entries": entries,
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+        "search": search,
+    }
+
+
+@app.get("/api/admin/chats/stats", dependencies=[Depends(require_admin)])
+async def chat_stats() -> dict:
+    stats = await run_in_threadpool(chat_log.stats)
+    return {**stats, "logging_enabled": settings.chat_log_enabled}
+
+
+@app.get("/api/admin/chats/export", dependencies=[Depends(require_admin)])
+async def export_chats(
+    format: str = Query(default="xlsx", pattern="^(xlsx|csv)$")
+) -> Response:
+    """Download the whole log as a spreadsheet.
+
+    Falls back to CSV — which Excel opens natively — when openpyxl is missing
+    from the deployment, rather than failing the download outright.
+    """
+    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    use_xlsx = format == "xlsx" and XLSX_AVAILABLE
+
+    if use_xlsx:
+        content = await run_in_threadpool(chat_log.to_xlsx)
+        media = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        filename, actual = f"portfolio-chats-{stamp}.xlsx", "xlsx"
+    else:
+        content = await run_in_threadpool(chat_log.to_csv)
+        media = "text/csv; charset=utf-8"
+        filename, actual = f"portfolio-chats-{stamp}.csv", "csv"
+        if format == "xlsx":
+            logger.warning("openpyxl unavailable — served the export as CSV instead")
+
+    return Response(
+        content=content,
+        media_type=media,
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "X-Export-Format": actual,
+            "Cache-Control": "no-store",
+        },
+    )
+
+
+@app.delete("/api/admin/chats", dependencies=[Depends(require_admin)])
+async def delete_chats(
+    confirm: str = Query(
+        default="", description="Must be the literal string DELETE-ALL."
+    )
+) -> dict:
+    """Erase every logged question. Owner only, and deliberately awkward."""
+    if confirm != "DELETE-ALL":
+        raise HTTPException(
+            status_code=400,
+            detail="Add ?confirm=DELETE-ALL to confirm erasing the entire chat log.",
+        )
+    removed = await run_in_threadpool(chat_log.clear)
+    return {"status": "cleared", "deleted": removed}
+
+
+# --------------------------------------------------------------------------
+# Owner-only: update the candidate data without touching code
 # --------------------------------------------------------------------------
 
 

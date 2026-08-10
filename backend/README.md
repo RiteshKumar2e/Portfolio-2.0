@@ -32,6 +32,10 @@ Interactive API docs: <http://localhost:8000/docs>
 | POST   | `/api/interview-questions`  | Interview questions grounded in the profile            |
 | POST   | `/api/profile/reload`       | Re-read `profile.json` from disk (needs `ADMIN_TOKEN`) |
 | PUT    | `/api/profile`              | Replace the profile — no code change (needs `ADMIN_TOKEN`) |
+| GET    | `/api/admin/chats`          | Every question ever asked, newest first (needs `ADMIN_TOKEN`) |
+| GET    | `/api/admin/chats/stats`    | Totals for the admin console (needs `ADMIN_TOKEN`)     |
+| GET    | `/api/admin/chats/export`   | The log as an `.xlsx` workbook (needs `ADMIN_TOKEN`)   |
+| DELETE | `/api/admin/chats`          | Erase the whole log (needs `ADMIN_TOKEN`)              |
 
 ### `POST /api/chat`
 
@@ -43,7 +47,21 @@ Interactive API docs: <http://localhost:8000/docs>
     { "role": "assistant", "content": "Ritesh has shipped..." }
   ],
   "job_description": null,        // optional — puts a JD in context
-  "language": "auto"              // "auto" | "en" | "hi"
+  "language": "auto",             // "auto" | "en" | "hi"
+  "visitor": {                    // optional — all of it, recorded in the log
+    "visitor_id": "v-9f2c…",      // stable per browser
+    "session_id": "s-41ab…",      // resets when the tab closes
+    "conversation_id": "c-77…",
+    "turn": 3,
+    "name": "Priya Sharma",       // only if they filled in the optional card
+    "email": "priya@acme.com",
+    "company": "Acme — Talent",
+    "page": "https://riteshkr.info/#ai",
+    "referrer": "https://linkedin.com/",
+    "timezone": "Asia/Kolkata",
+    "screen": "1920x1080",
+    "browser_language": "en-IN"
+  }
 }
 ```
 
@@ -97,6 +115,51 @@ curl -X PUT https://your-service.onrender.com/api/profile \
 
 Invalid profiles are rejected with a 422 and the old one stays live.
 
+## The question log
+
+Every question a visitor asks — and every job description they paste — is
+appended to `data/chat_log.jsonl` the moment the answer finishes, together with
+whatever is known about who asked: their name/email/company if they filled in
+the optional "who's asking" card, plus IP, browser, OS, device, page, referrer,
+timezone and the model that answered.
+
+The visitor has no way to reach any of it. Their browser keeps a local copy of
+their own conversation for convenience, but the record here is yours and only
+`ADMIN_TOKEN` opens it.
+
+**Console:** open `/admin.html` on the deployed site (e.g.
+`https://riteshkr.info/admin.html`), paste the token, and you get search,
+paging, a one-click Excel download and a delete-everything button. It is not
+linked from anywhere on the site and is marked `noindex`.
+
+**Or from the shell:**
+
+```bash
+# Download the workbook
+curl -OJ "https://your-service.onrender.com/api/admin/chats/export?token=$ADMIN_TOKEN"
+
+# Read it as JSON
+curl -H "X-Admin-Token: $ADMIN_TOKEN" \
+  "https://your-service.onrender.com/api/admin/chats?limit=20&search=acme"
+
+# Erase everything (irreversible — export first)
+curl -X DELETE -H "X-Admin-Token: $ADMIN_TOKEN" \
+  "https://your-service.onrender.com/api/admin/chats?confirm=DELETE-ALL"
+```
+
+The `.xlsx` has one row per question and 33 columns, filtered and frozen so it
+is usable the moment it opens. Without `openpyxl` installed the same endpoint
+serves CSV instead, which Excel reads natively.
+
+> **Free-tier warning.** Render wipes the filesystem on every deploy and cold
+> start, so on the free plan the log only survives until the next restart.
+> Either download the Excel regularly, or move to a paid instance, mount a disk
+> and set `CHAT_LOG_PATH=/var/data/chat_log.jsonl` (see `render.yaml`).
+
+City / region / country / ISP stay blank unless your host forwards geo headers.
+Set `GEO_LOOKUP_ENABLED=true` to fill them by looking each IP up at ip-api.com —
+off by default, because it means sending visitor IPs to a third party.
+
 ## Deploy to Render
 
 1. Push this repo to GitHub.
@@ -122,4 +185,8 @@ Every value in `.env.example` is optional except `GROQ_API_KEY`. Notable ones:
 | `LLM_TEMPERATURE`       | `0.3`                       | Low, to keep answers factual       |
 | `MAX_HISTORY_MESSAGES`  | `20`                        | How much conversation memory to replay |
 | `RATE_LIMIT_REQUESTS`   | `30` per 60s per IP         | Protects the free API key          |
-| `ADMIN_TOKEN`           | unset (admin routes off)    | Enables profile reload/replace     |
+| `ADMIN_TOKEN`           | unset (owner routes off)    | Profile edits **and** the chat log |
+| `CHAT_LOG_ENABLED`      | `true`                      | Record questions at all            |
+| `CHAT_LOG_PATH`         | `./data/chat_log.jsonl`     | Point at a mounted disk to keep history across deploys |
+| `CHAT_LOG_MAX_ROWS`     | `20000`                     | Oldest rows trimmed past this; `0` = forever |
+| `GEO_LOOKUP_ENABLED`    | `false`                     | Resolve visitor IPs to a city via ip-api.com |

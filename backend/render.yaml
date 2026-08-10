@@ -9,9 +9,27 @@ services:
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
     # Python version comes from backend/.python-version — no env var needed.
+    #
+    # WHERE THE CHAT LOG LIVES
+    # On the free plan the filesystem is wiped on every deploy and every cold
+    # start, so the question log only survives until the next restart — download
+    # the Excel regularly, or move to a paid instance and uncomment the disk
+    # below (Render only allows disks on paid plans), together with the
+    # CHAT_LOG_PATH env var further down.
+    #
+    # disk:
+    #   name: chat-log
+    #   mountPath: /var/data
+    #   sizeGB: 1
     envVars:
       - key: GROQ_API_KEY
         sync: false # set this in the Render dashboard — never commit it
+      # Unlocks reading, exporting and deleting the chat log. Set it in the
+      # dashboard; whoever holds it can read every visitor's details.
+      - key: ADMIN_TOKEN
+        sync: false
+      # - key: CHAT_LOG_PATH        # only with the disk above
+      #   value: /var/data/chat_log.jsonl
       # Ordered fallback chain. Setting a single GROQ_MODEL here instead would
       # silently disable the failover, so keep the full list.
       - key: GROQ_MODELS

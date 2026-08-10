@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { generateInterviewQuestions, matchJobDescription } from '../../lib/aiClient';
+import { visitorContext } from '../../lib/visitor';
 
 const VERDICTS = {
     strong_match: { label: 'Strong match', tone: 'emerald' },
@@ -111,7 +112,7 @@ const JobMatchPanel = ({ jobDescription, setJobDescription, onAskInChat }) => {
         setResult(null);
         setQuestions(null);
         try {
-            setResult(await matchJobDescription(jobDescription.trim()));
+            setResult(await matchJobDescription(jobDescription.trim(), visitorContext()));
         } catch (err) {
             setError(
                 err.message === 'Failed to fetch'

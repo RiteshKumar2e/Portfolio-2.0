@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Chat log — owner only</title>
+<!--
+  Deliberately a standalone page, outside the React bundle: it is not linked
+  from anywhere on the site and ships no portfolio code. It holds no secrets
+  either — the admin token is typed in here and kept in sessionStorage for the
+  tab's lifetime. Every endpoint it calls is enforced server-side, so opening
+  this page without the token shows nothing.
+-->
+<style>
+  :root {
+    --bg: #f8fafc; --panel: #ffffff; --line: #e2e8f0; --ink: #0f172a;
+    --muted: #64748b; --accent: #4f46e5; --danger: #e11d48;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #020617; --panel: #0f172a; --line: #1e293b; --ink: #e2e8f0;
+      --muted: #94a3b8; --accent: #6366f1; --danger: #fb7185;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink); line-height: 1.5;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 32px 20px 80px; }
+  h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); font-size: 13px; margin: 0 0 24px; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 16px; padding: 18px; margin-bottom: 18px;
+  }
+  label { display: block; font-size: 11px; font-weight: 800; letter-spacing: .12em;
+          text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  input[type=text], input[type=password], input[type=search] {
+    width: 100%; height: 40px; padding: 0 12px; font-size: 14px;
+    color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; outline: none;
+  }
+  input:focus { border-color: var(--accent); }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+  .row > div { flex: 1 1 220px; }
+  button {
+    height: 40px; padding: 0 16px; font-size: 12px; font-weight: 800;
+    letter-spacing: .08em; text-transform: uppercase; cursor: pointer;
+    border-radius: 10px; border: 1px solid var(--line);
+    background: var(--panel); color: var(--ink);
+  }
+  button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.primary:hover:not(:disabled) { filter: brightness(1.1); color: #fff; }
+  button.danger { border-color: var(--danger); color: var(--danger); }
+  button.danger:hover:not(:disabled) { background: var(--danger); color: #fff; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .stat { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  .stat b { display: block; font-size: 24px; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); white-space: nowrap; }
+  td.q { min-width: 260px; }
+  td.a { min-width: 300px; color: var(--muted); }
+  .who { font-weight: 700; }
+  .meta { color: var(--muted); font-size: 11px; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 800; text-transform: uppercase;
+         letter-spacing: .08em; padding: 2px 7px; border-radius: 999px;
+         border: 1px solid var(--line); color: var(--muted); }
+  .clip { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+          overflow: hidden; cursor: pointer; }
+  .clip.open { -webkit-line-clamp: unset; }
+  .note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+  .error { color: var(--danger); font-size: 13px; margin: 10px 0 0; }
+  .hidden { display: none; }
+  .pager { display: flex; gap: 10px; align-items: center; justify-content: space-between;
+           margin-top: 14px; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Chat log</h1>
+  <p class="sub">Every question visitors have asked the AI representative — owner access only.</p>
+
+  <!-- Sign in -->
+  <div class="panel" id="auth-panel">
+    <div class="row">
+      <div>
+        <label for="token">Admin token</label>
+        <input id="token" type="password" autocomplete="current-password"
+               placeholder="the ADMIN_TOKEN set on the backend" />
+      </div>
+      <div style="flex: 0 1 320px;">
+        <label for="api">Backend URL</label>
+        <input id="api" type="text" placeholder="https://portfolio-q17g.onrender.com" />
+      </div>
+      <button class="primary" id="unlock">Unlock</button>
+    </div>
+    <p class="error hidden" id="auth-error"></p>
+    <p class="note">The token is held for this browser tab only and is never stored on disk.</p>
+  </div>
+
+  <!-- Console -->
+  <div id="console" class="hidden">
+    <div class="panel">
+      <div class="stats" id="stats"></div>
+      <p class="note" id="storage-note"></p>
+    </div>
+
+    <div class="panel">
+      <div class="row">
+        <div>
+          <label for="search">Search</label>
+          <input id="search" type="search" placeholder="name, email, question, city, IP…" />
+        </div>
+        <button id="refresh">Refresh</button>
+        <button class="primary" id="download">Download Excel</button>
+        <button id="download-csv">CSV</button>
+        <button class="danger" id="wipe">Delete all</button>
+      </div>
+      <p class="error hidden" id="list-error"></p>
+    </div>
+
+    <div class="panel">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>When (IST)</th>
+              <th>Who</th>
+              <th>Question</th>
+              <th>Answer</th>
+              <th>Where from</th>
+              <th>Device</th>
+              <th>Model</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="pager">
+        <span id="range">—</span>
+        <span>
+          <button id="prev">Prev</button>
+          <button id="next">Next</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var DEFAULT_API = 'https://portfolio-q17g.onrender.com';
+  var API_KEY = 'admin-api-base';
+  var TOKEN_KEY = 'admin-token';
+  var PAGE_SIZE = 25;
+
+  var state = { token: '', api: DEFAULT_API, offset: 0, total: 0, search: '' };
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(el, on) { el.classList.toggle('hidden', !on); }
+
+  function fail(el, message) {
+    el.textContent = message || '';
+    show(el, Boolean(message));
+  }
+
+  function esc(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function api(path, options) {
+    options = options || {};
+    options.headers = Object.assign({ 'X-Admin-Token': state.token }, options.headers || {});
+    return fetch(state.api + path, options).then(function (response) {
+      if (response.ok) return response.json();
+      return response.json().catch(function () { return {}; }).then(function (body) {
+        var detail = typeof body.detail === 'string' ? body.detail : 'Request failed (' + response.status + ').';
+        throw new Error(detail);
+      });
+    });
+  }
+
+  // -- rendering ---------------------------------------------------------
+
+  function ist(iso) {
+    if (!iso) return '—';
+    var when = new Date(iso);
+    if (isNaN(when)) return iso;
+    return when.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' });
+  }
+
+  function renderStats(stats) {
+    var cards = [
+      ['Questions', stats.total_questions],
+      ['Unique visitors', stats.unique_visitors],
+      ['Left contact details', stats.identified_visitors],
+      ['Job descriptions', stats.job_matches],
+      ['Last asked', stats.last_asked_at ? ist(stats.last_asked_at) : '—']
+    ];
+    $('stats').innerHTML = cards.map(function (card) {
+      var big = typeof card[1] === 'number';
+      return '<div class="stat"><b style="' + (big ? '' : 'font-size:14px;font-weight:600;line-height:1.6') + '">'
+        + esc(card[1]) + '</b><span>' + esc(card[0]) + '</span></div>';
+    }).join('');
+
+    var notes = [];
+    if (!stats.xlsx_available) notes.push('openpyxl is missing on the backend — the export will download as CSV.');
+    if (!stats.logging_enabled) notes.push('CHAT_LOG_ENABLED is off — new questions are not being recorded.');
+    notes.push('Stored at ' + stats.storage_path);
+    $('storage-note').textContent = notes.join(' · ');
+  }
+
+  function whoCell(row) {
+    var name = row.name || row.email ? esc(row.name || row.email) : 'Anonymous';
+    var lines = ['<div class="who">' + name + '</div>'];
+    if (row.email && row.name) lines.push('<div class="meta">' + esc(row.email) + '</div>');
+    if (row.company) lines.push('<div class="meta">' + esc(row.company) + '</div>');
+    lines.push('<div class="meta">' + esc(row.visitor_id || '—') + '</div>');
+    return lines.join('');
+  }
+
+  function fromCell(row) {
+    var place = [row.city, row.region, row.country].filter(Boolean).join(', ');
+    var lines = [];
+    if (place) lines.push('<div>' + esc(place) + '</div>');
+    lines.push('<div class="meta">' + esc(row.ip || '—') + '</div>');
+    if (row.referrer) lines.push('<div class="meta">via ' + esc(row.referrer.slice(0, 60)) + '</div>');
+    return lines.join('');
+  }
+
+  function renderRows(entries) {
+    if (!entries.length) {
+      $('rows').innerHTML = '<tr><td colspan="7" style="padding:40px;text-align:center;color:var(--muted)">Nothing logged yet.</td></tr>';
+      return;
+    }
+    $('rows').innerHTML = entries.map(function (row) {
+      return '<tr>'
+        + '<td><div>' + esc(ist(row.asked_at)) + '</div>'
+          + '<div class="meta"><span class="tag">' + esc(row.kind === 'job_match' ? 'JD' : 'chat') + '</span></div></td>'
+        + '<td>' + whoCell(row) + '</td>'
+        + '<td class="q"><div class="clip">' + esc(row.question) + '</div></td>'
+        + '<td class="a"><div class="clip">' + esc(row.answer) + '</div></td>'
+        + '<td>' + fromCell(row) + '</td>'
+        + '<td><div>' + esc(row.device || '—') + '</div>'
+          + '<div class="meta">' + esc([row.os, row.browser].filter(Boolean).join(' · ')) + '</div></td>'
+        + '<td><div class="meta">' + esc(row.model || '—') + '</div>'
+          + '<div class="meta">' + esc(row.status || '') + ' · ' + esc(row.duration_s || 0) + 's</div></td>'
+        + '</tr>';
+    }).join('');
+
+    // Long questions and answers expand in place rather than in a modal.
+    Array.prototype.forEach.call(document.querySelectorAll('.clip'), function (node) {
+      node.addEventListener('click', function () { node.classList.toggle('open'); });
+    });
+  }
+
+  // -- data --------------------------------------------------------------
+
+  function load() {
+    fail($('list-error'), '');
+    var query = '?limit=' + PAGE_SIZE + '&offset=' + state.offset
+      + '&search=' + encodeURIComponent(state.search);
+
+    return Promise.all([api('/api/admin/chats' + query), api('/api/admin/chats/stats')])
+      .then(function (results) {
+        var page = results[0];
+        state.total = page.total;
+        renderRows(page.entries);
+        renderStats(results[1]);
+
+        var from = page.total ? state.offset + 1 : 0;
+        var to = Math.min(state.offset + PAGE_SIZE, page.total);
+        $('range').textContent = from + '–' + to + ' of ' + page.total;
+        $('prev').disabled = state.offset === 0;
+        $('next').disabled = to >= page.total;
+      })
+      .catch(function (error) { fail($('list-error'), error.message); });
+  }
+
+  function unlock() {
+    state.token = $('token').value.trim();
+    state.api = ($('api').value.trim() || DEFAULT_API).replace(/\/$/, '');
+    if (!state.token) return fail($('auth-error'), 'Enter the admin token.');
+
+    fail($('auth-error'), '');
+    $('unlock').disabled = true;
+    api('/api/admin/chats/stats')
+      .then(function () {
+        try {
+          sessionStorage.setItem(TOKEN_KEY, state.token);
+          localStorage.setItem(API_KEY, state.api);
+        } catch (e) { /* private mode */ }
+        show($('auth-panel'), false);
+        show($('console'), true);
+        return load();
+      })
+      .catch(function (error) { fail($('auth-error'), error.message); })
+      .finally(function () { $('unlock').disabled = false; });
+  }
+
+  function download(format) {
+    var url = state.api + '/api/admin/chats/export?format=' + format
+      + '&token=' + encodeURIComponent(state.token);
+    window.open(url, '_blank');
+  }
+
+  function wipe() {
+    var typed = window.prompt(
+      'This permanently deletes all ' + state.total + ' logged questions.\n' +
+      'Download the Excel first if you want a copy.\n\n' +
+      'Type DELETE-ALL to confirm:'
+    );
+    if (typed !== 'DELETE-ALL') return;
+
+    api('/api/admin/chats?confirm=DELETE-ALL', { method: 'DELETE' })
+      .then(function (result) {
+        state.offset = 0;
+        return load().then(function () {
+          window.alert('Deleted ' + result.deleted + ' entries.');
+        });
+      })
+      .catch(function (error) { fail($('list-error'), error.message); });
+  }
+
+  // -- wiring ------------------------------------------------------------
+
+  var searchTimer;
+  $('search').addEventListener('input', function (event) {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function () {
+      state.search = event.target.value.trim();
+      state.offset = 0;
+      load();
+    }, 300);
+  });
+
+  $('unlock').addEventListener('click', unlock);
+  $('token').addEventListener('keydown', function (e) { if (e.key === 'Enter') unlock(); });
+  $('refresh').addEventListener('click', load);
+  $('download').addEventListener('click', function () { download('xlsx'); });
+  $('download-csv').addEventListener('click', function () { download('csv'); });
+  $('wipe').addEventListener('click', wipe);
+  $('prev').addEventListener('click', function () {
+    state.offset = Math.max(0, state.offset - PAGE_SIZE);
+    load();
+  });
+  $('next').addEventListener('click', function () {
+    state.offset += PAGE_SIZE;
+    load();
+  });
+
+  // Restore the tab's session so a refresh doesn't mean retyping the token.
+  try {
+    $('api').value = localStorage.getItem(API_KEY) || DEFAULT_API;
+    var saved = sessionStorage.getItem(TOKEN_KEY);
+    if (saved) {
+      $('token').value = saved;
+      unlock();
+    }
+  } catch (e) {
+    $('api').value = DEFAULT_API;
+  }
+})();
+</script>
+</body>
+</html>
