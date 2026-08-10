@@ -48,14 +48,14 @@ Interactive API docs: <http://localhost:8000/docs>
   ],
   "job_description": null,        // optional — puts a JD in context
   "language": "auto",             // "auto" | "en" | "hi"
-  "visitor": {                    // optional — all of it, recorded in the log
-    "visitor_id": "v-9f2c…",      // stable per browser
+  "visitor": {                    // recorded in the log; every field optional
+    "visitor_id": "v-9f2c…",      // stable per browser                to the API
     "session_id": "s-41ab…",      // resets when the tab closes
     "conversation_id": "c-77…",
     "turn": 3,
-    "name": "Priya Sharma",       // only if they filled in the optional card
-    "email": "priya@acme.com",
-    "company": "Acme — Talent",
+    "name": "Priya Sharma",       // the web UI requires name + email before
+    "email": "priya@acme.com",    // the first answer; the API does not
+    "company": "Acme — Talent",   // optional in the UI too
     "page": "https://riteshkr.info/#ai",
     "referrer": "https://linkedin.com/",
     "timezone": "Asia/Kolkata",
@@ -119,9 +119,9 @@ Invalid profiles are rejected with a 422 and the old one stays live.
 
 Every question a visitor asks — and every job description they paste — is
 appended to `data/chat_log.jsonl` the moment the answer finishes, together with
-whatever is known about who asked: their name/email/company if they filled in
-the optional "who's asking" card, plus IP, browser, OS, device, page, referrer,
-timezone and the model that answered.
+whatever is known about who asked: their name and email (the chat asks for both
+once, before the first answer) plus an optional company/role, and on top of that
+IP, browser, OS, device, page, referrer, timezone and the model that answered.
 
 The visitor has no way to reach any of it. Their browser keeps a local copy of
 their own conversation for convenience, but the record here is yours and only

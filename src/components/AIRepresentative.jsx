@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-    ArrowDown, Bot, Briefcase, Check, Download, History, Languages, MessageSquare,
-    Mic, Plus, RotateCcw, Send, Square, UserRound,
+    ArrowDown, ArrowRight, Bot, Briefcase, Check, Download, History, Languages,
+    MessageSquare, Mic, Plus, RotateCcw, Send, Square, UserRound,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { checkHealth } from '../lib/aiClient';
-import { hasIdentity, loadIdentity, saveIdentity } from '../lib/visitor';
+import { isIdentityComplete, isValidEmail, loadIdentity, saveIdentity } from '../lib/visitor';
 import ChatBubble from './ai/ChatBubble';
 import JobMatchPanel from './ai/JobMatchPanel';
 import { conversationTitle, useChat } from './ai/useChat';
@@ -31,6 +31,9 @@ const AIRepresentative = () => {
     const [historyOpen, setHistoryOpen] = useState(false);
     const [identityOpen, setIdentityOpen] = useState(false);
     const [identity, setIdentity] = useState(loadIdentity);
+    // A question typed before we know who is asking: held here while the
+    // introduction card is up, then sent the moment it is filled in.
+    const [pendingQuestion, setPendingQuestion] = useState(null);
 
     const scrollRef = useRef(null);
     const inputRef = useRef(null);
@@ -126,9 +129,36 @@ const AIRepresentative = () => {
     const submit = (text) => {
         const value = (text ?? input).trim();
         if (!value || isStreaming) return;
+
+        // Ask who's asking — once per browser, before the first answer.
+        if (!isIdentityComplete(identity)) {
+            setInput('');
+            setPendingQuestion(value);
+            setHistoryOpen(false);
+            setIdentityOpen(false);
+            return;
+        }
+
         setInput('');
         setPinned(true);
         send(value);
+    };
+
+    /** The introduction is filled in: save it and release the held question. */
+    const completeIntroduction = (details) => {
+        setIdentity(saveIdentity(details));
+        const question = pendingQuestion;
+        setPendingQuestion(null);
+        if (question) {
+            setPinned(true);
+            setTimeout(() => send(question), 0);
+        }
+    };
+
+    /** Backed out of the introduction: give them their question back. */
+    const cancelIntroduction = () => {
+        setInput((current) => current || pendingQuestion || '');
+        setPendingQuestion(null);
     };
 
     const handleKeyDown = (event) => {
@@ -185,7 +215,7 @@ ${rows}
     };
 
     // -- styling helpers ---------------------------------------------------
-    const identified = hasIdentity(identity);
+    const identified = isIdentityComplete(identity);
 
     const surface = isDarkMode
         ? 'bg-slate-900/60 border-white/10'
@@ -544,7 +574,7 @@ ${rows}
                             </div>
 
                             <AnimatePresence>
-                                {!pinned && messages.length > 0 && (
+                                {!pinned && messages.length > 0 && !pendingQuestion && (
                                     <motion.button
                                         initial={{ opacity: 0, y: 8 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -556,6 +586,20 @@ ${rows}
                                     >
                                         <ArrowDown size={16} />
                                     </motion.button>
+                                )}
+                            </AnimatePresence>
+
+                            {/* One-time introduction, standing in front of the
+                                first answer rather than interrupting later. */}
+                            <AnimatePresence>
+                                {pendingQuestion && (
+                                    <IntroductionGate
+                                        question={pendingQuestion}
+                                        identity={identity}
+                                        isDarkMode={isDarkMode}
+                                        onSubmit={completeIntroduction}
+                                        onCancel={cancelIntroduction}
+                                    />
                                 )}
                             </AnimatePresence>
                         </div>
@@ -675,18 +719,209 @@ const ToolbarButton = ({
 );
 
 /**
- * Optional introduction. Entirely skippable — the chat behaves the same either
- * way — but a recruiter who fills it in shows up by name in Ritesh's log
- * instead of as an anonymous visitor id.
+ * Name and email, plus an optional company. Shared by the one-time gate and
+ * the toolbar popover, so both validate identically.
+ *
+ * Errors only appear once a field has been left or the form submitted —
+ * scolding someone mid-keystroke for an incomplete email is obnoxious.
  */
+const IdentityFields = ({ draft, setDraft, touched, setTouched, isDarkMode, autoFocus }) => {
+    const invalid = {
+        name: draft.name.trim().length < 2,
+        email: !isValidEmail(draft.email),
+    };
+
+    const field = (key) =>
+        `w-full px-3 h-10 rounded-xl text-[13px] border outline-none transition-colors ${
+            touched[key] && invalid[key]
+                ? 'border-rose-400 focus:border-rose-400'
+                : isDarkMode
+                  ? 'border-white/10 focus:border-indigo-400'
+                  : 'border-slate-200 focus:border-indigo-400'
+        } ${
+            isDarkMode
+                ? 'bg-slate-950/60 text-slate-200 placeholder:text-slate-600'
+                : 'bg-slate-50 text-slate-800 placeholder:text-slate-400'
+        }`;
+
+    const labelClass = `block text-[10px] font-black uppercase tracking-[0.16em] mb-1.5 ${
+        isDarkMode ? 'text-slate-400' : 'text-slate-500'
+    }`;
+
+    const update = (key) => (event) => setDraft({ ...draft, [key]: event.target.value });
+    const blur = (key) => () => setTouched((prev) => ({ ...prev, [key]: true }));
+
+    return (
+        <div className="space-y-3">
+            <div>
+                <label className={labelClass} htmlFor="visitor-name">
+                    Name <span className="text-indigo-500">*</span>
+                </label>
+                <input
+                    id="visitor-name"
+                    className={field('name')}
+                    placeholder="Your name"
+                    value={draft.name}
+                    maxLength={120}
+                    autoFocus={autoFocus}
+                    autoComplete="name"
+                    aria-invalid={touched.name && invalid.name}
+                    onChange={update('name')}
+                    onBlur={blur('name')}
+                />
+                {touched.name && invalid.name && (
+                    <p className="mt-1 text-[11px] text-rose-500">Please enter your name.</p>
+                )}
+            </div>
+
+            <div>
+                <label className={labelClass} htmlFor="visitor-email">
+                    Email <span className="text-indigo-500">*</span>
+                </label>
+                <input
+                    id="visitor-email"
+                    className={field('email')}
+                    type="email"
+                    placeholder="you@company.com"
+                    value={draft.email}
+                    maxLength={180}
+                    autoComplete="email"
+                    aria-invalid={touched.email && invalid.email}
+                    onChange={update('email')}
+                    onBlur={blur('email')}
+                />
+                {touched.email && invalid.email && (
+                    <p className="mt-1 text-[11px] text-rose-500">
+                        Please enter a valid email address.
+                    </p>
+                )}
+            </div>
+
+            <div>
+                <label className={labelClass} htmlFor="visitor-company">
+                    Company / role <span className="font-bold normal-case tracking-normal text-slate-400">(optional)</span>
+                </label>
+                <input
+                    id="visitor-company"
+                    className={field('company')}
+                    placeholder="Acme — Engineering Manager"
+                    value={draft.company}
+                    maxLength={180}
+                    autoComplete="organization"
+                    onChange={update('company')}
+                />
+            </div>
+        </div>
+    );
+};
+
+/** Shared submit guard: mark everything touched, bail if anything is invalid. */
+function tryComplete(draft, setTouched, onSubmit) {
+    setTouched({ name: true, email: true });
+    if (!isIdentityComplete(draft)) return;
+    onSubmit(draft);
+}
+
+/**
+ * The one-time gate. It stands in front of the first answer — the question is
+ * already typed and waiting behind it — and is never shown again on this
+ * browser once name and email are in.
+ */
+const IntroductionGate = ({ question, identity, isDarkMode, onSubmit, onCancel }) => {
+    const [draft, setDraft] = useState(identity);
+    const [touched, setTouched] = useState({ name: false, email: false });
+
+    const submit = () => tryComplete(draft, setTouched, onSubmit);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Introduce yourself before asking"
+            className={`absolute inset-0 z-20 grid place-items-center px-5 py-6 backdrop-blur-sm ${
+                isDarkMode ? 'bg-slate-950/70' : 'bg-white/80'
+            }`}
+            onKeyDown={(event) => {
+                if (event.key === 'Escape') onCancel();
+            }}
+        >
+            <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                transition={{ duration: 0.18 }}
+                className={`w-full max-w-sm rounded-3xl border p-5 shadow-2xl overflow-y-auto max-h-full ${
+                    isDarkMode
+                        ? 'bg-slate-900 border-white/10 shadow-black/50'
+                        : 'bg-white border-slate-200 shadow-slate-400/20'
+                }`}
+                data-lenis-prevent
+            >
+                <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-9 h-9 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 grid place-items-center text-indigo-500 shrink-0">
+                        <UserRound size={17} />
+                    </div>
+                    <div>
+                        <p className={`text-[15px] font-black leading-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                            Before I answer — who's asking?
+                        </p>
+                        <p className="text-[11px] text-slate-500">Asked once, then never again.</p>
+                    </div>
+                </div>
+
+                <div
+                    className={`rounded-2xl border px-3 py-2.5 mb-4 ${
+                        isDarkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'
+                    }`}
+                >
+                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500 mb-1">
+                        Your question
+                    </p>
+                    <p className={`text-[13px] line-clamp-3 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                        {question}
+                    </p>
+                </div>
+
+                <IdentityFields
+                    draft={draft}
+                    setDraft={setDraft}
+                    touched={touched}
+                    setTouched={setTouched}
+                    isDarkMode={isDarkMode}
+                    autoFocus
+                />
+
+                <button
+                    type="button"
+                    onClick={submit}
+                    className="w-full mt-4 inline-flex items-center justify-center gap-2 h-11 rounded-2xl bg-indigo-600 text-white text-[11px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/20"
+                >
+                    Continue <ArrowRight size={14} />
+                </button>
+                <button
+                    type="button"
+                    onClick={onCancel}
+                    className="w-full mt-2 h-9 rounded-xl text-[11px] font-bold text-slate-500 hover:text-slate-700 transition-colors"
+                >
+                    Back
+                </button>
+
+                <p className="mt-3 text-[11px] text-slate-500 text-center leading-relaxed">
+                    Used only so Ritesh knows who was interested and can follow up.
+                </p>
+            </motion.div>
+        </motion.div>
+    );
+};
+
+/** Toolbar popover for changing the details later. */
 const IdentityCard = ({ identity, isDarkMode, onSave }) => {
     const [draft, setDraft] = useState(identity);
-
-    const field = `w-full px-3 h-9 rounded-xl text-[13px] border outline-none transition-colors focus:border-indigo-400 ${
-        isDarkMode
-            ? 'bg-slate-950/60 border-white/10 text-slate-200 placeholder:text-slate-600'
-            : 'bg-slate-50 border-slate-200 text-slate-800 placeholder:text-slate-400'
-    }`;
+    const [touched, setTouched] = useState({ name: false, email: false });
 
     return (
         <motion.div
@@ -704,53 +939,24 @@ const IdentityCard = ({ identity, isDarkMode, onSave }) => {
                 Who's asking?
             </p>
             <p className="text-[11px] text-slate-500 mb-3 leading-relaxed">
-                Optional. If you leave your details, Ritesh knows who was interested
-                and can follow up.
+                So Ritesh knows who was interested and can follow up.
             </p>
 
-            <div className="space-y-2">
-                <input
-                    className={field}
-                    placeholder="Name"
-                    value={draft.name}
-                    maxLength={120}
-                    onChange={(event) => setDraft({ ...draft, name: event.target.value })}
-                />
-                <input
-                    className={field}
-                    type="email"
-                    placeholder="Email"
-                    value={draft.email}
-                    maxLength={180}
-                    onChange={(event) => setDraft({ ...draft, email: event.target.value })}
-                />
-                <input
-                    className={field}
-                    placeholder="Company / role"
-                    value={draft.company}
-                    maxLength={180}
-                    onChange={(event) => setDraft({ ...draft, company: event.target.value })}
-                />
-            </div>
+            <IdentityFields
+                draft={draft}
+                setDraft={setDraft}
+                touched={touched}
+                setTouched={setTouched}
+                isDarkMode={isDarkMode}
+            />
 
-            <div className="flex items-center gap-2 mt-3">
-                <button
-                    type="button"
-                    onClick={() => onSave(draft)}
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 rounded-xl bg-indigo-600 text-white text-[11px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-colors"
-                >
-                    <Check size={13} /> Save
-                </button>
-                <button
-                    type="button"
-                    onClick={() => onSave({ name: '', email: '', company: '' })}
-                    className={`h-9 px-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-slate-500 transition-colors ${
-                        isDarkMode ? 'hover:text-slate-300' : 'hover:text-slate-700'
-                    }`}
-                >
-                    Clear
-                </button>
-            </div>
+            <button
+                type="button"
+                onClick={() => tryComplete(draft, setTouched, onSave)}
+                className="w-full mt-3 inline-flex items-center justify-center gap-1.5 h-9 rounded-xl bg-indigo-600 text-white text-[11px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-colors"
+            >
+                <Check size={13} /> Save
+            </button>
         </motion.div>
     );
 };

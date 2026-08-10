@@ -6,11 +6,12 @@
  *
  *   - ambient   — id, session, page, referrer, timezone, screen. Free, and
  *                 always sent.
- *   - declared  — name, email, company, typed into the optional "who's asking"
- *                 card. Sent only once the visitor fills it in.
+ *   - declared  — name and email (required before the first question) plus an
+ *                 optional company, typed into the "who's asking" card and
+ *                 remembered, so it is asked exactly once per browser.
  *
  * Nothing here is a login: the ids are random local labels that make repeat
- * visits recognisable, not identities that can be verified.
+ * visits recognisable, and the name/email are self-declared, not verified.
  */
 
 const VISITOR_KEY = 'ai-portfolio-visitor-v1';
@@ -93,17 +94,17 @@ export function saveIdentity(identity) {
     return clean;
 }
 
-export function clearIdentity() {
-    try {
-        localStorage.removeItem(IDENTITY_KEY);
-    } catch {
-        /* ignore */
-    }
-    return { ...EMPTY_IDENTITY };
+/** Loose on purpose: catches typos, not exotic-but-valid addresses. */
+export function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((value || '').trim());
 }
 
-export function hasIdentity(identity) {
-    return Boolean(identity?.name?.trim() || identity?.email?.trim());
+/**
+ * Name and email are required before the first question goes through; the
+ * company field is a nice-to-have. Anything less and the chat asks once.
+ */
+export function isIdentityComplete(identity) {
+    return Boolean((identity?.name || '').trim().length >= 2 && isValidEmail(identity?.email));
 }
 
 /**

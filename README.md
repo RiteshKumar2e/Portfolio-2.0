@@ -164,7 +164,7 @@ Each row carries who asked, not just what they asked:
 
 | | |
 | --- | --- |
-| **Identity** | Name, email, company — if they filled in the optional *"who's asking?"* card in the chat toolbar. Nothing is required to use the chat. |
+| **Identity** | Name and email, asked once before the first answer via a *"who's asking?"* card, plus an optional company/role. Saved per browser, so it never interrupts again. |
 | **Recognition** | A visitor id stable across visits, a session id per tab, plus conversation id and turn number, so a five-question conversation reads as one thread. |
 | **Origin** | IP address, city / region / country / ISP (with `GEO_LOOKUP_ENABLED`), the page they asked from, and where they arrived from. |
 | **Context** | Device, OS, browser, screen size, their timezone, browser language, and the reply language they picked. |
