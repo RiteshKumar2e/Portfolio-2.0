@@ -147,6 +147,21 @@ curl -X DELETE -H "X-Admin-Token: $ADMIN_TOKEN" \
   "https://your-service.onrender.com/api/admin/chats?confirm=DELETE-ALL"
 ```
 
+### Deleting also resets the visitors
+
+A visitor's name and email live in their own browser, where the server cannot
+reach. So a wipe stamps a timestamp into `chat_log.meta.json` — a sidecar that
+deliberately survives the log file being deleted — and publishes it as
+`identity_reset_at` on `/api/health` and in the chat's SSE `done` event. Each
+browser compares it against the last one it saw, and anything newer means
+"forget the saved details and ask again". Nobody who arrives after a wipe rides
+on a record that no longer exists.
+
+Only a **newer** stamp resets anything, never merely a different one. That
+matters because the sidecar sits on the same ephemeral disk as the log: when a
+free-tier cold start loses it, the marker reads `0` and quietly resets nobody,
+instead of logging out every visitor on every restart.
+
 The `.xlsx` has one row per question and 33 columns, filtered and frozen so it
 is usable the moment it opens. Without `openpyxl` installed the same endpoint
 serves CSV instead, which Excel reads natively.

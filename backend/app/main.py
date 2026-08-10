@@ -168,8 +168,8 @@ def asker_details(
 ) -> dict[str, Any]:
     """Everything we know about who is asking, before the answer exists.
 
-    Deliberately synchronous and cheap: it is called on the request path, and
-    the slow part (the IP lookup) is deferred to `record_question`.
+    Deliberately synchronous and cheap: it sits on the request path, so the one
+    slow part — the IP lookup — runs alongside the answer via `start_geo_lookup`.
     """
     headers = request.headers
     agent = headers.get("user-agent", "")[:500]
@@ -209,32 +209,43 @@ def _header(headers, name: str) -> str:
 
 
 # Tasks are kept alive here; asyncio only holds a weak reference to them.
-_pending_writes: set[asyncio.Task] = set()
+_background: set[asyncio.Task] = set()
 
 
-def record_question(entry: dict[str, Any]) -> None:
-    """Persist one logged question without blocking the response.
+def start_geo_lookup(entry: dict[str, Any]) -> Optional[asyncio.Task]:
+    """Resolve the visitor's city while the model is still writing the answer.
 
-    Fire-and-forget on purpose. It is called from the `finally` of the SSE
-    generator, which may be running because the visitor pressed stop — awaiting
-    there would re-raise the cancellation and lose the row.
+    Started here and collected in `record_question`, so the lookup overlaps the
+    generation instead of delaying either the first token or the final write.
+    """
+    if not geo.enabled or (entry.get("city") and entry.get("country")):
+        return None
+
+    task = asyncio.create_task(geo.lookup(entry["ip"]))
+    _background.add(task)
+    task.add_done_callback(_background.discard)
+    return task
+
+
+def record_question(entry: dict[str, Any], geo_task: Optional[asyncio.Task] = None) -> None:
+    """Write one logged question to disk. Synchronous, and that is deliberate.
+
+    This is called from the `finally` of the SSE generator, which may be running
+    precisely because the visitor pressed stop or closed the tab. Anything
+    awaited there re-raises the cancellation and the row is lost, and handing it
+    to a background task means a process that dies moments later takes the last
+    question with it. A single line appended to an open file is measured in
+    microseconds, so it happens inline and is on disk before the response ends.
     """
     if not settings.chat_log_enabled:
         return
 
-    async def write() -> None:
-        try:
-            if not (entry.get("city") and entry.get("country")):
-                entry.update(
-                    {k: v for k, v in (await geo.lookup(entry["ip"])).items() if v}
-                )
-            await run_in_threadpool(chat_log.append, entry)
-        except Exception:  # noqa: BLE001 — logging must never surface to a visitor
-            logger.exception("Could not record the question")
+    # Whatever the lookup managed to find by now; it is never waited for.
+    if geo_task is not None and geo_task.done() and not geo_task.cancelled():
+        if geo_task.exception() is None:
+            entry.update({key: value for key, value in geo_task.result().items() if value})
 
-    task = asyncio.create_task(write())
-    _pending_writes.add(task)
-    task.add_done_callback(_pending_writes.discard)
+    chat_log.append(entry)  # swallows its own errors — logging can't break a chat
 
 
 @app.exception_handler(LLMError)
@@ -267,6 +278,9 @@ async def health(request: Request) -> dict:
         "models": llm.models,
         "model_health": llm.health_snapshot(),
         "profile": store.summary_stats,
+        # Public on purpose: it is just a timestamp, and every visitor's browser
+        # needs it to know whether the details it remembers were wiped.
+        "identity_reset_at": chat_log.reset_at,
     }
 
 
@@ -333,6 +347,7 @@ async def chat(payload: ChatRequest, request: Request) -> StreamingResponse:
     llm: LLMRouter = request.app.state.llm
 
     entry = asker_details(request, payload.visitor, kind="chat")
+    geo_task = start_geo_lookup(entry)
 
     async def event_stream() -> AsyncIterator[str]:
         # Which model actually answered — the router may have failed over.
@@ -377,9 +392,16 @@ async def chat(payload: ChatRequest, request: Request) -> StreamingResponse:
                 language=payload.language,
                 job_description=(payload.job_description or "")[:4000],
             )
-            record_question(entry)
+            record_question(entry, geo_task)
 
-            yield _sse("done", {"model": selected["model"] or settings.primary_model})
+            yield _sse(
+                "done",
+                {
+                    "model": selected["model"] or settings.primary_model,
+                    # Lets a tab that has been open since before a wipe notice it.
+                    "identity_reset_at": chat_log.reset_at,
+                },
+            )
 
     return StreamingResponse(
         event_stream(),
@@ -413,6 +435,7 @@ async def match(payload: MatchRequest, request: Request, response: Response) -> 
     # A pasted job description is the single most useful thing a recruiter can
     # leave behind, so it lands in the log alongside the chat questions.
     entry = asker_details(request, payload.visitor, kind="job_match")
+    geo_task = start_geo_lookup(entry)
     started = time.monotonic()
 
     raw, model_used = await llm.complete_json(messages, max_tokens=1400, compact_messages=compact)
@@ -429,7 +452,7 @@ async def match(payload: MatchRequest, request: Request, response: Response) -> 
             duration_s=round(time.monotonic() - started, 2),
             job_description=payload.job_description[:4000],
         )
-        record_question(entry)
+        record_question(entry, geo_task)
         raise HTTPException(
             status_code=502,
             detail="The AI's suitability report came back malformed. Please try again.",
@@ -443,7 +466,7 @@ async def match(payload: MatchRequest, request: Request, response: Response) -> 
         duration_s=round(time.monotonic() - started, 2),
         job_description=payload.job_description[:4000],
     )
-    record_question(entry)
+    record_question(entry, geo_task)
     return result
 
 

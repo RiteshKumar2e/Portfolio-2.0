@@ -16,6 +16,7 @@ import json
 import logging
 import re
 import threading
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterator
@@ -80,9 +81,13 @@ class ChatLogStore:
 
     def __init__(self, path: Path, max_rows: int = 20000) -> None:
         self._path = path
+        # Sidecar, so it survives the log file being deleted — that is the whole
+        # point of it. Holds when the log was last wiped.
+        self._meta_path = path.with_name(path.stem + ".meta.json")
         self._max_rows = max_rows
         self._lock = threading.Lock()
         self._count = self._count_lines()
+        self._reset_at = self._read_reset_at()
         logger.info("Chat log at %s (%d entries)", self._path, self._count)
 
     # -- writing -----------------------------------------------------------
@@ -120,6 +125,37 @@ class ChatLogStore:
             logger.exception("Could not trim the chat log")
 
     # -- reading -----------------------------------------------------------
+
+    # -- the reset marker --------------------------------------------------
+    #
+    # Wiping the log has to reach the visitors too: their name and email live in
+    # their own browser, and a server-side delete cannot touch that. So the wipe
+    # stamps a timestamp here, every client compares it against the one it last
+    # saw, and anything newer means "forget who you are and ask again".
+    #
+    # A timestamp rather than a counter, and "newer wins" rather than "different
+    # wins", so that losing this file — which Render's free plan does on every
+    # cold start — reads as 0 and quietly resets nobody.
+
+    def _read_reset_at(self) -> float:
+        try:
+            return float(json.loads(self._meta_path.read_text(encoding="utf-8"))["reset_at"])
+        except (OSError, ValueError, KeyError, TypeError):
+            return 0.0
+
+    def _write_reset_at(self, value: float) -> None:
+        try:
+            self._meta_path.parent.mkdir(parents=True, exist_ok=True)
+            self._meta_path.write_text(
+                json.dumps({"reset_at": value}), encoding="utf-8"
+            )
+        except OSError:
+            logger.exception("Could not persist the chat-log reset marker")
+
+    @property
+    def reset_at(self) -> float:
+        """Unix seconds of the last wipe; 0 if it has never been wiped."""
+        return self._reset_at
 
     def _count_lines(self) -> int:
         if not self._path.exists():
@@ -196,7 +232,11 @@ class ChatLogStore:
     # -- clearing (owner only) ---------------------------------------------
 
     def clear(self) -> int:
-        """Delete every logged question. Returns how many were removed."""
+        """Delete every logged question. Returns how many were removed.
+
+        Also stamps the reset marker, so returning visitors are asked for their
+        name and email again instead of riding on a record that no longer exists.
+        """
         with self._lock:
             removed = self._count
             try:
@@ -206,6 +246,8 @@ class ChatLogStore:
                 logger.exception("Could not delete the chat log file")
                 raise
             self._count = 0
+            self._reset_at = time.time()
+            self._write_reset_at(self._reset_at)
         logger.warning("Chat log cleared by the owner — %d entries deleted", removed)
         return removed
 

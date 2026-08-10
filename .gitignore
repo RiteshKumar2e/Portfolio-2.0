@@ -24,6 +24,7 @@ backend/.deps
 # Visitors' questions and their contact details — never commit this
 backend/data/chat_log.jsonl
 **/chat_log.jsonl
+**/chat_log.meta.json
 **/__pycache__/
 *.py[cod]
 

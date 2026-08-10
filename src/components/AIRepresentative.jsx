@@ -6,7 +6,9 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { checkHealth } from '../lib/aiClient';
-import { isIdentityComplete, isValidEmail, loadIdentity, saveIdentity } from '../lib/visitor';
+import {
+    isIdentityComplete, isValidEmail, loadIdentity, saveIdentity, syncIdentityReset,
+} from '../lib/visitor';
 import ChatBubble from './ai/ChatBubble';
 import JobMatchPanel from './ai/JobMatchPanel';
 import { conversationTitle, useChat } from './ai/useChat';
@@ -53,6 +55,7 @@ const AIRepresentative = () => {
     } = useChat({
         jobDescription: jobDescription.trim() || null,
         language,
+        onServerMeta: (payload) => applyIdentityReset(payload?.identity_reset_at),
     });
     const { speak, speakingId, supported: ttsSupported } = useSpeech();
     const {
@@ -64,23 +67,42 @@ const AIRepresentative = () => {
         language: language === 'hi' ? 'hi-IN' : 'en-IN',
     });
 
+    /**
+     * The owner wiped the chat log, so the details this browser remembers no
+     * longer exist anywhere — drop them and let the gate ask again.
+     */
+    const applyIdentityReset = useCallback((serverResetAt) => {
+        if (syncIdentityReset(serverResetAt)) setIdentity(loadIdentity());
+    }, []);
+
     // -- backend status ----------------------------------------------------
     useEffect(() => {
         let cancelled = false;
-        checkHealth()
-            .then((data) => {
-                if (cancelled) return;
-                setHealth(
-                    data.llm_configured
-                        ? { state: 'online', model: data.model }
-                        : { state: 'unconfigured' }
-                );
-            })
-            .catch(() => !cancelled && setHealth({ state: 'offline' }));
+
+        const poll = () =>
+            checkHealth()
+                .then((data) => {
+                    if (cancelled) return;
+                    setHealth(
+                        data.llm_configured
+                            ? { state: 'online', model: data.model }
+                            : { state: 'unconfigured' }
+                    );
+                    applyIdentityReset(data.identity_reset_at);
+                })
+                .catch(() => !cancelled && setHealth({ state: 'offline' }));
+
+        poll();
+
+        // Coming back to a tab left open across a wipe counts as a fresh look.
+        const onVisible = () => document.visibilityState === 'visible' && poll();
+        document.addEventListener('visibilitychange', onVisible);
+
         return () => {
             cancelled = true;
+            document.removeEventListener('visibilitychange', onVisible);
         };
-    }, []);
+    }, [applyIdentityReset]);
 
     // -- close the popovers on outside click / Escape -----------------------
     useEffect(() => {

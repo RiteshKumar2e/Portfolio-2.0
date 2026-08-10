@@ -62,7 +62,7 @@ function loadInitialState() {
  * Chat state: streaming, conversation memory, and a persisted history of past
  * conversations that the visitor can reopen.
  */
-export function useChat({ jobDescription = null, language = 'auto' } = {}) {
+export function useChat({ jobDescription = null, language = 'auto', onServerMeta } = {}) {
     const [state, setState] = useState(loadInitialState);
     const [isStreaming, setIsStreaming] = useState(false);
     const [error, setError] = useState(null);
@@ -70,6 +70,10 @@ export function useChat({ jobDescription = null, language = 'auto' } = {}) {
     const abortRef = useRef(null);
     const stateRef = useRef(state);
     stateRef.current = state;
+
+    // Held in a ref so a new callback identity each render doesn't rebuild send.
+    const serverMetaRef = useRef(onServerMeta);
+    serverMetaRef.current = onServerMeta;
 
     const { activeId, conversations } = state;
 
@@ -177,10 +181,15 @@ export function useChat({ jobDescription = null, language = 'auto' } = {}) {
                             )
                         );
                     },
-                    onDone: ({ model }) => {
+                    onDone: (payload) => {
                         updateConversation(conversationId, (prev) =>
-                            prev.map((m) => (m.id === assistantId ? { ...m, model } : m))
+                            prev.map((m) =>
+                                m.id === assistantId ? { ...m, model: payload.model } : m
+                            )
                         );
+                        // Carries the chat-log reset marker, so a long-open tab
+                        // finds out the owner wiped the log.
+                        serverMetaRef.current?.(payload);
                     },
                 });
             } catch (err) {

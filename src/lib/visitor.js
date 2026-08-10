@@ -17,6 +17,7 @@
 const VISITOR_KEY = 'ai-portfolio-visitor-v1';
 const IDENTITY_KEY = 'ai-portfolio-identity-v1';
 const SESSION_KEY = 'ai-portfolio-session-v1';
+const RESET_KEY = 'ai-portfolio-identity-reset-v1';
 
 const randomId = (prefix) => {
     const raw =
@@ -92,6 +93,40 @@ export function saveIdentity(identity) {
         write(localStorage, IDENTITY_KEY, JSON.stringify(clean));
     }
     return clean;
+}
+
+/**
+ * The owner wiped the log — so forget who this visitor said they were.
+ *
+ * Their details live here in the browser, out of the server's reach, so the
+ * server publishes the timestamp of its last wipe and we compare. Only a
+ * *newer* stamp clears anything: the backend's marker file lives on an
+ * ephemeral disk, and a restart that loses it must not log everyone out.
+ *
+ * @param   {number}  serverResetAt Unix seconds from `/api/health` or the SSE
+ *                                  `done` event. 0 = never wiped.
+ * @returns {boolean} true if the stored identity was just discarded.
+ */
+export function syncIdentityReset(serverResetAt) {
+    const stamp = Number(serverResetAt) || 0;
+    if (!stamp || typeof localStorage === 'undefined') return false;
+
+    const seen = Number(read(localStorage, RESET_KEY)) || 0;
+    if (stamp <= seen) return false;
+
+    write(localStorage, RESET_KEY, String(stamp));
+    const hadIdentity = hasAnyIdentity();
+    try {
+        localStorage.removeItem(IDENTITY_KEY);
+    } catch {
+        /* nothing stored to begin with */
+    }
+    return hadIdentity;
+}
+
+function hasAnyIdentity() {
+    const identity = loadIdentity();
+    return Boolean(identity.name || identity.email || identity.company);
 }
 
 /** Loose on purpose: catches typos, not exotic-but-valid addresses. */

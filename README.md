@@ -172,6 +172,8 @@ Each row carries who asked, not just what they asked:
 
 **Access is owner-only.** Visitors can neither see nor delete the log — the chat UI has no delete-all button at all, and conversations stay put. Reading, exporting and erasing all require `ADMIN_TOKEN`, checked with a constant-time compare; deletion additionally needs an explicit `confirm=DELETE-ALL`.
 
+**Deleting resets the visitors too.** Their details live in their own browser, out of the server's reach, so a wipe publishes a timestamp that every browser compares against the last one it saw — anything newer clears the saved name and email, and the next question asks for them again. Only a *newer* stamp counts, so an ephemeral disk losing the marker on a cold start resets nobody.
+
 The console lives at **`/admin.html`** — a standalone page, unlinked from the site and `noindex`ed, that ships no portfolio code. Paste the token to get search, paging, one-click Excel download, and delete-everything. Full details, including the shell equivalents, are in [`backend/README.md`](backend/README.md#the-question-log).
 
 > On Render's free plan the filesystem is wiped on each deploy and cold start, so download the workbook regularly or mount a paid persistent disk and point `CHAT_LOG_PATH` at it.

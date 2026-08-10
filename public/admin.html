@@ -331,6 +331,8 @@
     var typed = window.prompt(
       'This permanently deletes all ' + state.total + ' logged questions.\n' +
       'Download the Excel first if you want a copy.\n\n' +
+      'Visitors will also be asked for their name and email again the next\n' +
+      'time they use the chat.\n\n' +
       'Type DELETE-ALL to confirm:'
     );
     if (typed !== 'DELETE-ALL') return;
@@ -339,7 +341,10 @@
       .then(function (result) {
         state.offset = 0;
         return load().then(function () {
-          window.alert('Deleted ' + result.deleted + ' entries.');
+          window.alert(
+            'Deleted ' + result.deleted + ' entries.\n\n' +
+            'Everyone who chats from now on will be asked to introduce themselves again.'
+          );
         });
       })
       .catch(function (error) { fail($('list-error'), error.message); });
