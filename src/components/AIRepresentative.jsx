@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-    ArrowDown, ArrowRight, Bot, Check, Download, History, Languages,
+    ArrowDown, ArrowRight, Bot, Check, Download, History, Languages, ShieldAlert,
     Mic, Plus, RotateCcw, Send, Square, UserRound,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
@@ -42,6 +42,8 @@ const AIRepresentative = () => {
     const {
         messages,
         isStreaming,
+        blocked,
+        warning,
         send,
         stop,
         retryLast,
@@ -154,7 +156,7 @@ const AIRepresentative = () => {
     // -- sending -----------------------------------------------------------
     const submit = (text) => {
         const value = (text ?? input).trim();
-        if (!value || isStreaming) return;
+        if (!value || isStreaming || blocked) return;
 
         // Ask who's asking — once per browser, before the first answer.
         if (!isIdentityComplete(identity)) {
@@ -588,6 +590,31 @@ ${rows}
 
                         {/* Composer */}
                         <div className={`px-5 sm:px-6 py-4 border-t ${isDarkMode ? 'border-white/10' : 'border-slate-100'}`}>
+                            {(blocked || warning) && (
+                                <div
+                                    role="alert"
+                                    className={`flex items-start gap-3 mb-3 p-4 rounded-2xl border ${
+                                        blocked
+                                            ? isDarkMode
+                                                ? 'bg-rose-500/10 border-rose-500/30 text-rose-200'
+                                                : 'bg-rose-50 border-rose-200 text-rose-700'
+                                            : isDarkMode
+                                              ? 'bg-amber-500/10 border-amber-500/30 text-amber-200'
+                                              : 'bg-amber-50 border-amber-200 text-amber-800'
+                                    }`}
+                                >
+                                    <ShieldAlert size={18} className="shrink-0 mt-0.5" />
+                                    <div className="min-w-0">
+                                        <p className="text-[11px] font-black uppercase tracking-widest mb-1">
+                                            {blocked ? 'Chat disabled' : 'Warning'}
+                                        </p>
+                                        <p className="text-[13px] leading-relaxed font-medium">
+                                            {blocked || warning}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
                             <div
                                 className={`flex items-end gap-2 rounded-2xl border p-2 transition-colors focus-within:border-indigo-400/60 ${
                                     isDarkMode ? 'bg-slate-950/50 border-white/10' : 'bg-slate-50 border-slate-200'
@@ -604,7 +631,14 @@ ${rows}
                                         element.style.height = `${Math.min(element.scrollHeight, 140)}px`;
                                     }}
                                     onKeyDown={handleKeyDown}
-                                    placeholder={isListening ? 'Listening…' : 'Ask about projects, skills, availability…'}
+                                    disabled={Boolean(blocked)}
+                                    placeholder={
+                                        blocked
+                                            ? 'Chatting has been disabled.'
+                                            : isListening
+                                              ? 'Listening…'
+                                              : 'Ask about projects, skills, availability…'
+                                    }
                                     aria-label="Your question"
                                     data-lenis-prevent-wheel
                                     className={`flex-1 bg-transparent resize-none outline-none px-3 py-2.5 text-[15px] max-h-[140px] overflow-y-auto touch-pan-y overscroll-y-auto sm:overscroll-y-contain ${
@@ -634,7 +668,7 @@ ${rows}
                                 <button
                                     type="button"
                                     onClick={() => (isStreaming ? stop() : submit())}
-                                    disabled={!isStreaming && !input.trim()}
+                                    disabled={Boolean(blocked) || (!isStreaming && !input.trim())}
                                     aria-label={isStreaming ? 'Stop generating' : 'Send message'}
                                     className="shrink-0 w-10 h-10 rounded-xl grid place-items-center bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-md shadow-indigo-600/20"
                                 >

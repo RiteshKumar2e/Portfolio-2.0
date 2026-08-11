@@ -3,6 +3,10 @@ import { streamChat } from '../../lib/aiClient';
 import { visitorContext } from '../../lib/visitor';
 
 const STORAGE_KEY = 'ritesh-ai-chats';
+// Set when the backend returns 403 for an abusive message. Kept in storage
+// so a refresh doesn't hand the composer back — though the real enforcement
+// is server-side, by visitor id and IP.
+const BLOCKED_KEY = 'ritesh-ai-blocked';
 
 // Everything the old `ai-portfolio-*` keys held is gone for good: those threads
 // predate the current log and have no counterpart on the server, so they are
@@ -68,6 +72,16 @@ export function useChat({ language = 'auto', onServerMeta } = {}) {
     const [state, setState] = useState(loadInitialState);
     const [isStreaming, setIsStreaming] = useState(false);
     const [error, setError] = useState(null);
+    // Last moderation warning, if any — cleared as soon as a message goes
+    // through cleanly, so it does not hang around after they have moved on.
+    const [warning, setWarning] = useState(null);
+    const [blocked, setBlocked] = useState(() => {
+        try {
+            return localStorage.getItem(BLOCKED_KEY) || null;
+        } catch {
+            return null;
+        }
+    });
 
     const abortRef = useRef(null);
     const stateRef = useRef(state);
@@ -137,9 +151,10 @@ export function useChat({ language = 'auto', onServerMeta } = {}) {
     const send = useCallback(
         async (rawText) => {
             const text = rawText.trim();
-            if (!text || isStreaming) return;
+            if (!text || isStreaming || blocked) return;
 
             setError(null);
+            setWarning(null);
 
             // Memory: everything already exchanged goes back to the model, so
             // follow-ups like "which one was the hardest?" resolve correctly.
@@ -207,6 +222,27 @@ export function useChat({ language = 'auto', onServerMeta } = {}) {
                                 : m
                         )
                     );
+                } else if (err.status === 403 || err.status === 400) {
+                    // Moderation: 400 is a warning the composer survives, 403 is
+                    // the third strike and the end of the conversation.
+                    const isBlocked = err.status === 403;
+                    setWarning(isBlocked ? null : err.message);
+                    setError(err.message);
+                    if (isBlocked) {
+                        setBlocked(err.message);
+                        try {
+                            localStorage.setItem(BLOCKED_KEY, err.message);
+                        } catch {
+                            /* the server-side block still stands */
+                        }
+                    }
+                    updateConversation(conversationId, (prev) =>
+                        prev.map((m) =>
+                            m.id === assistantId
+                                ? { ...m, pending: false, failed: true, flagged: true, content: err.message }
+                                : m
+                        )
+                    );
                 } else {
                     const detail =
                         err.message === 'Failed to fetch'
@@ -226,7 +262,7 @@ export function useChat({ language = 'auto', onServerMeta } = {}) {
                 abortRef.current = null;
             }
         },
-        [isStreaming, language, updateConversation]
+        [blocked, isStreaming, language, updateConversation]
     );
 
     const stop = useCallback(() => abortRef.current?.abort(), []);
@@ -276,6 +312,15 @@ export function useChat({ language = 'auto', onServerMeta } = {}) {
     const clearConversations = useCallback(() => {
         abortRef.current?.abort();
         setError(null);
+        // The same wipe lifts every block on the server, so the composer here
+        // unlocks with it.
+        setBlocked(null);
+        setWarning(null);
+        try {
+            localStorage.removeItem(BLOCKED_KEY);
+        } catch {
+            /* nothing stored */
+        }
         const conversation = makeConversation();
         setState({ activeId: conversation.id, conversations: [conversation] });
     }, []);
@@ -294,6 +339,8 @@ export function useChat({ language = 'auto', onServerMeta } = {}) {
         messages,
         isStreaming,
         error,
+        blocked,
+        warning,
         send,
         stop,
         retryLast,

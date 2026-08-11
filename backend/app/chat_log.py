@@ -67,12 +67,13 @@ COLUMNS: list[tuple[str, str, int]] = [
     ("Turn", "turn", 6),
     ("Model used", "model", 26),
     ("Status", "status", 10),
+    ("Flagged term", "flagged_term", 14),
     ("Reply time (s)", "duration_s", 12),
     ("User agent", "user_agent", 40),
     ("Asked at (UTC)", "asked_at", 22),
 ]
 
-KIND_LABELS = {"chat": "Chat"}
+KIND_LABELS = {"chat": "Chat", "abuse": "Flagged"}
 
 
 class ChatLogStore:
@@ -221,6 +222,7 @@ class ChatLogStore:
             "total_questions": len(entries),
             "unique_visitors": len(visitors),
             "identified_visitors": len({e.get("email") or e.get("name") for e in identified}),
+            "flagged": sum(1 for e in entries if e.get("kind") == "abuse"),
             "first_asked_at": first,
             "last_asked_at": last,
             "xlsx_available": XLSX_AVAILABLE,

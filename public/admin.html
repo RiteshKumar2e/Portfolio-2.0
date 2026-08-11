@@ -217,6 +217,7 @@
       ['Questions', stats.total_questions],
       ['Unique visitors', stats.unique_visitors],
       ['Left contact details', stats.identified_visitors],
+      ['Flagged / blocked', stats.flagged],
       ['Last asked', stats.last_asked_at ? ist(stats.last_asked_at) : '—']
     ];
     $('stats').innerHTML = cards.map(function (card) {
@@ -258,7 +259,8 @@
     $('rows').innerHTML = entries.map(function (row) {
       return '<tr>'
         + '<td><div>' + esc(ist(row.asked_at)) + '</div>'
-          + '<div class="meta"><span class="tag">chat</span></div></td>'
+          + '<div class="meta"><span class="tag"' + (row.kind === 'abuse' ? ' style="background:#fee2e2;color:#b91c1c;border-color:#fecaca"' : '') + '>'
+          + esc(row.kind === 'abuse' ? 'flagged' : 'chat') + '</span></div></td>'
         + '<td>' + whoCell(row) + '</td>'
         + '<td class="q"><div class="clip">' + esc(row.question) + '</div></td>'
         + '<td class="a"><div class="clip">' + esc(row.answer) + '</div></td>'

@@ -35,6 +35,13 @@ from .chat_log import XLSX_AVAILABLE, ChatLogStore, parse_user_agent
 from .config import Settings, get_settings
 from .geo import GeoLookup
 from .llm import LLMError, LLMRouter
+from .moderation import (
+    BLOCKED_MESSAGE,
+    WARNINGS_BEFORE_BLOCK,
+    StrikeStore,
+    find_abuse,
+    warning_message,
+)
 from .profile_store import ProfileStore
 from .prompts import build_system_prompt
 from .schemas import ChatRequest, VisitorInfo
@@ -48,6 +55,7 @@ logger = logging.getLogger("ai-portfolio")
 settings: Settings = get_settings()
 store = ProfileStore(settings.profile_path)
 chat_log = ChatLogStore(settings.chat_log_path, max_rows=settings.chat_log_max_rows)
+strikes = StrikeStore(settings.chat_log_path.with_name("blocked.json"))
 geo = GeoLookup(enabled=settings.geo_lookup_enabled)
 
 
@@ -328,6 +336,41 @@ def _sse(event: str, data: dict) -> str:
 
 @app.post("/api/chat", dependencies=[Depends(rate_limit)])
 async def chat(payload: ChatRequest, request: Request) -> StreamingResponse:
+    # -- moderation, before a single token is spent ------------------------
+    #
+    # 403 rather than an SSE error event: the visitor is not getting a stream at
+    # all, and the browser needs a plain failure it can lock its composer on.
+    visitor_id = (payload.visitor.visitor_id if payload.visitor else "") or ""
+    ip = client_ip(request)
+
+    if strikes.is_blocked(visitor_id, ip):
+        raise HTTPException(status_code=403, detail=BLOCKED_MESSAGE)
+
+    term = find_abuse(payload.message)
+    if term:
+        strike = await run_in_threadpool(
+            strikes.record_strike, visitor_id, ip, term=term, question=payload.message
+        )
+        blocked = strike > WARNINGS_BEFORE_BLOCK
+        detail = BLOCKED_MESSAGE if blocked else warning_message(strike)
+
+        # Logged either way, message intact — the point is that Ritesh can see
+        # exactly what was said, by whom, and how many times.
+        flagged = asker_details(request, payload.visitor, kind="abuse")
+        flagged.update(
+            question=payload.message,
+            answer=f"[{'blocked' if blocked else 'warned'} — abusive message, not sent to the model]",
+            model="",
+            status="flagged" if blocked else "warned",
+            duration_s=0,
+            language=payload.language,
+            flagged_term=f"{term} (strike {strike})",
+        )
+        record_question(flagged, start_geo_lookup(flagged))
+
+        # 403 ends the conversation; 400 is a warning the composer stays open for.
+        raise HTTPException(status_code=403 if blocked else 400, detail=detail)
+
     messages = _build_messages(payload, store.facts)
     # Smaller models reject the full prompt (HTTP 413); they get this instead.
     compact_messages = _build_messages(payload, store.facts_compact)
@@ -478,7 +521,9 @@ async def delete_chats(
             detail="Add ?confirm=DELETE-ALL to confirm erasing the entire chat log.",
         )
     removed = await run_in_threadpool(chat_log.clear)
-    return {"status": "cleared", "deleted": removed}
+    # The blocks were raised by messages that no longer exist, so they go too.
+    unblocked = await run_in_threadpool(strikes.clear)
+    return {"status": "cleared", "deleted": removed, "unblocked": unblocked}
 
 
 # --------------------------------------------------------------------------
