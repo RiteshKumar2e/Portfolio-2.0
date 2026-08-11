@@ -355,6 +355,28 @@ const ProjectDetailView = ({ name, detail, onBack, onClose, isDarkMode }) => (
     </>
 );
 
+// Badge styling per self-assessed level: Proficient > Good > Decent
+const levelBadgeClass = (level, isDarkMode) => {
+    switch (level) {
+        case 'Proficient':
+            return isDarkMode
+                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
+                : 'bg-emerald-50 border-emerald-100 text-emerald-600';
+        case 'Good':
+            return isDarkMode
+                ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-300'
+                : 'bg-indigo-50 border-indigo-100 text-indigo-600';
+        case 'Decent':
+            return isDarkMode
+                ? 'bg-sky-500/10 border-sky-500/20 text-sky-300'
+                : 'bg-sky-50 border-sky-100 text-sky-600';
+        default:
+            return isDarkMode
+                ? 'bg-white/5 border-white/10 text-slate-300'
+                : 'bg-slate-50 border-slate-200 text-slate-600';
+    }
+};
+
 // ---- Level 1: skill overview (description + where it was used) ----
 const SkillOverview = ({ skill, onClose, onOpenProject, isDarkMode }) => {
     const Icon = skill.icon;
@@ -388,7 +410,7 @@ const SkillOverview = ({ skill, onClose, onOpenProject, isDarkMode }) => {
                             </span>
                         )}
                         {skill.level && (
-                            <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${isDarkMode ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-300' : 'bg-indigo-50 border-indigo-100 text-indigo-600'}`}>
+                            <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${levelBadgeClass(skill.level, isDarkMode)}`}>
                                 {skill.level}
                             </span>
                         )}
@@ -560,7 +582,7 @@ const SkillsAdvanced = () => {
             icon: FaLaptopCode,
             skills: [
                 {
-                    name: "React.js", icon: SiReact, color: "text-[#61DAFB]", level: "Intermediate",
+                    name: "React.js", icon: SiReact, color: "text-[#61DAFB]", level: "Decent",
                     description: "Most of my frontend projects are built with React because it makes developing scalable and maintainable applications easier. I regularly work with reusable components, React Hooks, routing, API integration, and responsive layouts to create modern user experiences.",
                   usedIn: [
         {
@@ -586,7 +608,7 @@ const SkillsAdvanced = () => {
     ]
                 },
                 {
-                    name: "JavaScript", icon: SiJavascript, color: "text-[#F7DF1E]", level: "Intermediate",
+                    name: "JavaScript", icon: SiJavascript, color: "text-[#F7DF1E]", level: "Decent",
                     description: "The language behind all my frontend work — ES6+, async/await, and the React ecosystem.",
                     usedIn: [
                         { project: "All web projects", detail: "Client-side logic, API integration, and interactivity across every React app I've shipped." },
@@ -594,7 +616,7 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "HTML5", icon: SiHtml5, color: "text-[#E34F26]", level: "Intermediate",
+                    name: "HTML5", icon: SiHtml5, color: "text-[#E34F26]", level: "Good",
                     description: "HTML5 is the foundation of every web interface I build. I use semantic and well-structured markup to create accessible, responsive, and SEO-friendly web applications that work seamlessly across modern browsers.",
                     usedIn: [
                         {
@@ -604,7 +626,7 @@ const SkillsAdvanced = () => {
                 ]
                 },
                 {
-                    name: "CSS3", icon: SiCss, color: "text-[#1572B6]", level: "Intermediate",
+                    name: "CSS3", icon: SiCss, color: "text-[#1572B6]", level: "Good",
                     description: "Modern responsive styling with flexbox, grid, and animations — usually via Tailwind CSS.",
                     usedIn: [
                 {
@@ -620,12 +642,12 @@ const SkillsAdvanced = () => {
             icon: FaServer,
             skills: [
                 {
-                    name: "Node.js", icon: SiNodedotjs, color: "text-[#339933]", level: "Intermediate",
+                    name: "Node.js", icon: SiNodedotjs, color: "text-[#339933]", level: "Good",
                     description: "JavaScript runtime I use for backend services, scripts, and the build tooling behind my frontends (Vite, npm).",
                     usedIn: []
                 },
                 {
-                    name: "FastAPI", icon: SiFastapi, color: "text-[#009688]", level: "Intermediate",
+                    name: "FastAPI", icon: SiFastapi, color: "text-[#009688]", level: "Good",
                     description: "My go-to Python framework for fast, async REST APIs with built-in request validation.",
                     usedIn: [
                         { project: "Community AI Platform", detail: "Built the async API backend with SQLAlchemy and JWT security." },
@@ -633,12 +655,12 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "Express.js", icon: SiExpress, color: "text-slate-900 dark:text-white", level: "Intermediate",
+                    name: "Express.js", icon: SiExpress, color: "text-slate-900 dark:text-white", level: "Good",
                     description: "Minimal Node.js framework for building lightweight REST APIs and web servers.",
                     usedIn: []
                 },
                 {
-                    name: "Python", icon: SiPython, color: "text-[#3776AB]", level: "Intermediate",
+                    name: "Python", icon: SiPython, color: "text-[#3776AB]", level: "Proficient",
                     description: "My primary language for AI/ML, data science, and backend development.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Built the full PyTorch training and inference pipeline." },
@@ -647,21 +669,21 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "JWT", icon: SiJsonwebtokens, color: "text-[#D63AFF]", level: "Intermediate",
+                    name: "JWT", icon: SiJsonwebtokens, color: "text-[#D63AFF]", level: "Decent",
                     description: "Token-based authentication for securing APIs and managing user sessions.",
                     usedIn: [
                         { project: "Community AI Platform", detail: "Secured the FastAPI backend with JWT-based auth on protected routes." }
                     ]
                 },
                 {
-                    name: "Pydantic", icon: SiPydantic, color: "text-[#E92063]", level: "Intermediate",
+                    name: "Pydantic", icon: SiPydantic, color: "text-[#E92063]", level: "Good",
                     description: "Python data-validation library that enforces correct, typed data at the edges of an API.",
                     usedIn: [
                         { project: "Community AI Platform", detail: "Validated every incoming request before it ever reached the database." }
                     ]
                 },
                 {
-                    name: "C++", icon: SiCplusplus, color: "text-[#00599C]", level: "Intermediate",
+                    name: "C++", icon: SiCplusplus, color: "text-[#00599C]", level: "Good",
                     description: "My language for data structures, algorithms, and performance-focused problem solving.",
                     usedIn: [
                         { project: "DSA & Problem Solving", detail: "Core language for competitive programming and coursework." }
@@ -674,36 +696,36 @@ const SkillsAdvanced = () => {
             icon: FaCloud,
             skills: [
                 {
-                    name: "PostgreSQL", icon: SiPostgresql, color: "text-[#336791]", level: "Intermediate",
+                    name: "PostgreSQL", icon: SiPostgresql, color: "text-[#336791]", level: "Decent",
                     description: "Relational database for structured, query-heavy applications, accessed through SQLAlchemy in my Python backends.",
                     usedIn: []
                 },
                 {
-                    name: "MongoDB", icon: SiMongodb, color: "text-[#47A248]", level: "Intermediate",
+                    name: "MongoDB", icon: SiMongodb, color: "text-[#47A248]", level: "Good",
                     description: "NoSQL document database for flexible, schema-less data models.",
                     usedIn: []
                 },
                 {
-                    name: "MySQL", icon: SiMysql, color: "text-[#4479A1]", level: "Intermediate",
+                    name: "MySQL", icon: SiMysql, color: "text-[#4479A1]", level: "Good",
                     description: "Relational database for transactional web applications.",
                     usedIn: [
                         { project: "QuickFix AI Customer Agent", detail: "Used a MySQL-compatible MariaDB store for complaints and agent state." }
                     ]
                 },
                 {
-                    name: "SQLAlchemy", icon: SiSqlalchemy, color: "text-[#D71F00]", level: "Intermediate",
+                    name: "SQLAlchemy", icon: SiSqlalchemy, color: "text-[#D71F00]", level: "Good",
                     description: "Python ORM for clean, type-safe database access without writing raw SQL.",
                     usedIn: [
                         { project: "Community AI Platform", detail: "Modeled and queried the database through async SQLAlchemy." }
                     ]
                 },
                 {
-                    name: "GCP Cloud", icon: SiGooglecloud, color: "text-[#4285F4]", level: "Intermediate",
+                    name: "GCP Cloud", icon: SiGooglecloud, color: "text-[#4285F4]", level: "Decent",
                     description: "Google Cloud Platform for hosting, deployment, and managed services.",
                     usedIn: []
                 },
                 {
-                    name: "GitHub Pages", icon: SiGithub, color: "text-slate-900 dark:text-white", level: "Intermediate",
+                    name: "GitHub Pages", icon: SiGithub, color: "text-slate-900 dark:text-white", level: "Good",
                     description: "Static hosting for deploying frontend projects straight from a repository.",
                     usedIn: []
                 }
@@ -714,7 +736,7 @@ const SkillsAdvanced = () => {
             icon: FaBrain,
             skills: [
                 {
-                    name: "Deep Learning", icon: FaBrain, color: "text-[#FF6F00]", level: "Intermediate",
+                    name: "Deep Learning", icon: FaBrain, color: "text-[#FF6F00]", level: "Proficient",
                     description: "Designing and training neural networks for computer-vision and prediction tasks.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Built an AMFF-CNN detector with attention-based multi-scale feature fusion (98.33% accuracy)." },
@@ -722,12 +744,12 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "TensorFlow", icon: SiTensorflow, color: "text-[#FF6F00]", level: "Intermediate",
+                    name: "TensorFlow", icon: SiTensorflow, color: "text-[#FF6F00]", level: "Good",
                     description: "Framework for building and training deep-learning models and experimenting with architectures.",
                     usedIn: []
                 },
                 {
-                    name: "PyTorch", icon: SiPytorch, color: "text-[#EE4C2C]", level: "Intermediate",
+                    name: "PyTorch", icon: SiPytorch, color: "text-[#EE4C2C]", level: "Proficient",
                     description: "My preferred deep-learning framework for research-style model building and training.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Built the MobileNetV2 + Feature Pyramid Network detector in PyTorch." },
@@ -735,7 +757,7 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "CNN", icon: SiKeras, color: "text-[#D00000]", level: "Intermediate",
+                    name: "CNN", icon: SiKeras, color: "text-[#D00000]", level: "Proficient",
                     description: "Convolutional neural networks for image classification and detection.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Designed the AMFF-CNN with attention-based multi-scale fusion." },
@@ -743,7 +765,7 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "OpenCV", icon: SiOpencv, color: "text-[#5C3EE8]", level: "Intermediate",
+                    name: "OpenCV", icon: SiOpencv, color: "text-[#5C3EE8]", level: "Good",
                     description: "Computer-vision toolkit for image processing and real-time camera pipelines.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Image preprocessing for the defect-detection pipeline." },
@@ -751,12 +773,12 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "Scikit-learn", icon: SiScikitlearn, color: "text-[#F7931E]", level: "Intermediate",
+                    name: "Scikit-learn", icon: SiScikitlearn, color: "text-[#F7931E]", level: "Good",
                     description: "Classic ML toolkit for modeling, evaluation, and preprocessing on tabular data.",
                     usedIn: []
                 },
                 {
-                    name: "Pandas", icon: SiPandas, color: "text-[#150458]", level: "Intermediate",
+                    name: "Pandas", icon: SiPandas, color: "text-[#150458]", level: "Good",
                     description: "Data wrangling and analysis on tabular datasets.",
                     usedIn: [
                         { project: "Black Friday Sales Model", detail: "Feature engineering on historical sales data before modeling." },
@@ -764,14 +786,14 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "NumPy", icon: SiNumpy, color: "text-[#013243]", level: "Intermediate",
+                    name: "NumPy", icon: SiNumpy, color: "text-[#013243]", level: "Good",
                     description: "Numerical computing and array operations that underpin my ML pipelines.",
                     usedIn: [
                         { project: "All ML projects", detail: "Vectorized math and array handling across every model I build." }
                     ]
                 },
                 {
-                    name: "Machine Learning", icon: FaChartLine, color: "text-[#FF6F00]", level: "Intermediate",
+                    name: "Machine Learning", icon: FaChartLine, color: "text-[#FF6F00]", level: "Proficient",
                     description: "Training models that learn patterns from data to make predictions and classifications.",
                     usedIn: [
                         { project: "Black Friday Sales Model", detail: "Forecasted customer spending from historical sales data." },
@@ -780,7 +802,7 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "Generative AI (LLMs)", icon: SiGooglegemini, color: "text-[#8E75B2]", level: "Intermediate",
+                    name: "Generative AI (LLMs)", icon: SiGooglegemini, color: "text-[#8E75B2]", level: "Good",
                     description: "Building with large language models — Gemini and LLaMA — for chat, reasoning, and AI agents.",
                     usedIn: [
                         { project: "QuickFix AI Customer Agent", detail: "Powered 30+ support agents with Gemini 2.0 and Groq LLaMA." },
@@ -788,14 +810,14 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "RAG", icon: FaNetworkWired, color: "text-[#10A37F]", level: "Intermediate",
+                    name: "RAG", icon: FaNetworkWired, color: "text-[#10A37F]", level: "Good",
                     description: "Retrieval-Augmented Generation — grounding an LLM's answers in real source documents so it doesn't guess.",
                     usedIn: [
                         { project: "QuickFix AI Customer Agent", detail: "Made every agent policy-aware by retrieving real policy docs before answering." }
                     ]
                 },
                 {
-                    name: "NLP", icon: FaLanguage, color: "text-[#4B8BBE]", level: "Intermediate",
+                    name: "NLP", icon: FaLanguage, color: "text-[#4B8BBE]", level: "Good",
                     description: "Natural Language Processing — teaching machines to understand, compare, and score human text.",
                     usedIn: [
                         { project: "Combat Online Plagiarism", detail: "Compared documents by meaning using vector embeddings." },
@@ -803,14 +825,14 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "Transformers", icon: SiHuggingface, color: "text-[#FFD21E]", level: "Intermediate",
+                    name: "Transformers", icon: SiHuggingface, color: "text-[#FFD21E]", level: "Good",
                     description: "Modern neural architectures (via Hugging Face) that turn text into meaning-rich embeddings.",
                     usedIn: [
                         { project: "Combat Online Plagiarism", detail: "Generated embeddings to catch paraphrased plagiarism." }
                     ]
                 },
                 {
-                    name: "Computer Vision", icon: FaEye, color: "text-[#5C3EE8]", level: "Intermediate",
+                    name: "Computer Vision", icon: FaEye, color: "text-[#5C3EE8]", level: "Proficient",
                     description: "Enabling software to interpret images and live video — detection, recognition, and classification.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Spotted fine surface defects from production-line images." },
@@ -818,28 +840,28 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "XGBoost", icon: FaTree, color: "text-[#337AB7]", level: "Intermediate",
+                    name: "XGBoost", icon: FaTree, color: "text-[#337AB7]", level: "Good",
                     description: "Gradient-boosted decision trees — a top performer for structured, tabular prediction.",
                     usedIn: [
                         { project: "Black Friday Sales Model", detail: "Forecast customer spending with high accuracy on tabular data." }
                     ]
                 },
                 {
-                    name: "LightGBM", icon: FaSitemap, color: "text-[#02C39A]", level: "Intermediate",
+                    name: "LightGBM", icon: FaSitemap, color: "text-[#02C39A]", level: "Decent",
                     description: "A fast, efficient gradient-boosting framework for large tabular datasets.",
                     usedIn: [
                         { project: "Black Friday Sales Model", detail: "Paired with XGBoost to model spending patterns efficiently." }
                     ]
                 },
                 {
-                    name: "Plotly", icon: SiPlotly, color: "text-[#3F4F75]", level: "Intermediate",
+                    name: "Plotly", icon: SiPlotly, color: "text-[#3F4F75]", level: "Decent",
                     description: "Interactive data-visualization library for turning results into readable, explorable charts.",
                     usedIn: [
                         { project: "Sentiment Analysis Pipeline", detail: "Built dynamic charts so anyone could read the sentiment at a glance." }
                     ]
                 },
                 {
-                    name: "Data Analysis", icon: FaChartBar, color: "text-[#150458]", level: "Intermediate",
+                    name: "Data Analysis", icon: FaChartBar, color: "text-[#150458]", level: "Good",
                     description: "Cleaning, exploring, and drawing insight from raw datasets before any modeling begins.",
                     usedIn: [
                         { project: "Black Friday Sales Model", detail: "Explored and engineered features from historical sales data." },
@@ -853,26 +875,26 @@ const SkillsAdvanced = () => {
             icon: FaTools,
             skills: [
                 {
-                    name: "Git", icon: SiGit, color: "text-[#F05032]", level: "Intermediate",
+                    name: "Git", icon: SiGit, color: "text-[#F05032]", level: "Good",
                     description: "Version control for tracking, branching, and collaborating on every project.",
                     usedIn: [
                         { project: "Every project", detail: "All my work is version-controlled and pushed to GitHub." }
                     ]
                 },
                 {
-                    name: "GitHub", icon: SiGithub, color: "text-slate-900 dark:text-white", level: "Intermediate",
+                    name: "GitHub", icon: SiGithub, color: "text-slate-900 dark:text-white", level: "Good",
                     description: "Where I host, version, and showcase all my repositories.",
                     usedIn: [
                         { project: "Every project", detail: "Each project in the work section is open-source on my GitHub." }
                     ]
                 },
                 {
-                    name: "VS Code", icon: VscVscode, color: "text-[#007ACC]", level: "Intermediate",
+                    name: "VS Code", icon: VscVscode, color: "text-[#007ACC]", level: "Proficient",
                     description: "My primary editor for both web and ML development.",
                     usedIn: []
                 },
                 {
-                    name: "Jupyter", icon: SiJupyter, color: "text-[#F37626]", level: "Intermediate",
+                    name: "Jupyter", icon: SiJupyter, color: "text-[#F37626]", level: "Good",
                     description: "Notebook environment for ML experimentation and data exploration.",
                     usedIn: [
                         { project: "ML & data projects", detail: "Prototyping models and exploring data before productionizing." }

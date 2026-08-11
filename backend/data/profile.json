@@ -85,18 +85,51 @@
       "Brevo (transactional email/SMTP)"
     ],
     "self_assessed_levels": {
-      "note": "Levels as stated on the portfolio site.",
-      "intermediate": [
-        "React.js",
-        "JavaScript",
+      "note": "Levels as stated on the portfolio site and resume (Proficient > Good > Decent).",
+      "proficient": [
+        "Python",
+        "Machine Learning",
+        "Deep Learning",
+        "PyTorch",
+        "CNN",
+        "Computer Vision",
+        "VS Code"
+      ],
+      "good": [
+        "C++",
+        "Node.js",
+        "Express.js",
+        "FastAPI",
+        "Pydantic",
         "HTML5",
         "CSS3",
-        "Node.js",
-        "FastAPI",
-        "Express.js",
-        "Python",
+        "TensorFlow",
+        "OpenCV",
+        "Scikit-learn",
+        "Pandas",
+        "NumPy",
+        "Generative AI (LLMs)",
+        "RAG",
+        "NLP",
+        "Transformers",
+        "XGBoost",
+        "Data Analysis",
+        "MySQL",
+        "MongoDB",
+        "SQLAlchemy",
+        "GitHub Pages",
+        "Git",
+        "GitHub",
+        "Jupyter"
+      ],
+      "decent": [
+        "JavaScript",
+        "React.js",
         "JWT",
-        "Pydantic"
+        "PostgreSQL",
+        "GCP Cloud",
+        "LightGBM",
+        "Plotly"
       ]
     }
   },
