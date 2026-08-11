@@ -226,7 +226,7 @@ curl -X PUT https://your-service.onrender.com/api/profile \
 
 | Layer | Technologies |
 | --- | --- |
-| **Frontend** | React 18, Vite 5, Tailwind CSS 3, Framer Motion, GSAP, Three.js / React Three Fiber, Lucide icons |
+| **Frontend** | React 18, Vite 5, Tailwind CSS 3, Framer Motion, GreenSock Animation Platform(GSAP), Three.js / React Three Fiber, Lucide icons |
 | **Backend** | FastAPI, Pydantic v2, httpx (async SSE), Uvicorn |
 | **LLM** | Groq + Gemini APIs — streaming, JSON mode, nine-link failover chain |
 | **Hosting** | Vercel (frontend), Render (backend) |
