@@ -134,7 +134,6 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=2000)
     history: list[ChatMessage] = Field(default_factory=list)
-    job_description: Optional[str] = Field(default=None, max_length=12000)
     language: Literal["auto", "en", "hi"] = "auto"
     visitor: Optional[VisitorInfo] = None
 
@@ -145,66 +144,3 @@ class ChatRequest(BaseModel):
         if not stripped:
             raise ValueError("message cannot be blank")
         return stripped
-
-
-# --------------------------------------------------------------------------
-# Job-description matching (structured output)
-# --------------------------------------------------------------------------
-
-
-class MatchRequest(BaseModel):
-    job_description: str = Field(min_length=20, max_length=12000)
-    visitor: Optional[VisitorInfo] = None
-
-    @field_validator("job_description")
-    @classmethod
-    def _strip_jd(cls, value: str) -> str:
-        stripped = value.strip()
-        if len(stripped) < 20:
-            raise ValueError("job description is too short to evaluate")
-        return stripped
-
-
-class MatchResult(BaseModel):
-    """Structured suitability verdict returned to the recruiter UI."""
-
-    suitability_score: int = Field(ge=0, le=100)
-    verdict: Literal["strong_match", "good_match", "partial_match", "weak_match"]
-    role_title: str
-    summary: str
-    matching_skills: list[str] = Field(default_factory=list)
-    missing_skills: list[str] = Field(default_factory=list)
-    strengths: list[str] = Field(default_factory=list)
-    concerns: list[str] = Field(default_factory=list)
-    should_interview: bool
-    interview_rationale: str
-
-    @field_validator("suitability_score", mode="before")
-    @classmethod
-    def _clamp_score(cls, value):
-        try:
-            return max(0, min(100, int(round(float(value)))))
-        except (TypeError, ValueError):
-            return 0
-
-
-# --------------------------------------------------------------------------
-# Interview question generation
-# --------------------------------------------------------------------------
-
-
-class InterviewRequest(BaseModel):
-    job_description: Optional[str] = Field(default=None, max_length=12000)
-    focus: Literal["technical", "behavioral", "mixed"] = "mixed"
-    count: int = Field(default=6, ge=3, le=12)
-
-
-class InterviewQuestion(BaseModel):
-    question: str
-    category: str
-    why_it_matters: str
-    grounded_in: str
-
-
-class InterviewQuestions(BaseModel):
-    questions: list[InterviewQuestion]

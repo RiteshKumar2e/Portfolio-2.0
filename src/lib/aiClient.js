@@ -40,7 +40,6 @@ async function readError(response) {
  * @param {object}   options
  * @param {string}   options.message         The visitor's question.
  * @param {Array}    options.history         Prior turns: [{ role, content }].
- * @param {string}   [options.jobDescription] Pasted JD, if the recruiter set one.
  * @param {string}   [options.language]      'auto' | 'en' | 'hi'
  * @param {Function} options.onToken         Called with each text chunk.
  * @param {Function} [options.onDone]        Called with { model } — which model
@@ -52,7 +51,6 @@ async function readError(response) {
 export async function streamChat({
     message,
     history = [],
-    jobDescription = null,
     language = 'auto',
     visitor = null,
     onToken,
@@ -65,7 +63,6 @@ export async function streamChat({
         body: JSON.stringify({
             message,
             history,
-            job_description: jobDescription || null,
             language,
             visitor,
         }),
@@ -118,30 +115,6 @@ export async function streamChat({
     }
 
     if (streamError) throw new ApiError(streamError, 502);
-}
-
-async function postJson(path, body) {
-    const response = await fetch(`${API_BASE}${path}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-    });
-    if (!response.ok) throw new ApiError(await readError(response), response.status);
-    return response.json();
-}
-
-/** Structured suitability report for a pasted job description. */
-export function matchJobDescription(jobDescription, visitor = null) {
-    return postJson('/api/match', { job_description: jobDescription, visitor });
-}
-
-/** Interview questions grounded in the profile (optionally targeted at a JD). */
-export function generateInterviewQuestions({ jobDescription = null, focus = 'mixed', count = 6 } = {}) {
-    return postJson('/api/interview-questions', {
-        job_description: jobDescription || null,
-        focus,
-        count,
-    });
 }
 
 /** Liveness check — used to show an honest status dot in the UI. */

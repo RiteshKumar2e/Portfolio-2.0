@@ -217,7 +217,6 @@
       ['Questions', stats.total_questions],
       ['Unique visitors', stats.unique_visitors],
       ['Left contact details', stats.identified_visitors],
-      ['Job descriptions', stats.job_matches],
       ['Last asked', stats.last_asked_at ? ist(stats.last_asked_at) : '—']
     ];
     $('stats').innerHTML = cards.map(function (card) {
@@ -259,7 +258,7 @@
     $('rows').innerHTML = entries.map(function (row) {
       return '<tr>'
         + '<td><div>' + esc(ist(row.asked_at)) + '</div>'
-          + '<div class="meta"><span class="tag">' + esc(row.kind === 'job_match' ? 'JD' : 'chat') + '</span></div></td>'
+          + '<div class="meta"><span class="tag">chat</span></div></td>'
         + '<td>' + whoCell(row) + '</td>'
         + '<td class="q"><div class="clip">' + esc(row.question) + '</div></td>'
         + '<td class="a"><div class="clip">' + esc(row.answer) + '</div></td>'

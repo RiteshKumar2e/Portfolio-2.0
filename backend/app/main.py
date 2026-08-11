@@ -5,8 +5,6 @@ Endpoints
     GET    /api/profile             — the structured candidate profile
     GET    /api/suggestions         — starter questions for the chat UI
     POST   /api/chat                — streaming answer (Server-Sent Events)
-    POST   /api/match               — structured job-description suitability report
-    POST   /api/interview-questions — interview questions grounded in the profile
     POST   /api/profile/reload      — re-read profile.json from disk (owner)
     PUT    /api/profile             — replace the profile without a code change (owner)
     GET    /api/admin/chats         — every question ever asked, with who asked it (owner)
@@ -38,15 +36,8 @@ from .config import Settings, get_settings
 from .geo import GeoLookup
 from .llm import LLMError, LLMRouter
 from .profile_store import ProfileStore
-from .prompts import build_interview_prompt, build_match_prompt, build_system_prompt
-from .schemas import (
-    ChatRequest,
-    InterviewQuestions,
-    InterviewRequest,
-    MatchRequest,
-    MatchResult,
-    VisitorInfo,
-)
+from .prompts import build_system_prompt
+from .schemas import ChatRequest, VisitorInfo
 
 logging.basicConfig(
     level=os.getenv("LOG_LEVEL", "INFO"),
@@ -315,11 +306,7 @@ async def suggestions() -> dict:
 
 
 def _build_messages(payload: ChatRequest, facts: str) -> list[dict]:
-    system_prompt = build_system_prompt(
-        name=store.name,
-        facts=facts,
-        job_description=payload.job_description,
-    )
+    system_prompt = build_system_prompt(name=store.name, facts=facts)
     if payload.language == "hi":
         system_prompt += "\n\nRespond in Hindi (Devanagari script), keeping technology names and metrics in their original form."
     elif payload.language == "en":
@@ -390,7 +377,6 @@ async def chat(payload: ChatRequest, request: Request) -> StreamingResponse:
                 status=status,
                 duration_s=round(time.monotonic() - started, 2),
                 language=payload.language,
-                job_description=(payload.job_description or "")[:4000],
             )
             record_question(entry, geo_task)
 
@@ -412,97 +398,6 @@ async def chat(payload: ChatRequest, request: Request) -> StreamingResponse:
             "X-Accel-Buffering": "no",  # stops nginx/proxies buffering the stream
         },
     )
-
-
-# --------------------------------------------------------------------------
-# Job-description matching (structured output)
-# --------------------------------------------------------------------------
-
-
-@app.post("/api/match", response_model=MatchResult, dependencies=[Depends(rate_limit)])
-async def match(payload: MatchRequest, request: Request, response: Response) -> MatchResult:
-    llm: LLMRouter = request.app.state.llm
-    messages = [
-        {"role": "system", "content": build_system_prompt(store.name, store.facts)},
-        {"role": "user", "content": build_match_prompt(store.name, payload.job_description)},
-    ]
-
-    compact = [
-        {"role": "system", "content": build_system_prompt(store.name, store.facts_compact)},
-        messages[1],
-    ]
-
-    # A pasted job description is the single most useful thing a recruiter can
-    # leave behind, so it lands in the log alongside the chat questions.
-    entry = asker_details(request, payload.visitor, kind="job_match")
-    geo_task = start_geo_lookup(entry)
-    started = time.monotonic()
-
-    raw, model_used = await llm.complete_json(messages, max_tokens=1400, compact_messages=compact)
-    response.headers["X-Model-Used"] = model_used
-    try:
-        result = MatchResult.model_validate(raw)
-    except ValidationError as exc:
-        logger.error("Match result failed validation: %s", exc)
-        entry.update(
-            question="[Job description submitted]",
-            answer="",
-            model=model_used,
-            status="error",
-            duration_s=round(time.monotonic() - started, 2),
-            job_description=payload.job_description[:4000],
-        )
-        record_question(entry, geo_task)
-        raise HTTPException(
-            status_code=502,
-            detail="The AI's suitability report came back malformed. Please try again.",
-        ) from exc
-
-    entry.update(
-        question=f"[Job description submitted] {result.role_title}",
-        answer=f"{result.suitability_score}/100 — {result.verdict}. {result.summary}",
-        model=model_used,
-        status="ok",
-        duration_s=round(time.monotonic() - started, 2),
-        job_description=payload.job_description[:4000],
-    )
-    record_question(entry, geo_task)
-    return result
-
-
-@app.post(
-    "/api/interview-questions",
-    response_model=InterviewQuestions,
-    dependencies=[Depends(rate_limit)],
-)
-async def interview_questions(
-    payload: InterviewRequest, request: Request, response: Response
-) -> InterviewQuestions:
-    llm: LLMRouter = request.app.state.llm
-    messages = [
-        {"role": "system", "content": build_system_prompt(store.name, store.facts)},
-        {
-            "role": "user",
-            "content": build_interview_prompt(
-                store.name, payload.count, payload.focus, payload.job_description
-            ),
-        },
-    ]
-
-    compact = [
-        {"role": "system", "content": build_system_prompt(store.name, store.facts_compact)},
-        messages[1],
-    ]
-    raw, model_used = await llm.complete_json(messages, max_tokens=1600, compact_messages=compact)
-    response.headers["X-Model-Used"] = model_used
-    try:
-        return InterviewQuestions.model_validate(raw)
-    except ValidationError as exc:
-        logger.error("Interview questions failed validation: %s", exc)
-        raise HTTPException(
-            status_code=502,
-            detail="The AI's interview questions came back malformed. Please try again.",
-        ) from exc
 
 
 # --------------------------------------------------------------------------

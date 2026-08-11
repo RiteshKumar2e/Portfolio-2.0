@@ -62,7 +62,7 @@ function loadInitialState() {
  * Chat state: streaming, conversation memory, and a persisted history of past
  * conversations that the visitor can reopen.
  */
-export function useChat({ jobDescription = null, language = 'auto', onServerMeta } = {}) {
+export function useChat({ language = 'auto', onServerMeta } = {}) {
     const [state, setState] = useState(loadInitialState);
     const [isStreaming, setIsStreaming] = useState(false);
     const [error, setError] = useState(null);
@@ -163,7 +163,6 @@ export function useChat({ jobDescription = null, language = 'auto', onServerMeta
                 await streamChat({
                     message: text,
                     history: historyPayload,
-                    jobDescription,
                     language,
                     // Who asked, which thread, and how far into it — the
                     // backend files this alongside the question.
@@ -225,7 +224,7 @@ export function useChat({ jobDescription = null, language = 'auto', onServerMeta
                 abortRef.current = null;
             }
         },
-        [isStreaming, jobDescription, language, updateConversation]
+        [isStreaming, language, updateConversation]
     );
 
     const stop = useCallback(() => abortRef.current?.abort(), []);

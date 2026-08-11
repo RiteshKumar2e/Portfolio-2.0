@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-    ArrowDown, ArrowRight, Bot, Briefcase, Check, Download, History, Languages,
-    MessageSquare, Mic, Plus, RotateCcw, Send, Square, UserRound,
+    ArrowDown, ArrowRight, Bot, Check, Download, History, Languages,
+    Mic, Plus, RotateCcw, Send, Square, UserRound,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { checkHealth } from '../lib/aiClient';
@@ -10,7 +10,6 @@ import {
     isIdentityComplete, isValidEmail, loadIdentity, saveIdentity, syncIdentityReset,
 } from '../lib/visitor';
 import ChatBubble from './ai/ChatBubble';
-import JobMatchPanel from './ai/JobMatchPanel';
 import { conversationTitle, useChat } from './ai/useChat';
 import { useSpeech, useSpeechInput } from './ai/speech';
 
@@ -24,9 +23,7 @@ const STARTERS = [
 
 const AIRepresentative = () => {
     const { isDarkMode } = useTheme();
-    const [tab, setTab] = useState('chat');
     const [input, setInput] = useState('');
-    const [jobDescription, setJobDescription] = useState('');
     const [language, setLanguage] = useState('auto');
     const [health, setHealth] = useState({ state: 'checking' });
     const [pinned, setPinned] = useState(true);
@@ -53,7 +50,6 @@ const AIRepresentative = () => {
         newChat,
         openConversation,
     } = useChat({
-        jobDescription: jobDescription.trim() || null,
         language,
         onServerMeta: (payload) => applyIdentityReset(payload?.identity_reset_at),
     });
@@ -190,11 +186,6 @@ const AIRepresentative = () => {
         }
     };
 
-    const askInChat = (question) => {
-        setTab('chat');
-        setTimeout(() => submit(question), 60);
-    };
-
     // -- export ------------------------------------------------------------
     const exportTranscript = () => {
         if (!messages.length) return;
@@ -285,59 +276,20 @@ ${rows}
                         className={`text-base md:text-lg font-medium max-w-2xl mx-auto ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
                     >
                         This AI answers only from Ritesh's verified profile — and says
-                        "I don't know" when the answer isn't in it. Paste a job description
-                        and it will score the fit, gaps included.
+                        "I don't know" when the answer isn't in it.
                     </motion.p>
                 </div>
 
                 {/* Tabs + status */}
-                <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
-                    <div
-                        className={`inline-flex p-1 rounded-2xl border ${
-                            isDarkMode ? 'bg-slate-900/60 border-white/10' : 'bg-slate-100 border-slate-200'
-                        }`}
-                        role="tablist"
-                    >
-                        {[
-                            { id: 'chat', label: 'Chat', icon: MessageSquare },
-                            { id: 'match', label: 'Job match', icon: Briefcase },
-                        ].map(({ id, label, icon: Icon }) => (
-                            <button
-                                key={id}
-                                type="button"
-                                role="tab"
-                                aria-selected={tab === id}
-                                onClick={() => setTab(id)}
-                                className={`inline-flex items-center gap-2 px-5 h-10 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
-                                    tab === id
-                                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                                        : isDarkMode
-                                          ? 'text-slate-400 hover:text-slate-200'
-                                          : 'text-slate-500 hover:text-slate-800'
-                                }`}
-                            >
-                                <Icon size={14} /> {label}
-                            </button>
-                        ))}
-                    </div>
-
+                <div className="flex flex-wrap items-center justify-end gap-4 mb-5">
                     <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
                         <span className={`w-2 h-2 rounded-full ${statusMeta.dot} ${health.state === 'online' ? 'animate-pulse' : ''}`} />
                         {statusMeta.label}
                     </div>
                 </div>
 
-                {/* Panels */}
-                {tab === 'match' ? (
-                    <div className={`rounded-[2rem] border p-6 sm:p-8 ${surface}`}>
-                        <JobMatchPanel
-                            jobDescription={jobDescription}
-                            setJobDescription={setJobDescription}
-                            onAskInChat={askInChat}
-                        />
-                    </div>
-                ) : (
-                    <div className={`rounded-[2rem] border overflow-hidden ${surface}`}>
+                {/* Chat panel */}
+                <div className={`rounded-[2rem] border overflow-hidden ${surface}`}>
                         {/* Toolbar */}
                         <div
                             className={`flex items-center justify-between gap-3 px-5 sm:px-6 py-3 border-b ${
@@ -353,7 +305,7 @@ ${rows}
                                         Ritesh's AI representative
                                     </div>
                                     <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 truncate">
-                                        {jobDescription.trim() ? 'Job description in context' : 'Grounded from profile'}
+                                        Grounded from profile
                                     </div>
                                 </div>
                             </div>
@@ -550,7 +502,7 @@ ${rows}
                                                 Ask me anything about Ritesh
                                             </p>
                                             <p className="text-sm text-slate-500 max-w-sm">
-                                                Projects, stack decisions, metrics, availability — or paste a JD in the Job match tab.
+                                                Projects, stack decisions, metrics, availability — ask anything.
                                             </p>
                                         </div>
                                         <div className="flex flex-wrap justify-center gap-2 max-w-xl">
@@ -688,8 +640,7 @@ ${rows}
                                 come only from Ritesh's profile data
                             </p>
                         </div>
-                    </div>
-                )}
+                </div>
             </div>
         </section>
     );

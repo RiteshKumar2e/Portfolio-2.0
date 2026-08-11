@@ -4,8 +4,6 @@ Everything the AI is allowed to say comes from the profile block injected
 below. The rules exist to make refusal-to-guess the default behaviour.
 """
 
-from .schemas import InterviewQuestions, MatchResult
-
 BASE_RULES = """You are the AI representative of {name}, speaking to visitors of {name}'s portfolio site — usually recruiters, hiring managers and engineers.
 
 ## WHO YOU ARE
@@ -38,99 +36,5 @@ BASE_RULES = """You are the AI representative of {name}, speaking to visitors of
 ## END OF CANDIDATE PROFILE"""
 
 
-JD_ADDENDUM = """
-
-## ACTIVE JOB DESCRIPTION
-The visitor has pasted the job description below and is evaluating {name} against it. When your answer relates to fit, ground it in this JD.
-
-<job_description>
-{job_description}
-</job_description>
-
-When assessing fit:
-- Be honest about gaps. A credible "missing X and Y" is worth more to a recruiter than a sales pitch, and it is required by the no-invention rule — never claim experience with a JD requirement that the profile does not show.
-- Distinguish "has direct evidence in the profile" from "adjacent/transferable" from "no evidence".
-- Note that {name} is a student graduating May 2026 when the JD's seniority expectations matter.
-- End fit assessments with a clear recommendation on whether an interview is worthwhile, and why."""
-
-
-def build_system_prompt(name: str, facts: str, job_description: str | None = None) -> str:
-    prompt = BASE_RULES.format(name=name, facts=facts)
-    if job_description:
-        prompt += JD_ADDENDUM.format(name=name, job_description=job_description.strip())
-    return prompt
-
-
-# --------------------------------------------------------------------------
-# Structured (non-streaming) tasks
-# --------------------------------------------------------------------------
-
-MATCH_INSTRUCTION = """A recruiter has pasted a job description. Evaluate {name} against it using ONLY the candidate profile.
-
-Rules for the evaluation:
-- `matching_skills` may only contain skills with direct evidence in the profile. If it isn't in the profile, it is not a match.
-- `missing_skills` lists requirements from the JD with no evidence in the profile. Be thorough and honest here; an empty list is almost always wrong.
-- Before you call a requirement missing, search the WHOLE profile for it — the skills lists (including tools/deployment and AI-ML), every experience entry's highlights and stack, and every project's engineering details and stack. A technology named anywhere in the profile is evidence, so it belongs in `matching_skills`, not `missing_skills`. Understating what the candidate has done is as wrong as overstating it.
-- `concerns` should include seniority/experience gaps (they are a student graduating May 2026) where the JD implies more.
-- `summary` is 2-3 sentences a busy recruiter can read in ten seconds.
-- `suitability_score` is a 0-100 judgement of fit for THIS role. Use the full range honestly: 85+ only when nearly every requirement is evidenced; below 40 when the role is a different discipline.
-- `verdict`: strong_match (>=80), good_match (65-79), partial_match (45-64), weak_match (<45).
-- `role_title`: the role title from the JD, or "Unspecified role" if it isn't stated.
-- `grounded_in` style honesty applies throughout: never list a skill as matching to be generous.
-
-Respond with ONLY a JSON object matching this schema, no prose and no markdown fence:
-{schema}
-
-<job_description>
-{job_description}
-</job_description>"""
-
-
-INTERVIEW_INSTRUCTION = """Generate exactly {count} interview questions an interviewer could ask {name}, based ONLY on the candidate profile{jd_clause}.
-
-Focus: {focus}.
-
-Rules:
-- Every question must be anchored to something specific and real in the profile — a named project, a metric, a technology, a decision they made.
-- Ask questions that probe depth and trade-offs, not trivia. Good: "Your AMFF-CNN reached 98.33% accuracy on NEU-DET — how did you avoid overfitting on a 6-class dataset, and what did the confusion matrix look like for the hardest class?" Bad: "What is a CNN?"
-- `category`: a short label such as "System Design", "Deep Learning", "Backend", "Behavioral", "Ownership".
-- `why_it_matters`: one sentence on what the answer reveals about the candidate.
-- `grounded_in`: name the exact profile item the question comes from (e.g. "QuickFix 3-tier LLM fallback").
-
-Respond with ONLY a JSON object matching this schema, no prose and no markdown fence:
-{schema}"""
-
-
-def build_match_prompt(name: str, job_description: str) -> str:
-    return MATCH_INSTRUCTION.format(
-        name=name,
-        job_description=job_description.strip(),
-        schema=_compact_schema(MatchResult),
-    )
-
-
-def build_interview_prompt(
-    name: str, count: int, focus: str, job_description: str | None
-) -> str:
-    jd_clause = ""
-    if job_description:
-        jd_clause = (
-            ", targeted at this role:\n<job_description>\n"
-            f"{job_description.strip()}\n</job_description>"
-        )
-    return INTERVIEW_INSTRUCTION.format(
-        name=name,
-        count=count,
-        focus=focus,
-        jd_clause=jd_clause,
-        schema=_compact_schema(InterviewQuestions),
-    )
-
-
-def _compact_schema(model) -> str:
-    """A trimmed JSON Schema — enough for the model, without the noise."""
-    import json
-
-    schema = model.model_json_schema()
-    schema.pop("title", None)
-    return json.dumps(schema, separators=(",", ":"))
+def build_system_prompt(name: str, facts: str) -> str:
+    return BASE_RULES.format(name=name, facts=facts)

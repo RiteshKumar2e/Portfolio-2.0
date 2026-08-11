@@ -68,12 +68,11 @@ COLUMNS: list[tuple[str, str, int]] = [
     ("Model used", "model", 26),
     ("Status", "status", 10),
     ("Reply time (s)", "duration_s", 12),
-    ("Job description", "job_description", 40),
     ("User agent", "user_agent", 40),
     ("Asked at (UTC)", "asked_at", 22),
 ]
 
-KIND_LABELS = {"chat": "Chat", "job_match": "Job match", "interview": "Interview Qs"}
+KIND_LABELS = {"chat": "Chat"}
 
 
 class ChatLogStore:
@@ -222,7 +221,6 @@ class ChatLogStore:
             "total_questions": len(entries),
             "unique_visitors": len(visitors),
             "identified_visitors": len({e.get("email") or e.get("name") for e in identified}),
-            "job_matches": sum(1 for e in entries if e.get("kind") == "job_match"),
             "first_asked_at": first,
             "last_asked_at": last,
             "xlsx_available": XLSX_AVAILABLE,
@@ -294,7 +292,7 @@ class ChatLogStore:
             sheet.column_dimensions[get_column_letter(index)].width = width
 
         # Long free text stays readable instead of bleeding across the sheet.
-        wrapped = {"question", "answer", "job_description", "user_agent"}
+        wrapped = {"question", "answer", "user_agent"}
         for index, (_, key, _) in enumerate(COLUMNS, start=1):
             if key not in wrapped:
                 continue
