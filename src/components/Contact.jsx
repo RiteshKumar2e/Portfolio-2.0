@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FaPaperPlane, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { SiOrcid } from 'react-icons/si';
 import { Mail, MapPin, CheckCircle2, AlertCircle, Rocket, Linkedin, Github } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useTheme } from '../context/ThemeContext';
@@ -75,8 +76,9 @@ const Contact = () => {
 
     const contactInfo = [
         { icon: Mail, label: 'Direct Mail', value: 'riteshkumar90359@gmail.com', link: 'mailto:riteshkumar90359@gmail.com', color: 'text-blue-500' },
-        { icon: Linkedin, label: 'Professional', value: 'Ritesh Kumar', link: 'https://www.linkedin.com/in/ritesh-kumar-b5a1a0257/', color: 'text-indigo-500' },
+        { icon: Linkedin, label: 'Professional', value: 'Ritesh Kumar', link: 'https://www.linkedin.com/in/riteshkumar-tech', color: 'text-indigo-500' },
         { icon: Github, label: 'Open Source', value: 'RiteshKumar2e', link: 'https://github.com/RiteshKumar2e', color: 'text-slate-900' },
+        { icon: SiOrcid, label: 'Research', value: '0009-0009-0057-6839', link: 'https://orcid.org/0009-0009-0057-6839', color: 'text-[#A6CE39]' },
         { icon: MapPin, label: 'Based In', value: 'Jamshedpur, India', link: null, color: 'text-rose-500' }
     ];
 

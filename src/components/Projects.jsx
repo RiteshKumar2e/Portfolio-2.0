@@ -3,7 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import {
     Code2, Globe, Github as LucidGithub,
     Bot, Cpu, FileCheck, LayoutDashboard, ShoppingBag,
-    ScanSearch, User, Zap
+    ScanSearch, User, Zap, GraduationCap
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
@@ -233,6 +233,19 @@ const Projects = () => {
             demo: 'https://riteshkr.online',
             image: '/projects/Quickfix.png',
             icon: <Bot className="w-16 h-16 text-white" />
+        },
+        {
+            title: 'SOEIT Student Achievement Portal',
+            role: 'Full-Stack Developer',
+            problem: 'Student achievements sit scattered across emails, spreadsheets, and paperwork, so faculty lose hours verifying certificates and students lose track of their own record.',
+            approach: 'Built a full-stack academic platform with three roles (Student / Faculty / Admin) covering achievement verification, certificate uploads, gamified leaderboards, bulk certificate export, and one-click ATS-compliant resume generation.',
+            impact: ['3 role-based dashboards', 'Bulk certificate export', 'One-click ATS resume'],
+            tech: ['Node.js', 'Express', 'React 19', 'Turso (LibSQL)', 'Docker', 'JWT', 'Google OAuth'],
+            gradient: 'from-teal-500 via-emerald-500 to-green-600',
+            github: 'https://github.com/RiteshKumar2e/SOEIT-Acheivement-portal',
+            demo: 'https://soeit-acheivement-portal.vercel.app',
+            image: '/projects/soeit.png',
+            icon: <GraduationCap className="w-16 h-16 text-white" />
         },
         {
             title: 'Steel Surface Defect Detection',

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaHeart, FaChevronRight } from 'react-icons/fa';
+import { SiOrcid } from 'react-icons/si';
 import { useTheme } from '../context/ThemeContext';
 import { useLenis } from '@studio-freight/react-lenis';
 
@@ -42,8 +43,9 @@ const Footer = () => {
 
     const socialLinks = [
         { icon: FaGithub, href: 'https://github.com/RiteshKumar2e', label: 'GitHub', color: 'bg-slate-50 text-slate-800 hover:bg-slate-100' },
-        { icon: FaLinkedin, href: 'https://www.linkedin.com/in/ritesh-kumar-b5a1a0257/', label: 'LinkedIn', color: 'bg-blue-50 text-blue-600 hover:bg-blue-100' },
+        { icon: FaLinkedin, href: 'https://www.linkedin.com/in/riteshkumar-tech', label: 'LinkedIn', color: 'bg-blue-50 text-blue-600 hover:bg-blue-100' },
         { icon: FaEnvelope, href: 'mailto:riteshkumar90359@gmail.com', label: 'Email', color: 'bg-rose-50 text-rose-500 hover:bg-rose-100' },
+        { icon: SiOrcid, href: 'https://orcid.org/0009-0009-0057-6839', label: 'ORCID', color: 'bg-lime-50 text-[#A6CE39] hover:bg-lime-100' },
     ];
 
     return (
@@ -126,11 +128,17 @@ const Footer = () => {
                                 </div>
                                 <span className={`text-sm font-black truncate ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>riteshkumar90359@gmail.com</span>
                             </a>
-                            <a href="https://www.linkedin.com/in/ritesh-kumar-b5a1a0257/" target="_blank" rel="noopener noreferrer" className={`group flex items-center gap-4 p-4 rounded-2xl border transition-all shadow-sm ${isDarkMode ? 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-blue-500/30' : 'bg-slate-50 border-transparent hover:border-blue-100 hover:bg-white'}`}>
+                            <a href="https://www.linkedin.com/in/riteshkumar-tech" target="_blank" rel="noopener noreferrer" className={`group flex items-center gap-4 p-4 rounded-2xl border transition-all shadow-sm ${isDarkMode ? 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-blue-500/30' : 'bg-slate-50 border-transparent hover:border-blue-100 hover:bg-white'}`}>
                                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border ${isDarkMode ? 'bg-slate-900 text-blue-400 border-white/5' : 'bg-white text-blue-600 border-slate-100'}`}>
                                     <FaLinkedin />
                                 </div>
                                 <span className={`text-sm font-black ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>LinkedIn Profile</span>
+                            </a>
+                            <a href="https://orcid.org/0009-0009-0057-6839" target="_blank" rel="noopener noreferrer" className={`group flex items-center gap-4 p-4 rounded-2xl border transition-all shadow-sm ${isDarkMode ? 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-lime-500/30' : 'bg-slate-50 border-transparent hover:border-lime-100 hover:bg-white'}`}>
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border ${isDarkMode ? 'bg-slate-900 text-[#A6CE39] border-white/5' : 'bg-white text-[#A6CE39] border-slate-100'}`}>
+                                    <SiOrcid />
+                                </div>
+                                <span className={`text-sm font-black ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>ORCID Profile</span>
                             </a>
                         </div>
                     </motion.div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { SiOrcid } from 'react-icons/si';
 import { TypeAnimation } from 'react-type-animation';
 import { useTheme } from '../context/ThemeContext';
 
@@ -141,8 +142,9 @@ const Hero = () => {
                         >
                             {[
                                 { icon: FaGithub, href: 'https://github.com/RiteshKumar2e', label: 'GitHub', color: isDarkMode ? 'hover:bg-white/10 hover:text-white' : 'hover:bg-slate-900 hover:text-white' },
-                                { icon: FaLinkedin, href: 'https://www.linkedin.com/in/ritesh-kumar-b5a1a0257/', label: 'LinkedIn', color: 'hover:bg-blue-600 hover:text-white' },
-                                { icon: FaEnvelope, href: 'mailto:riteshkumar90359@gmail.com', label: 'Email', color: 'hover:bg-red-500 hover:text-white' }
+                                { icon: FaLinkedin, href: 'https://www.linkedin.com/in/riteshkumar-tech', label: 'LinkedIn', color: 'hover:bg-blue-600 hover:text-white' },
+                                { icon: FaEnvelope, href: 'mailto:riteshkumar90359@gmail.com', label: 'Email', color: 'hover:bg-red-500 hover:text-white' },
+                                { icon: SiOrcid, href: 'https://orcid.org/0009-0009-0057-6839', label: 'ORCID', color: 'hover:bg-[#A6CE39] hover:text-white' }
                             ].map((social, index) => (
                                 <motion.a
                                     key={index}

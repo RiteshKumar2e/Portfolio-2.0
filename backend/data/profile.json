@@ -93,6 +93,7 @@
         "PyTorch",
         "CNN",
         "Computer Vision",
+        "Attention Mechanisms",
         "VS Code"
       ],
       "good": [
@@ -117,10 +118,20 @@
         "MySQL",
         "MongoDB",
         "SQLAlchemy",
+        "SQL",
+        "Turso (LibSQL)",
         "GitHub Pages",
+        "Render",
+        "Vercel",
         "Git",
         "GitHub",
-        "Jupyter"
+        "Jupyter",
+        "Keras",
+        "MobileNetV2",
+        "FPN",
+        "Google OAuth 2.0",
+        "Gemini API",
+        "Groq API"
       ],
       "decent": [
         "JavaScript",
@@ -129,7 +140,10 @@
         "PostgreSQL",
         "GCP Cloud",
         "LightGBM",
-        "Plotly"
+        "Plotly",
+        "MUI",
+        "Docker",
+        "Brevo"
       ]
     }
   },

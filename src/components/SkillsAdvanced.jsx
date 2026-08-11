@@ -8,14 +8,16 @@ import {
     SiMysql, SiGit, SiGithub, SiGooglecloud, SiJupyter, SiOpencv,
     SiExpress, SiScikitlearn, SiKeras, SiFastapi, SiPostgresql,
     SiJsonwebtokens, SiSqlalchemy, SiPydantic, SiPlotly, SiHuggingface,
-    SiGooglegemini
+    SiGooglegemini, SiMui, SiTurso, SiDocker, SiRender,
+    SiVercel, SiBrevo, SiGoogle
 } from 'react-icons/si';
 import { VscVscode } from 'react-icons/vsc';
 import {
     FaLaptopCode, FaServer, FaDatabase, FaBrain, FaTools, FaCloud,
     FaCodeBranch, FaCube, FaGlobe, FaShapes, FaLayerGroup, FaTimes, FaArrowRight,
     FaArrowLeft, FaGithub as FaGithubBrand, FaExternalLinkAlt,
-    FaRobot, FaEye, FaLanguage, FaNetworkWired, FaChartLine, FaChartBar, FaTree, FaSitemap
+    FaRobot, FaEye, FaLanguage, FaNetworkWired, FaChartLine, FaChartBar, FaTree, FaSitemap,
+    FaBolt, FaBullseye, FaMobileAlt
 } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
 
@@ -634,6 +636,13 @@ const SkillsAdvanced = () => {
                     detail: "Used to build responsive layouts, modern user interfaces, reusable components, animations, and a consistent design across every project."
                 }
 ]
+                },
+                {
+                    name: "MUI", icon: SiMui, color: "text-[#007FFF]", level: "Decent",
+                    description: "Material UI component library for building consistent, accessible React interfaces without hand-rolling every control.",
+                    usedIn: [
+                        { project: "SOEIT Achievement Portal", detail: "Used MUI components for the dashboard tables, forms, and dialogs across the three user roles." }
+                    ]
                 }
             ]
         },
@@ -688,6 +697,22 @@ const SkillsAdvanced = () => {
                     usedIn: [
                         { project: "DSA & Problem Solving", detail: "Core language for competitive programming and coursework." }
                     ]
+                },
+                {
+                    name: "Google OAuth 2.0", icon: SiGoogle, color: "text-[#4285F4]", level: "Good",
+                    description: "Sign-in with Google — delegated authentication so users never hand my apps a password.",
+                    usedIn: [
+                        { project: "QuickFix AI Customer Agent", detail: "Google OAuth 2.0 alongside email OTP, backed by JWT role-based access control." },
+                        { project: "SOEIT Achievement Portal", detail: "Institutional Google sign-in for students, faculty, and admins." }
+                    ]
+                },
+                {
+                    name: "Brevo", icon: SiBrevo, color: "text-[#0B996E]", level: "Decent",
+                    description: "Transactional email/SMTP service for OTPs, verification mails, and system notifications.",
+                    usedIn: [
+                        { project: "QuickFix AI Customer Agent", detail: "Delivered login OTPs and complaint status notifications over Brevo SMTP." },
+                        { project: "SOEIT Achievement Portal", detail: "Sent verification and status-update emails to students and faculty." }
+                    ]
                 }
             ]
         },
@@ -728,6 +753,36 @@ const SkillsAdvanced = () => {
                     name: "GitHub Pages", icon: SiGithub, color: "text-slate-900 dark:text-white", level: "Good",
                     description: "Static hosting for deploying frontend projects straight from a repository.",
                     usedIn: []
+                },
+                {
+                    name: "SQL", icon: FaDatabase, color: "text-[#4479A1]", level: "Good",
+                    description: "The query language behind every relational database I use — joins, aggregates, indexing, and query tuning.",
+                    usedIn: [
+                        { project: "Food & Recipe API (TechMantra)", detail: "Cut API response time by ~35% through SQL query optimization and database indexing." }
+                    ]
+                },
+                {
+                    name: "Turso (LibSQL)", icon: SiTurso, color: "text-[#4FF8D2]", level: "Good",
+                    description: "Edge-hosted SQLite (LibSQL) — my default database for shipping full-stack apps fast without running a DB server.",
+                    usedIn: [
+                        { project: "QuickFix AI Customer Agent", detail: "Stored complaints, users, and agent state on Turso." },
+                        { project: "Community AI Platform", detail: "Backed the scheme catalogue and chat history." },
+                        { project: "SOEIT Achievement Portal", detail: "Held achievements, certificates, and role data for all three dashboards." }
+                    ]
+                },
+                {
+                    name: "Render", icon: SiRender, color: "text-slate-900 dark:text-white", level: "Good",
+                    description: "Cloud platform where I host my FastAPI and Node backends, including this portfolio's API.",
+                    usedIn: [
+                        { project: "This Portfolio", detail: "The backend powering the AI representative runs on Render." }
+                    ]
+                },
+                {
+                    name: "Vercel", icon: SiVercel, color: "text-slate-900 dark:text-white", level: "Good",
+                    description: "Frontend hosting with instant deploys straight from a Git push.",
+                    usedIn: [
+                        { project: "SOEIT Achievement Portal", detail: "Live frontend deployed on Vercel." }
+                    ]
                 }
             ]
         },
@@ -867,6 +922,50 @@ const SkillsAdvanced = () => {
                         { project: "Black Friday Sales Model", detail: "Explored and engineered features from historical sales data." },
                         { project: "Sentiment Analysis Pipeline", detail: "Structured and summarised large text datasets." }
                     ]
+                },
+                {
+                    name: "Keras", icon: SiKeras, color: "text-[#D00000]", level: "Good",
+                    description: "High-level API over TensorFlow for assembling and training networks quickly.",
+                    usedIn: [
+                        { project: "Steel Surface Defect Detection", detail: "Used for rapid architecture experiments alongside the PyTorch pipeline." }
+                    ]
+                },
+                {
+                    name: "MobileNetV2", icon: FaMobileAlt, color: "text-[#00A98F]", level: "Good",
+                    description: "A lightweight CNN backbone built for edge devices — high accuracy at a fraction of the compute.",
+                    usedIn: [
+                        { project: "Steel Surface Defect Detection", detail: "Backbone of the AMFF-CNN detector, chosen so the model can run on a production line rather than a server farm." }
+                    ]
+                },
+                {
+                    name: "FPN", icon: FaLayerGroup, color: "text-[#0EA5E9]", level: "Good",
+                    description: "Feature Pyramid Network — lets a detector see the same image at several scales, so both large blotches and hairline cracks get caught.",
+                    usedIn: [
+                        { project: "Steel Surface Defect Detection", detail: "Multi-scale feature extraction layered on top of the MobileNetV2 backbone." }
+                    ]
+                },
+                {
+                    name: "Attention Mechanisms", icon: FaBullseye, color: "text-[#F59E0B]", level: "Proficient",
+                    description: "Teaching a network where to look — weighting the parts of an image or sequence that actually carry the signal.",
+                    usedIn: [
+                        { project: "Steel Surface Defect Detection", detail: "Attention-modulated multi-scale feature fusion — the core idea of my AMFF-CNN and the paper under review at Springer Nature." }
+                    ]
+                },
+                {
+                    name: "Gemini API", icon: SiGooglegemini, color: "text-[#8E75B2]", level: "Good",
+                    description: "Google's LLM API — my primary model for reasoning, chat, and structured extraction.",
+                    usedIn: [
+                        { project: "QuickFix AI Customer Agent", detail: "Second tier of the 3-tier fallback chain behind Groq LLaMA 3.3." },
+                        { project: "Community AI Platform", detail: "Powers source-attributed multilingual Q&A." }
+                    ]
+                },
+                {
+                    name: "Groq API", icon: FaBolt, color: "text-[#F55036]", level: "Good",
+                    description: "Ultra-low-latency LLM inference (LLaMA 3.3) — the first tier of my model fallback chains.",
+                    usedIn: [
+                        { project: "QuickFix AI Customer Agent", detail: "Primary model, keeping complaint resolution responses under 200ms." },
+                        { project: "Community AI Platform", detail: "First stop in the Groq → Gemini fallback pipeline." }
+                    ]
                 }
             ]
         },
@@ -898,6 +997,13 @@ const SkillsAdvanced = () => {
                     description: "Notebook environment for ML experimentation and data exploration.",
                     usedIn: [
                         { project: "ML & data projects", detail: "Prototyping models and exploring data before productionizing." }
+                    ]
+                },
+                {
+                    name: "Docker", icon: SiDocker, color: "text-[#2496ED]", level: "Decent",
+                    description: "Containerizing apps so they run the same on my machine, a teammate's, and the server.",
+                    usedIn: [
+                        { project: "SOEIT Achievement Portal", detail: "Containerized the Node/Express backend for consistent deployment." }
                     ]
                 }
             ]
