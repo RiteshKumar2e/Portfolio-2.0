@@ -219,9 +219,6 @@ curl -X PUT https://your-service.onrender.com/api/profile \
   --data @backend/data/profile.json
 ```
 
-The `not_in_profile` list (salary, notice period, visa status, references) names the things the AI must explicitly decline to answer.
-
-> 🔒 **Never commit `.env`** — it holds the API keys. Both `.env` files are gitignored; only `.env.example` is tracked.
 
 ---
 
