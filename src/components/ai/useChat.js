@@ -264,9 +264,19 @@ export function useChat({ language = 'auto', onServerMeta } = {}) {
         });
     }, []);
 
-    // There is deliberately no delete here. Conversations stay put: the visitor
-    // keeps their local copy, and the authoritative record on the server can
-    // only be read or erased by the site owner, through /admin.html.
+    // The visitor cannot delete a single conversation — their local copy stays
+    // put, and the authoritative record on the server can only be read or erased
+    // by the site owner, through /admin.html.
+    //
+    // That owner-side wipe is the one thing that does reach in here: when the
+    // log is erased, the browser's leftover threads are the last trace of a
+    // record that no longer exists, so they go too.
+    const clearConversations = useCallback(() => {
+        abortRef.current?.abort();
+        setError(null);
+        const conversation = makeConversation();
+        setState({ activeId: conversation.id, conversations: [conversation] });
+    }, []);
 
     const retryLast = useCallback(() => {
         const lastUser = [...messages].reverse().find((m) => m.role === 'user');
@@ -290,5 +300,6 @@ export function useChat({ language = 'auto', onServerMeta } = {}) {
         activeId,
         newChat,
         openConversation,
+        clearConversations,
     };
 }

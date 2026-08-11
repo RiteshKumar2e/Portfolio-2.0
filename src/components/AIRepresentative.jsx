@@ -49,6 +49,7 @@ const AIRepresentative = () => {
         activeId,
         newChat,
         openConversation,
+        clearConversations,
     } = useChat({
         language,
         onServerMeta: (payload) => applyIdentityReset(payload?.identity_reset_at),
@@ -64,12 +65,19 @@ const AIRepresentative = () => {
     });
 
     /**
-     * The owner wiped the chat log, so the details this browser remembers no
-     * longer exist anywhere — drop them and let the gate ask again.
+     * The owner wiped the chat log from /admin.html. Nothing this browser
+     * remembers exists anywhere any more, so it all goes: the visitor is asked
+     * who they are again, and the leftover threads in the history menu — the
+     * last trace of a record that has been erased — are cleared with it.
      */
-    const applyIdentityReset = useCallback((serverResetAt) => {
-        if (syncIdentityReset(serverResetAt)) setIdentity(loadIdentity());
-    }, []);
+    const applyIdentityReset = useCallback(
+        (serverResetAt) => {
+            if (!syncIdentityReset(serverResetAt)) return;
+            setIdentity(loadIdentity());
+            clearConversations();
+        },
+        [clearConversations]
+    );
 
     // -- backend status ----------------------------------------------------
     useEffect(() => {
@@ -437,7 +445,7 @@ ${rows}
                                                         }`}
                                                     >
                                                         Chats are kept so Ritesh can see what people
-                                                        ask. They aren't deleted from here.
+                                                        ask. They clear when he clears the log.
                                                     </p>
                                                 )}
                                             </motion.div>

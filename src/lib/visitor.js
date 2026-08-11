@@ -105,7 +105,10 @@ export function saveIdentity(identity) {
  *
  * @param   {number}  serverResetAt Unix seconds from `/api/health` or the SSE
  *                                  `done` event. 0 = never wiped.
- * @returns {boolean} true if the stored identity was just discarded.
+ * @returns {boolean} true if this call just consumed a wipe the browser had
+ *                    not seen before — whether or not an identity was stored.
+ *                    The caller uses it to clear everything else the wipe
+ *                    should take with it, such as the local chat history.
  */
 export function syncIdentityReset(serverResetAt) {
     const stamp = Number(serverResetAt) || 0;
@@ -115,18 +118,12 @@ export function syncIdentityReset(serverResetAt) {
     if (stamp <= seen) return false;
 
     write(localStorage, RESET_KEY, String(stamp));
-    const hadIdentity = hasAnyIdentity();
     try {
         localStorage.removeItem(IDENTITY_KEY);
     } catch {
         /* nothing stored to begin with */
     }
-    return hadIdentity;
-}
-
-function hasAnyIdentity() {
-    const identity = loadIdentity();
-    return Boolean(identity.name || identity.email || identity.company);
+    return true;
 }
 
 /** Loose on purpose: catches typos, not exotic-but-valid addresses. */
