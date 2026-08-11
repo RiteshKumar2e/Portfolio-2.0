@@ -4,7 +4,8 @@ import { useInView } from 'react-intersection-observer';
 import {
     FaTrophy, FaMedal, FaStar, FaAward, FaCertificate,
     FaCode, FaGraduationCap, FaLightbulb, FaUsers, FaChartLine,
-    FaRocket, FaHandshake, FaUserTie, FaBrain, FaClock, FaSmile
+    FaRocket, FaHandshake, FaUserTie, FaBrain, FaClock, FaSmile,
+    FaServer, FaBolt, FaTachometerAlt, FaPlug, FaLandmark
 } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
 
@@ -153,6 +154,46 @@ const Achievements = () => {
             }
         ],
         technical: [
+            {
+                icon: FaServer,
+                title: '15,900+ Daily Requests',
+                description: 'QuickFix sustains 15,900+ requests a day through an async pipeline of specialized AI services (Orchestrator, Classifier, Sentiment Analyzer, Priority Detector, RAG Engine)',
+                color: 'from-amber-600 to-orange-600',
+                gradient: 'bg-gradient-to-br from-amber-600/10 to-orange-600/10',
+                category: 'Technical'
+            },
+            {
+                icon: FaBolt,
+                title: '<200ms Response Time',
+                description: 'Kept complaint resolution under 200ms with a 3-tier LLM fallback: Groq LLaMA 3.3 → Gemini 2.0 Flash → local TF-IDF',
+                color: 'from-yellow-500 to-amber-600',
+                gradient: 'bg-gradient-to-br from-yellow-500/10 to-amber-600/10',
+                category: 'Technical'
+            },
+            {
+                icon: FaTachometerAlt,
+                title: '35% Faster APIs',
+                description: 'Reduced API response time by ~35% at TechMantra Global through SQL query optimization and database indexing',
+                color: 'from-emerald-600 to-teal-600',
+                gradient: 'bg-gradient-to-br from-emerald-600/10 to-teal-600/10',
+                category: 'Technical'
+            },
+            {
+                icon: FaPlug,
+                title: '10+ REST Endpoints',
+                description: 'Shipped 10+ production-ready endpoints with input validation, exception handling, and reusable code, backed by Jest unit and integration tests',
+                color: 'from-blue-600 to-indigo-600',
+                gradient: 'bg-gradient-to-br from-blue-600/10 to-indigo-600/10',
+                category: 'Technical'
+            },
+            {
+                icon: FaLandmark,
+                title: '50+ Government Schemes',
+                description: 'Community AI Platform makes 50+ schemes, learning resources, and job opportunities searchable across 5 Indian languages with source-attributed answers',
+                color: 'from-violet-600 to-purple-600',
+                gradient: 'bg-gradient-to-br from-violet-600/10 to-purple-600/10',
+                category: 'Technical'
+            },
             {
                 icon: FaAward,
                 title: '10+ Projects',
