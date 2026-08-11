@@ -88,12 +88,6 @@
       "note": "Levels as stated on the portfolio site and resume (Proficient > Good > Decent).",
       "proficient": [
         "Python",
-        "Machine Learning",
-        "Deep Learning",
-        "PyTorch",
-        "CNN",
-        "Computer Vision",
-        "Attention Mechanisms",
         "VS Code"
       ],
       "good": [
@@ -143,7 +137,13 @@
         "Plotly",
         "MUI",
         "Docker",
-        "Brevo"
+        "Brevo",
+        "Machine Learning",
+        "Deep Learning",
+        "PyTorch",
+        "CNN",
+        "Computer Vision",
+        "Attention Mechanisms"
       ]
     }
   },

@@ -791,7 +791,7 @@ const SkillsAdvanced = () => {
             icon: FaBrain,
             skills: [
                 {
-                    name: "Deep Learning", icon: FaBrain, color: "text-[#FF6F00]", level: "Proficient",
+                    name: "Deep Learning", icon: FaBrain, color: "text-[#FF6F00]", level: "Decent",
                     description: "Designing and training neural networks for computer-vision and prediction tasks.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Built an AMFF-CNN detector with attention-based multi-scale feature fusion (98.33% accuracy)." },
@@ -804,7 +804,7 @@ const SkillsAdvanced = () => {
                     usedIn: []
                 },
                 {
-                    name: "PyTorch", icon: SiPytorch, color: "text-[#EE4C2C]", level: "Proficient",
+                    name: "PyTorch", icon: SiPytorch, color: "text-[#EE4C2C]", level: "Decent",
                     description: "My preferred deep-learning framework for research-style model building and training.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Built the MobileNetV2 + Feature Pyramid Network detector in PyTorch." },
@@ -812,7 +812,7 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "CNN", icon: SiKeras, color: "text-[#D00000]", level: "Proficient",
+                    name: "CNN", icon: SiKeras, color: "text-[#D00000]", level: "Decent",
                     description: "Convolutional neural networks for image classification and detection.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Designed the AMFF-CNN with attention-based multi-scale fusion." },
@@ -848,7 +848,7 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "Machine Learning", icon: FaChartLine, color: "text-[#FF6F00]", level: "Proficient",
+                    name: "Machine Learning", icon: FaChartLine, color: "text-[#FF6F00]", level: "Decent",
                     description: "Training models that learn patterns from data to make predictions and classifications.",
                     usedIn: [
                         { project: "Black Friday Sales Model", detail: "Forecasted customer spending from historical sales data." },
@@ -887,7 +887,7 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "Computer Vision", icon: FaEye, color: "text-[#5C3EE8]", level: "Proficient",
+                    name: "Computer Vision", icon: FaEye, color: "text-[#5C3EE8]", level: "Decent",
                     description: "Enabling software to interpret images and live video — detection, recognition, and classification.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Spotted fine surface defects from production-line images." },
@@ -945,7 +945,7 @@ const SkillsAdvanced = () => {
                     ]
                 },
                 {
-                    name: "Attention Mechanisms", icon: FaBullseye, color: "text-[#F59E0B]", level: "Proficient",
+                    name: "Attention Mechanisms", icon: FaBullseye, color: "text-[#F59E0B]", level: "Decent",
                     description: "Teaching a network where to look — weighting the parts of an image or sequence that actually carry the signal.",
                     usedIn: [
                         { project: "Steel Surface Defect Detection", detail: "Attention-modulated multi-scale feature fusion — the core idea of my AMFF-CNN and the paper under review at Springer Nature." }
