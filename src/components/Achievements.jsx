@@ -154,22 +154,6 @@ const Achievements = () => {
         ],
         technical: [
             {
-                icon: FaTrophy,
-                title: '98.33% Accuracy',
-                description: 'Classification accuracy on the NEU-DET dataset for steel surface defect detection using a MobileNetV2 + FPN architecture with attention-based multi-scale feature fusion (AMFF-CNN).',
-                color: 'from-amber-600 to-orange-600',
-                gradient: 'bg-gradient-to-br from-amber-600/10 to-orange-600/10',
-                category: 'Technical'
-            },
-            {
-                icon: FaMedal,
-                title: '0.85 mAP',
-                description: 'Detection performance on NEU-DET, with the architecture optimized for real-time edge deployment in industrial manufacturing environments.',
-                color: 'from-blue-600 to-indigo-600',
-                gradient: 'bg-gradient-to-br from-blue-600/10 to-indigo-600/10',
-                category: 'Technical'
-            },
-            {
                 icon: FaAward,
                 title: '10+ Projects',
                 description: 'Successfully delivered major projects: Community AI Platform, QuickFix AI, Steel Defect Detection, Sentiment Analysis',
