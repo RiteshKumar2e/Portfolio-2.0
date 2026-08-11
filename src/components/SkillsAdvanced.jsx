@@ -17,7 +17,7 @@ import {
     FaCodeBranch, FaCube, FaGlobe, FaShapes, FaLayerGroup, FaTimes, FaArrowRight,
     FaArrowLeft, FaGithub as FaGithubBrand, FaExternalLinkAlt,
     FaRobot, FaEye, FaLanguage, FaNetworkWired, FaChartLine, FaChartBar, FaTree, FaSitemap,
-    FaBolt, FaBullseye, FaMobileAlt
+    FaBolt, FaBullseye, FaMobileAlt, FaChevronDown
 } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
 
@@ -525,12 +525,20 @@ const SkillModal = ({ skill, onClose }) => {
     );
 };
 
+// Categories can run long (Data Science & AI has 24 skills), so each one shows
+// the first PREVIEW_COUNT pills and hides the rest behind a "+N more" toggle.
+const PREVIEW_COUNT = 10;
+
 const SkillCategory = ({ title, icon: Icon, skills, index, onSelectSkill }) => {
     const { isDarkMode } = useTheme();
+    const [expanded, setExpanded] = useState(false);
     const [ref, inView] = useInView({
         triggerOnce: true,
         threshold: 0.1,
     });
+
+    const hiddenCount = skills.length - PREVIEW_COUNT;
+    const visibleSkills = expanded ? skills : skills.slice(0, PREVIEW_COUNT);
 
     return (
         <motion.div
@@ -552,7 +560,7 @@ const SkillCategory = ({ title, icon: Icon, skills, index, onSelectSkill }) => {
             </div>
 
             <div className="flex flex-wrap gap-3">
-                {skills.map((skill, idx) => (
+                {visibleSkills.map((skill, idx) => (
                     <HoverSkillPill
                         key={idx}
                         name={skill.name}
@@ -562,6 +570,21 @@ const SkillCategory = ({ title, icon: Icon, skills, index, onSelectSkill }) => {
                     />
                 ))}
             </div>
+
+            {hiddenCount > 0 && (
+                <button
+                    type="button"
+                    onClick={() => setExpanded(v => !v)}
+                    aria-expanded={expanded}
+                    className={`mt-5 inline-flex items-center gap-2 px-4 h-9 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-colors ${isDarkMode
+                        ? 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white'
+                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-white hover:border-indigo-300 hover:text-indigo-600'
+                        }`}
+                >
+                    {expanded ? 'Show less' : `+${hiddenCount} more`}
+                    <FaChevronDown className={`text-[9px] transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} />
+                </button>
+            )}
         </motion.div>
     );
 };
