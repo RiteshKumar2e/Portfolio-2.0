@@ -120,7 +120,9 @@ const Contact = () => {
 
                         <div className={`p-8 md:p-12 rounded-[48px] border transition-all duration-500 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow' : 'bg-white border-slate-200 shadow-2xl shadow-indigo-100/50'}`}>
                             <form onSubmit={handleSubmit} className="space-y-8">
-                                <div className="grid md:grid-cols-2 gap-8">
+                                {/* Stacked at every width — side by side, these two
+                                    never get enough room for a full email address. */}
+                                <div className="grid gap-8">
                                     <div className="space-y-3">
                                         <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Name</label>
                                         <input
@@ -130,7 +132,7 @@ const Contact = () => {
                                             onChange={handleChange}
                                             required
                                             placeholder="Your name"
-                                            className={`w-full px-8 py-5 rounded-3xl border transition-all font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
+                                            className={`w-full min-w-0 px-6 py-5 rounded-3xl border transition-all font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
                                         />
                                     </div>
                                     <div className="space-y-3">
@@ -142,7 +144,7 @@ const Contact = () => {
                                             onChange={handleChange}
                                             required
                                             placeholder="hello@example.com"
-                                            className={`w-full px-8 py-5 rounded-3xl border transition-all font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
+                                            className={`w-full min-w-0 px-6 py-5 rounded-3xl border transition-all font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
                                         />
                                     </div>
                                 </div>
@@ -156,7 +158,7 @@ const Contact = () => {
                                         onChange={handleChange}
                                         required
                                         placeholder="Project Inquiry / Job Opportunity"
-                                        className={`w-full px-8 py-5 rounded-3xl border transition-all font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
+                                        className={`w-full min-w-0 px-6 py-5 rounded-3xl border transition-all font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
                                     />
                                 </div>
 
@@ -169,7 +171,7 @@ const Contact = () => {
                                         required
                                         rows="5"
                                         placeholder="What's on your mind?"
-                                        className={`w-full px-8 py-5 rounded-3xl border transition-all font-bold resize-none focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
+                                        className={`w-full min-w-0 px-6 py-5 rounded-3xl border transition-all font-bold resize-none focus:ring-4 focus:ring-indigo-500/10 outline-none ${isDarkMode ? 'bg-white/5 border-white/5 text-white placeholder:text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400'}`}
                                     />
                                 </div>
 
