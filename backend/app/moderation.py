@@ -32,6 +32,8 @@ import time
 from pathlib import Path
 from typing import Any, Optional
 
+from .turso import TursoClient, TursoError
+
 logger = logging.getLogger("ai-portfolio.moderation")
 
 
@@ -132,12 +134,33 @@ class StrikeStore:
     visitor id does not buy a fresh set of warnings from the same address.
     """
 
-    def __init__(self, path: Path) -> None:
+    def __init__(self, path: Path, turso: Optional[TursoClient] = None) -> None:
         self._path = path
         self._lock = threading.Lock()
-        self._blocked: dict[str, dict[str, Any]] = self._read()
+        # Turso keeps strikes across the deploys and cold starts that wipe the
+        # container's disk; the file is the local-development fallback.
+        self._turso = turso if (turso and turso.enabled) else None
+        self._blocked: dict[str, dict[str, Any]] = self._read_remote() if self._turso else self._read()
         if self._blocked:
             logger.info("Loaded %d strike record(s)", len(self._blocked))
+
+    def _read_remote(self) -> dict[str, dict[str, Any]]:
+        try:
+            rows = self._turso.execute(
+                "SELECT key, strikes, last_at, term, question FROM strikes"
+            )
+        except TursoError:
+            logger.exception("Could not read strikes from Turso")
+            return {}
+        return {
+            row["key"]: {
+                "strikes": int(row["strikes"]),
+                "last_at": float(row["last_at"]),
+                "term": row.get("term") or "",
+                "question": row.get("question") or "",
+            }
+            for row in rows
+        }
 
     # -- persistence -------------------------------------------------------
 
@@ -149,6 +172,20 @@ class StrikeStore:
             return {}
 
     def _write(self) -> None:
+        if self._turso:
+            try:
+                self._turso.batch(
+                    (
+                        "INSERT OR REPLACE INTO strikes (key, strikes, last_at, term, question)"
+                        " VALUES (?, ?, ?, ?, ?)",
+                        (key, r["strikes"], r["last_at"], r["term"], r["question"]),
+                    )
+                    for key, r in self._blocked.items()
+                )
+                return
+            except TursoError:
+                logger.exception("Could not persist strikes to Turso")
+                return
         try:
             self._path.parent.mkdir(parents=True, exist_ok=True)
             self._path.write_text(json.dumps(self._blocked), encoding="utf-8")
@@ -232,6 +269,11 @@ class StrikeStore:
         with self._lock:
             removed = len(self._blocked)
             self._blocked = {}
+            if self._turso:
+                try:
+                    self._turso.execute("DELETE FROM strikes")
+                except TursoError:
+                    logger.exception("Could not clear strikes in Turso")
             try:
                 if self._path.exists():
                     self._path.unlink()

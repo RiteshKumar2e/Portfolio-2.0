@@ -45,6 +45,7 @@ from .moderation import (
 from .profile_store import ProfileStore
 from .prompts import build_system_prompt
 from .schemas import ChatRequest, VisitorInfo
+from .turso import TursoClient
 
 logging.basicConfig(
     level=os.getenv("LOG_LEVEL", "INFO"),
@@ -54,8 +55,11 @@ logger = logging.getLogger("ai-portfolio")
 
 settings: Settings = get_settings()
 store = ProfileStore(settings.profile_path)
-chat_log = ChatLogStore(settings.chat_log_path, max_rows=settings.chat_log_max_rows)
-strikes = StrikeStore(settings.chat_log_path.with_name("blocked.json"))
+turso = TursoClient(settings.turso_url, settings.turso_token)
+chat_log = ChatLogStore(
+    settings.chat_log_path, max_rows=settings.chat_log_max_rows, turso=turso
+)
+strikes = StrikeStore(settings.chat_log_path.with_name("blocked.json"), turso=turso)
 geo = GeoLookup(enabled=settings.geo_lookup_enabled)
 
 
@@ -75,6 +79,8 @@ async def lifespan(app: FastAPI):
             settings.chat_log_path,
         )
     yield
+    await run_in_threadpool(chat_log.flush)
+    await run_in_threadpool(turso.close)
     await app.state.llm.aclose()
     await geo.aclose()
 

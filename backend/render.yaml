@@ -12,10 +12,15 @@ services:
     #
     # WHERE THE CHAT LOG LIVES
     # On the free plan the filesystem is wiped on every deploy and every cold
-    # start, so the question log only survives until the next restart — download
-    # the Excel regularly, or move to a paid instance and uncomment the disk
-    # below (Render only allows disks on paid plans), together with the
-    # CHAT_LOG_PATH env var further down.
+    # start, so anything written to disk is gone within hours. The chat log and
+    # the abuse strikes therefore live in Turso (libSQL) — set the two variables
+    # below in the dashboard and both survive every restart.
+    #
+    # Without them the service still runs, it just falls back to a JSONL file
+    # that the next cold start deletes.
+    #
+    # A paid instance with a mounted disk is the other option: uncomment this
+    # and set CHAT_LOG_PATH=/var/data/chat_log.jsonl instead of using Turso.
     #
     # disk:
     #   name: chat-log
@@ -27,6 +32,13 @@ services:
       # Unlocks reading, exporting and deleting the chat log. Set it in the
       # dashboard; whoever holds it can read every visitor's details.
       - key: ADMIN_TOKEN
+        sync: false
+      # Turso (libSQL) — what keeps the chat log across deploys and cold starts.
+      # Create a database at turso.tech, then set both of these in the
+      # dashboard. TURSO_AUTH_TOKEN grants full read/write, so never commit it.
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
         sync: false
       # - key: CHAT_LOG_PATH        # only with the disk above
       #   value: /var/data/chat_log.jsonl

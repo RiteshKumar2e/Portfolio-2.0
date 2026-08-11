@@ -82,14 +82,11 @@ Portfolio 2.0/
 │   │   └── ai/
 │   │       ├── useChat.js          # streaming, memory, persistence, abort
 │   │       ├── ChatBubble.jsx      # message + copy / listen actions
-│   │       ├── JobMatchPanel.jsx   # JD scoring + interview questions
 │   │       ├── MarkdownLite.jsx    # dependency-free markdown renderer
 │   │       └── speech.js           # speech-to-text and text-to-speech hooks
 │   ├── lib/aiClient.js             # fetch + SSE stream parsing
 │   ├── lib/visitor.js              # who's asking — ids + optional contact card
 │   └── components/…                # rest of the portfolio (Hero, Projects, …)
-└── public/
-    └── admin.html                  # owner-only chat-log console (unlinked)
 ```
 
 ---
@@ -160,9 +157,11 @@ Each row carries who asked, not just what they asked:
 
 **Deleting resets the visitors too.** Their details live in their own browser, out of the server's reach, so a wipe publishes a timestamp that every browser compares against the last one it saw — anything newer clears the saved name and email, and the next question asks for them again. Only a *newer* stamp counts, so an ephemeral disk losing the marker on a cold start resets nobody.
 
-The console lives at **`/admin.html`** — a standalone page, unlinked from the site and `noindex`ed, that ships no portfolio code. Paste the token to get search, paging, one-click Excel download, and delete-everything. Full details, including the shell equivalents, are in [`backend/README.md`](backend/README.md#the-question-log).
+Reading, exporting and erasing the log all go through the owner-only API — search, paging, Excel/CSV export and delete-everything. The shell equivalents are in [`backend/README.md`](backend/README.md#the-question-log).
 
-> On Render's free plan the filesystem is wiped on each deploy and cold start, so download the workbook regularly or mount a paid persistent disk and point `CHAT_LOG_PATH` at it.
+**Abusive messages are handled before the model sees them.** A word list (English, Hinglish and Devanagari, matched at word boundaries so ordinary words are never caught) gives two warnings; the third abusive message is flagged in the log and disables chatting for that visitor, tracked by visitor id *and* IP so clearing browser storage does not reset it. Clearing the log lifts every block.
+
+> Storage is **Turso (libSQL)** in production — set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` and the log, the reset marker and the abuse strikes all survive deploys and cold starts. Without them everything falls back to a local JSONL file, which Render's free plan deletes on every restart.
 
 ---
 

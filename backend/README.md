@@ -28,8 +28,6 @@ Interactive API docs: <http://localhost:8000/docs>
 | GET    | `/api/profile`              | The structured candidate profile                       |
 | GET    | `/api/suggestions`          | Starter questions for the chat UI                      |
 | POST   | `/api/chat`                 | Streaming answer (Server-Sent Events)                  |
-| POST   | `/api/match`                | Structured job-description suitability report          |
-| POST   | `/api/interview-questions`  | Interview questions grounded in the profile            |
 | POST   | `/api/profile/reload`       | Re-read `profile.json` from disk (needs `ADMIN_TOKEN`) |
 | PUT    | `/api/profile`              | Replace the profile — no code change (needs `ADMIN_TOKEN`) |
 | GET    | `/api/admin/chats`          | Every question ever asked, newest first (needs `ADMIN_TOKEN`) |
@@ -117,8 +115,8 @@ Invalid profiles are rejected with a 422 and the old one stays live.
 
 ## The question log
 
-Every question a visitor asks — and every job description they paste — is
-appended to `data/chat_log.jsonl` the moment the answer finishes, together with
+Every question a visitor asks is recorded the moment the answer finishes —
+in Turso when it is configured, in `data/chat_log.jsonl` otherwise — together with
 whatever is known about who asked: their name and email (the chat asks for both
 once, before the first answer) plus an optional company/role, and on top of that
 IP, browser, OS, device, page, referrer, timezone and the model that answered.
@@ -127,12 +125,7 @@ The visitor has no way to reach any of it. Their browser keeps a local copy of
 their own conversation for convenience, but the record here is yours and only
 `ADMIN_TOKEN` opens it.
 
-**Console:** open `/admin.html` on the deployed site (e.g.
-`https://riteshkr.info/admin.html`), paste the token, and you get search,
-paging, a one-click Excel download and a delete-everything button. It is not
-linked from anywhere on the site and is marked `noindex`.
-
-**Or from the shell:**
+**From the shell:**
 
 ```bash
 # Download the workbook
@@ -166,10 +159,25 @@ The `.xlsx` has one row per question and 33 columns, filtered and frozen so it
 is usable the moment it opens. Without `openpyxl` installed the same endpoint
 serves CSV instead, which Excel reads natively.
 
-> **Free-tier warning.** Render wipes the filesystem on every deploy and cold
-> start, so on the free plan the log only survives until the next restart.
-> Either download the Excel regularly, or move to a paid instance, mount a disk
-> and set `CHAT_LOG_PATH=/var/data/chat_log.jsonl` (see `render.yaml`).
+### Where it is stored
+
+Render wipes the container filesystem on every deploy and cold start, so a
+file-backed log loses everything within hours. Set both of these and it does
+not:
+
+| Variable | Where to get it |
+|---|---|
+| `TURSO_DATABASE_URL` | `libsql://<db>-<org>.turso.io`, shown when you create the database |
+| `TURSO_AUTH_TOKEN`   | `turso db tokens create <db>` — full read/write, never commit it |
+
+The tables (`chat_log`, `chat_meta`, `strikes`) are created on first boot. Writes
+go to the local file first and are mirrored to Turso by a background thread, so
+logging never blocks an answer; reads come from Turso. If the database is
+unreachable at startup the service logs a warning and carries on file-only
+rather than failing every chat.
+
+Leave both unset for local development, or use a paid Render instance with a
+mounted disk and `CHAT_LOG_PATH=/var/data/chat_log.jsonl` instead.
 
 City / region / country / ISP stay blank unless your host forwards geo headers.
 Set `GEO_LOOKUP_ENABLED=true` to fill them by looking each IP up at ip-api.com —
@@ -202,6 +210,8 @@ Every value in `.env.example` is optional except `GROQ_API_KEY`. Notable ones:
 | `RATE_LIMIT_REQUESTS`   | `30` per 60s per IP         | Protects the free API key          |
 | `ADMIN_TOKEN`           | unset (owner routes off)    | Profile edits **and** the chat log |
 | `CHAT_LOG_ENABLED`      | `true`                      | Record questions at all            |
-| `CHAT_LOG_PATH`         | `./data/chat_log.jsonl`     | Point at a mounted disk to keep history across deploys |
+| `CHAT_LOG_PATH`         | `./data/chat_log.jsonl`     | Fallback file; ignored once Turso is configured |
+| `TURSO_DATABASE_URL`    | unset (file storage)        | libSQL database URL — keeps the log across deploys |
+| `TURSO_AUTH_TOKEN`      | unset (file storage)        | Token for the above; both are required |
 | `CHAT_LOG_MAX_ROWS`     | `20000`                     | Oldest rows trimmed past this; `0` = forever |
 | `GEO_LOOKUP_ENABLED`    | `false`                     | Resolve visitor IPs to a city via ip-api.com |

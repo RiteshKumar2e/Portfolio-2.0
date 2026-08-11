@@ -142,6 +142,13 @@ class Settings:
         self.chat_log_path: Path = Path(
             os.getenv("CHAT_LOG_PATH", str(BASE_DIR / "data" / "chat_log.jsonl"))
         )
+        # Turso (libSQL) is what makes the log survive a deploy: the host wipes
+        # the container filesystem on every restart, so without these two the
+        # chat log and the abuse strikes only live until the next cold start.
+        # Both must be set; either one alone falls back to the files above.
+        self.turso_url: str = os.getenv("TURSO_DATABASE_URL", "").strip()
+        self.turso_token: str = os.getenv("TURSO_AUTH_TOKEN", "").strip()
+
         # 0 keeps every question forever; anything else trims the oldest rows.
         self.chat_log_max_rows: int = int(os.getenv("CHAT_LOG_MAX_ROWS", "20000"))
         # Sends visitor IPs to ip-api.com to fill the City/Country columns.

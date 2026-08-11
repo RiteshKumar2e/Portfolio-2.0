@@ -1,10 +1,19 @@
 """Durable log of every question a visitor asks, exportable as an Excel sheet.
 
-Storage is an append-only JSONL file: one question per line, written the moment
-the answer finishes. JSONL is used rather than writing .xlsx directly because a
-spreadsheet has to be rewritten whole on every change — a plain append is
-atomic enough to survive a crash mid-request and costs microseconds. The
-workbook is rendered on demand when the owner downloads it.
+Two storage layers, and which one is in charge depends on configuration:
+
+* **Turso (libSQL)**, when TURSO_DATABASE_URL and TURSO_AUTH_TOKEN are set. This
+  is the one that matters in production. The host wipes the container filesystem
+  on every deploy and every cold start, so a file-backed log quietly loses
+  everything a few times a day; a database does not.
+* **A JSONL file**, otherwise. One question per line, appended the moment the
+  answer finishes. Used for local development, and as the write-ahead buffer
+  underneath Turso.
+
+Writes always hit the file first and are mirrored to Turso by a background
+writer, because `append` is called from the `finally` of a cancelled SSE
+generator: it has to be non-blocking and it has to not raise. Reads come from
+Turso whenever it is configured, since the file is the copy that disappears.
 
 Only the owner (ADMIN_TOKEN) can read or clear this log; visitors can neither
 see it nor delete from it.
@@ -14,12 +23,15 @@ import csv
 import io
 import json
 import logging
+import queue
 import re
 import threading
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any, Iterator, Optional
+
+from .turso import TursoClient, TursoError
 
 logger = logging.getLogger("ai-portfolio.chatlog")
 
@@ -76,19 +88,128 @@ COLUMNS: list[tuple[str, str, int]] = [
 KIND_LABELS = {"chat": "Chat", "abuse": "Flagged"}
 
 
-class ChatLogStore:
-    """Append-only question log on disk, with owner-only read/export/clear."""
+SCHEMA = [
+    """CREATE TABLE IF NOT EXISTS chat_log (
+        id       TEXT PRIMARY KEY,
+        asked_at TEXT NOT NULL,
+        payload  TEXT NOT NULL
+    )""",
+    "CREATE INDEX IF NOT EXISTS chat_log_asked_at ON chat_log (asked_at)",
+    """CREATE TABLE IF NOT EXISTS chat_meta (
+        key   TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+    )""",
+    """CREATE TABLE IF NOT EXISTS strikes (
+        key      TEXT PRIMARY KEY,
+        strikes  INTEGER NOT NULL,
+        last_at  REAL NOT NULL,
+        term     TEXT,
+        question TEXT
+    )""",
+]
 
-    def __init__(self, path: Path, max_rows: int = 20000) -> None:
+
+class ChatLogStore:
+    """Append-only question log, with owner-only read/export/clear."""
+
+    def __init__(
+        self, path: Path, max_rows: int = 20000, turso: Optional[TursoClient] = None
+    ) -> None:
         self._path = path
         # Sidecar, so it survives the log file being deleted — that is the whole
         # point of it. Holds when the log was last wiped.
         self._meta_path = path.with_name(path.stem + ".meta.json")
         self._max_rows = max_rows
         self._lock = threading.Lock()
-        self._count = self._count_lines()
+
+        self._turso = turso if (turso and turso.enabled) else None
+        self._queue: "queue.Queue[Optional[dict[str, Any]]]" = queue.Queue()
+        self._writer: Optional[threading.Thread] = None
+        if self._turso and not self._init_turso():
+            self._turso = None  # unreachable at boot — carry on with the file
+
+        self._count = self._remote_count() if self._turso else self._count_lines()
         self._reset_at = self._read_reset_at()
-        logger.info("Chat log at %s (%d entries)", self._path, self._count)
+        logger.info(
+            "Chat log on %s (%d entries)",
+            "Turso" if self._turso else f"file {self._path}",
+            self._count,
+        )
+
+    # -- Turso ------------------------------------------------------------
+
+    def _init_turso(self) -> bool:
+        """Create the tables and start the writer. False if the database is
+        unreachable, which downgrades the log to file-only rather than 500ing
+        every chat."""
+        try:
+            self._turso.batch((sql, ()) for sql in SCHEMA)
+        except TursoError:
+            logger.exception("Turso is configured but unreachable — falling back to the file")
+            return False
+
+        self._writer = threading.Thread(
+            target=self._drain, name="chat-log-writer", daemon=True
+        )
+        self._writer.start()
+        return True
+
+    def _drain(self) -> None:
+        """Mirror queued entries into Turso, one round trip per batch.
+
+        Runs off the request path entirely: a slow database delays the row
+        landing in the table, never the visitor's answer.
+        """
+        while True:
+            entry = self._queue.get()
+            if entry is None:  # shutdown sentinel
+                self._queue.task_done()
+                return
+
+            batch = [entry]
+            while len(batch) < 50:  # opportunistic: whatever else is waiting
+                try:
+                    extra = self._queue.get_nowait()
+                except queue.Empty:
+                    break
+                if extra is None:
+                    self._queue.put(None)  # put the sentinel back for the next loop
+                    break
+                batch.append(extra)
+
+            try:
+                self._turso.batch(
+                    (
+                        "INSERT OR REPLACE INTO chat_log (id, asked_at, payload) VALUES (?, ?, ?)",
+                        (
+                            row.get("id") or f"{time.time()}",
+                            row.get("asked_at") or "",
+                            json.dumps(row, ensure_ascii=False, default=str),
+                        ),
+                    )
+                    for row in batch
+                )
+            except TursoError:
+                logger.exception("Could not mirror %d row(s) to Turso", len(batch))
+
+            for _ in batch:
+                self._queue.task_done()
+
+    def _remote_count(self) -> int:
+        try:
+            rows = self._turso.execute("SELECT COUNT(*) AS n FROM chat_log")
+            return int(rows[0]["n"]) if rows else 0
+        except (TursoError, KeyError, ValueError):
+            logger.exception("Could not count the Turso chat log")
+            return 0
+
+    def flush(self, timeout: float = 5.0) -> None:
+        """Wait for queued rows to reach Turso. Called on shutdown."""
+        if not self._turso:
+            return
+        finished = threading.Thread(target=self._queue.join, daemon=True)
+        finished.start()
+        finished.join(timeout)
 
     # -- writing -----------------------------------------------------------
 
@@ -102,7 +223,9 @@ class ChatLogStore:
                 with self._path.open("a", encoding="utf-8") as handle:
                     handle.write(line + "\n")
                 self._count += 1
-                over = self._max_rows and self._count > self._max_rows
+                over = self._max_rows and self._count > self._max_rows and not self._turso
+            if self._turso:
+                self._queue.put(entry)
             if over:
                 self._trim()
         except Exception:  # noqa: BLE001 — logging is best-effort by design
@@ -138,12 +261,31 @@ class ChatLogStore:
     # cold start — reads as 0 and quietly resets nobody.
 
     def _read_reset_at(self) -> float:
+        if self._turso:
+            try:
+                rows = self._turso.execute(
+                    "SELECT value FROM chat_meta WHERE key = ?", ("reset_at",)
+                )
+                return float(rows[0]["value"]) if rows else 0.0
+            except (TursoError, KeyError, ValueError, TypeError):
+                logger.exception("Could not read the reset marker from Turso")
+                return 0.0
         try:
             return float(json.loads(self._meta_path.read_text(encoding="utf-8"))["reset_at"])
         except (OSError, ValueError, KeyError, TypeError):
             return 0.0
 
     def _write_reset_at(self, value: float) -> None:
+        if self._turso:
+            try:
+                self._turso.execute(
+                    "INSERT OR REPLACE INTO chat_meta (key, value) VALUES (?, ?)",
+                    ("reset_at", str(value)),
+                )
+                return
+            except TursoError:
+                logger.exception("Could not persist the reset marker to Turso")
+                return
         try:
             self._meta_path.parent.mkdir(parents=True, exist_ok=True)
             self._meta_path.write_text(
@@ -191,8 +333,29 @@ class ChatLogStore:
         return self._path
 
     def all_entries(self, newest_first: bool = False) -> list[dict[str, Any]]:
-        entries = list(self._iter_entries())
+        if self._turso:
+            entries = self._remote_entries()
+        else:
+            entries = list(self._iter_entries())
         return entries[::-1] if newest_first else entries
+
+    def _remote_entries(self) -> list[dict[str, Any]]:
+        """Oldest first, to match the file order every caller already expects."""
+        try:
+            rows = self._turso.execute(
+                "SELECT payload FROM chat_log ORDER BY asked_at ASC, rowid ASC"
+            )
+        except TursoError:
+            logger.exception("Could not read the chat log from Turso")
+            return []
+
+        entries = []
+        for row in rows:
+            try:
+                entries.append(json.loads(row["payload"]))
+            except (KeyError, json.JSONDecodeError):
+                continue
+        return entries
 
     def page(
         self, limit: int = 50, offset: int = 0, search: str = ""
@@ -226,7 +389,7 @@ class ChatLogStore:
             "first_asked_at": first,
             "last_asked_at": last,
             "xlsx_available": XLSX_AVAILABLE,
-            "storage_path": str(self._path),
+            "storage_path": "Turso (libSQL)" if self._turso else str(self._path),
         }
 
     # -- clearing (owner only) ---------------------------------------------
@@ -239,12 +402,19 @@ class ChatLogStore:
         """
         with self._lock:
             removed = self._count
+            if self._turso:
+                try:
+                    self._turso.execute("DELETE FROM chat_log")
+                except TursoError:
+                    logger.exception("Could not clear the Turso chat log")
+                    raise
             try:
                 if self._path.exists():
                     self._path.unlink()
             except OSError:
                 logger.exception("Could not delete the chat log file")
-                raise
+                if not self._turso:
+                    raise
             self._count = 0
             self._reset_at = time.time()
             self._write_reset_at(self._reset_at)
