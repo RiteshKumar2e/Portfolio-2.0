@@ -131,21 +131,7 @@ Scroll to **Ask AI**, or click *Ask AI* in the navbar.
 
 ---
 
-## Model Fallback Chain
-
-Groq meters free-tier usage *per model* — each has its own tokens-per-day budget — so a single model eventually returns `429` under load. The chain solves this with an ordered list of **nine links across two providers**: six Groq models, followed by three Gemini models on a completely separate Google quota. The first healthy link answers; any link that gets rate-limited is sidelined for a cooldown (honouring `Retry-After`) while the next takes over. Visitors never see the failure, and `GET /api/health` reports the live state of every link.
-
-Both providers are called through their OpenAI-compatible `chat/completions` endpoint, so one streaming code path serves both — they differ only by URL, key, and model id. Either provider is optional: with no `GEMINI_API_KEY`, the Gemini links simply drop out and the service runs on Groq alone.
-
-Because the two providers report the same problem differently — Groq answers `401` for a bad key, Gemini answers `400 "Please pass a valid API key"` — both are treated as failover conditions with a long cooldown. One provider's broken credentials can never silence the other.
-
-Two behaviours make the chain hold up in practice:
-
-- **Failover happens only before the first token.** Once an answer is streaming, switching models would restart it mid-sentence, so a mid-stream failure is reported instead.
-- **Models that reject the full prompt (`413`) are retried immediately with a compact prompt** — 41% smaller, same facts — and remembered, so the smaller models stay usable instead of dropping out.
-
-These six are every chat model Groq exposes that can serve this workload. The rest of the catalogue cannot:
-
+s
 | Model | Why it's excluded |
 | --- | --- |
 | `groq/compound`, `groq/compound-mini` | Route to `llama-3.3-70b-versatile` internally and spend its quota, adding no capacity when that model is the one that ran out. They also carry built-in web search, which could pull facts from outside the profile. |
