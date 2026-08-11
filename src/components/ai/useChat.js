@@ -2,8 +2,21 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { streamChat } from '../../lib/aiClient';
 import { visitorContext } from '../../lib/visitor';
 
-const STORAGE_KEY = 'ai-portfolio-chats-v1';
-const LEGACY_KEY = 'ai-portfolio-chat-v1'; // single-thread format, pre-history
+const STORAGE_KEY = 'ritesh-ai-chats';
+
+// Everything the old `ai-portfolio-*` keys held is gone for good: those threads
+// predate the current log and have no counterpart on the server, so they are
+// deleted rather than migrated. Done at module scope so the purge runs once per
+// page load, before any component reads storage.
+if (typeof localStorage !== 'undefined') {
+    try {
+        Object.keys(localStorage)
+            .filter((key) => key.startsWith('ai-portfolio-chat'))
+            .forEach((key) => localStorage.removeItem(key));
+    } catch {
+        /* private mode — nothing to purge */
+    }
+}
 const MAX_CONVERSATIONS = 20;
 const MAX_STORED_MESSAGES = 40;
 
@@ -37,17 +50,6 @@ function loadInitialState() {
                     ? parsed.activeId
                     : parsed.conversations[0].id;
                 return { activeId, conversations: parsed.conversations };
-            }
-        }
-
-        // One-time migration: an older build stored a single message array.
-        const legacy = localStorage.getItem(LEGACY_KEY);
-        if (legacy) {
-            const messages = JSON.parse(legacy);
-            localStorage.removeItem(LEGACY_KEY);
-            if (Array.isArray(messages) && messages.length) {
-                const conversation = makeConversation(messages);
-                return { activeId: conversation.id, conversations: [conversation] };
             }
         }
     } catch {
