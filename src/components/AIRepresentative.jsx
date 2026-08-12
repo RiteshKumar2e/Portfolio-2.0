@@ -777,7 +777,7 @@ const IdentityFields = ({ draft, setDraft, touched, setTouched, isDarkMode, auto
                 <input
                     id="visitor-name"
                     className={field('name')}
-                    placeholder="Your name"
+                    placeholder="Enter name"
                     value={draft.name}
                     maxLength={120}
                     autoFocus={autoFocus}
