@@ -191,6 +191,7 @@ def asker_details(
         "name": details.get("name") or "",
         "email": details.get("email") or "",
         "company": details.get("company") or "",
+        "linkedin": details.get("linkedin") or "",
         "ip": client_ip(request),
         # Some hosts hand us the location directly; the rest is filled in later.
         "city": _header(headers, "x-vercel-ip-city"),

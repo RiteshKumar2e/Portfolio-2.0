@@ -57,6 +57,7 @@ COLUMNS: list[tuple[str, str, int]] = [
     ("Name", "name", 18),
     ("Email", "email", 26),
     ("Company / role", "company", 22),
+    ("LinkedIn", "linkedin", 34),
     ("Question", "question", 60),
     ("Answer", "answer", 70),
     ("IP address", "ip", 16),

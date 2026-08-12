@@ -6,9 +6,10 @@
  *
  *   - ambient   — id, session, page, referrer, timezone, screen. Free, and
  *                 always sent.
- *   - declared  — name and email (required before the first question) plus an
- *                 optional company, typed into the "who's asking" card and
- *                 remembered, so it is asked exactly once per browser.
+ *   - declared  — name, email and LinkedIn (all required before the first
+ *                 question) plus an optional company, typed into the
+ *                 "who's asking" card and remembered, so it is asked exactly
+ *                 once per browser.
  *
  * Nothing here is a login: the ids are random local labels that make repeat
  * visits recognisable, and the name/email are self-declared, not verified.
@@ -66,7 +67,7 @@ function sessionId() {
     return id;
 }
 
-const EMPTY_IDENTITY = { name: '', email: '', company: '' };
+const EMPTY_IDENTITY = { name: '', email: '', company: '', linkedin: '' };
 
 /** What the visitor chose to tell us about themselves, if anything. */
 export function loadIdentity() {
@@ -77,6 +78,7 @@ export function loadIdentity() {
             name: String(stored.name || '').slice(0, 120),
             email: String(stored.email || '').slice(0, 180),
             company: String(stored.company || '').slice(0, 180),
+            linkedin: String(stored.linkedin || '').slice(0, 200),
         };
     } catch {
         return { ...EMPTY_IDENTITY };
@@ -88,6 +90,7 @@ export function saveIdentity(identity) {
         name: (identity.name || '').trim().slice(0, 120),
         email: (identity.email || '').trim().slice(0, 180),
         company: (identity.company || '').trim().slice(0, 180),
+        linkedin: normaliseLinkedIn(identity.linkedin),
     };
     if (typeof localStorage !== 'undefined') {
         write(localStorage, IDENTITY_KEY, JSON.stringify(clean));
@@ -132,11 +135,44 @@ export function isValidEmail(value) {
 }
 
 /**
- * Name and email are required before the first question goes through; the
- * company field is a nice-to-have. Anything less and the chat asks once.
+ * A LinkedIn profile or company URL, with or without the scheme and with or
+ * without a country subdomain — `in.linkedin.com/in/name` and
+ * `https://www.linkedin.com/company/acme` are both fine.
+ *
+ * Only the host and the path shape are checked. Whether the profile actually
+ * exists is not something a form can know, and pretending otherwise would just
+ * reject people with unusual handles.
+ */
+const LINKEDIN_URL =
+    /^(?:https?:\/\/)?(?:[a-z]{2,3}\.)?(?:www\.)?linkedin\.com\/(in|pub|company|school)\/[A-Za-z0-9\-_%À-ÿ.]{2,100}\/?(?:\?.*)?$/i;
+
+export function isValidLinkedIn(value) {
+    return LINKEDIN_URL.test((value || '').trim());
+}
+
+/** Store it as a canonical https URL, whatever shape it was typed in. */
+export function normaliseLinkedIn(value) {
+    const raw = (value || '').trim().replace(/\?.*$/, '').replace(/\/$/, '');
+    if (!raw) return '';
+    if (!isValidLinkedIn(raw)) return raw.slice(0, 200); // kept as typed; the form blocks it
+    const withoutScheme = raw.replace(/^https?:\/\//i, '');
+    return `https://${withoutScheme}`.slice(0, 200);
+}
+
+/**
+ * Name, email and LinkedIn are required before the first question goes through;
+ * the company field is a nice-to-have. Anything less and the chat asks once.
+ *
+ * Note that tightening this is retroactive by design: someone who filled the
+ * card in before LinkedIn was required no longer counts as complete, so they
+ * are asked once more rather than being grandfathered in without one.
  */
 export function isIdentityComplete(identity) {
-    return Boolean((identity?.name || '').trim().length >= 2 && isValidEmail(identity?.email));
+    return Boolean(
+        (identity?.name || '').trim().length >= 2 &&
+            isValidEmail(identity?.email) &&
+            isValidLinkedIn(identity?.linkedin)
+    );
 }
 
 /**
@@ -162,6 +198,7 @@ export function visitorContext({ conversationId = '', turn = null } = {}) {
         name: identity.name,
         email: identity.email,
         company: identity.company,
+        linkedin: identity.linkedin,
         page: typeof location !== 'undefined' ? location.href.slice(0, 500) : '',
         referrer: typeof document !== 'undefined' ? document.referrer.slice(0, 500) : '',
         timezone,

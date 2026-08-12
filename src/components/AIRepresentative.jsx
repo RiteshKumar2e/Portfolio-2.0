@@ -7,7 +7,8 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import { checkHealth } from '../lib/aiClient';
 import {
-    isIdentityComplete, isValidEmail, loadIdentity, saveIdentity, syncIdentityReset,
+    isIdentityComplete, isValidEmail, isValidLinkedIn, loadIdentity, saveIdentity,
+    syncIdentityReset,
 } from '../lib/visitor';
 import ChatBubble from './ai/ChatBubble';
 import { conversationTitle, useChat } from './ai/useChat';
@@ -744,6 +745,7 @@ const IdentityFields = ({ draft, setDraft, touched, setTouched, isDarkMode, auto
     const invalid = {
         name: draft.name.trim().length < 2,
         email: !isValidEmail(draft.email),
+        linkedin: !isValidLinkedIn(draft.linkedin),
     };
 
     const field = (key) =>
@@ -826,13 +828,39 @@ const IdentityFields = ({ draft, setDraft, touched, setTouched, isDarkMode, auto
                     onChange={update('company')}
                 />
             </div>
+
+            <div>
+                <label className={labelClass} htmlFor="visitor-linkedin">
+                    LinkedIn <span className="text-indigo-500">*</span>
+                </label>
+                <input
+                    id="visitor-linkedin"
+                    className={field('linkedin')}
+                    type="url"
+                    inputMode="url"
+                    placeholder="linkedin.com/in/your-profile"
+                    value={draft.linkedin || ''}
+                    maxLength={200}
+                    autoComplete="url"
+                    aria-invalid={touched.linkedin && invalid.linkedin}
+                    onChange={update('linkedin')}
+                    onBlur={blur('linkedin')}
+                />
+                {touched.linkedin && invalid.linkedin && (
+                    <p className="mt-1 text-[11px] text-rose-500">
+                        {draft.linkedin?.trim()
+                            ? "That doesn't look like a LinkedIn profile — e.g. linkedin.com/in/your-profile"
+                            : 'Please add your LinkedIn profile.'}
+                    </p>
+                )}
+            </div>
         </div>
     );
 };
 
 /** Shared submit guard: mark everything touched, bail if anything is invalid. */
 function tryComplete(draft, setTouched, onSubmit) {
-    setTouched({ name: true, email: true });
+    setTouched({ name: true, email: true, linkedin: true });
     if (!isIdentityComplete(draft)) return;
     onSubmit(draft);
 }

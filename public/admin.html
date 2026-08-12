@@ -238,6 +238,10 @@
     var lines = ['<div class="who">' + name + '</div>'];
     if (row.email && row.name) lines.push('<div class="meta">' + esc(row.email) + '</div>');
     if (row.company) lines.push('<div class="meta">' + esc(row.company) + '</div>');
+    if (row.linkedin) {
+      lines.push('<div class="meta"><a href="' + esc(row.linkedin)
+        + '" target="_blank" rel="noopener noreferrer">LinkedIn</a></div>');
+    }
     lines.push('<div class="meta">' + esc(row.visitor_id || '—') + '</div>');
     return lines.join('');
   }

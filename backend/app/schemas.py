@@ -110,6 +110,7 @@ class VisitorInfo(BaseModel):
     name: Optional[str] = Field(default=None, max_length=120)
     email: Optional[str] = Field(default=None, max_length=180)
     company: Optional[str] = Field(default=None, max_length=180)
+    linkedin: Optional[str] = Field(default=None, max_length=200)
 
     # Ambient context the browser knows for free.
     page: Optional[str] = Field(default=None, max_length=500)
