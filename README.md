@@ -23,7 +23,6 @@ Instead of reading a resume, recruiters chat with an AI that answers questions a
 - [What the AI Does](#what-the-ai-does)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
-- [Model Fallback Chain](#model-fallback-chain)
 - [Question Log](#question-log)
 - [Deployment](#deployment)
 - [Updating the Candidate Data](#updating-the-candidate-data)
@@ -69,6 +68,8 @@ Portfolio 2.0/
 │   │   ├── llm.py                 # LLM client + model failover & cooldowns
 │   │   ├── profile_store.py       # loads / validates / renders the profile
 │   │   ├── chat_log.py            # question log + Excel/CSV export
+│   │   ├── moderation.py          # abuse word list, strikes & blocking
+│   │   ├── turso.py               # libSQL storage for log / strikes / reset marker
 │   │   ├── geo.py                 # optional IP → city lookup for the log
 │   │   ├── schemas.py             # Pydantic models
 │   │   └── config.py              # env-driven settings
@@ -128,26 +129,15 @@ Scroll to **Ask AI**, or click *Ask AI* in the navbar.
 
 ---
 
-s
-| Model | Why it's excluded |
-| --- | --- |
-| `groq/compound`, `groq/compound-mini` | Route to `llama-3.3-70b-versatile` internally and spend its quota, adding no capacity when that model is the one that ran out. They also carry built-in web search, which could pull facts from outside the profile. |
-| `whisper-large-v3*` | Speech-to-text. |
-| `canopylabs/orpheus-*` | Text-to-speech. |
-| `meta-llama/llama-prompt-guard-2-*` | 512-token classifiers. |
-| `allam-2-7b` | 4k context — smaller than the prompt itself. |
-
----
-
 ## Question Log
 
-A portfolio chat is only half useful if the questions evaporate. Every question a visitor asks — and every job description they paste — is appended to an append-only JSONL file the moment the answer finishes, and rendered on demand as a formatted **Excel workbook**: one row per question, 33 columns.
+A portfolio chat is only half useful if the questions evaporate. Every question a visitor asks — and every job description they paste — is appended to an append-only JSONL file the moment the answer finishes, and rendered on demand as a formatted **Excel workbook**: one row per question, 34 columns.
 
 Each row carries who asked, not just what they asked:
 
 | | |
 | --- | --- |
-| **Identity** | Name and email, asked once before the first answer via a *"who's asking?"* card, plus an optional company/role. Saved per browser, so it never interrupts again. |
+| **Identity** | Name and email, asked once before the first answer via a *"who's asking?"* card, plus an optional company/role and LinkedIn profile. Saved per browser, so it never interrupts again. |
 | **Recognition** | A visitor id stable across visits, a session id per tab, plus conversation id and turn number, so a five-question conversation reads as one thread. |
 | **Origin** | IP address, city / region / country / ISP (with `GEO_LOOKUP_ENABLED`), the page they asked from, and where they arrived from. |
 | **Context** | Device, OS, browser, screen size, their timezone, browser language, and the reply language they picked. |
