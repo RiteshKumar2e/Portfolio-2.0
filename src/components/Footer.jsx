@@ -42,10 +42,11 @@ const Footer = () => {
     ];
 
     const socialLinks = [
-        { icon: FaGithub, href: 'https://github.com/RiteshKumar2e', label: 'GitHub', color: 'bg-slate-50 text-slate-800 hover:bg-slate-100' },
-        { icon: FaLinkedin, href: 'https://www.linkedin.com/in/riteshkumar-tech', label: 'LinkedIn', color: 'bg-blue-50 text-blue-600 hover:bg-blue-100' },
-        { icon: FaEnvelope, href: 'mailto:riteshkumar90359@gmail.com', label: 'Email', color: 'bg-rose-50 text-rose-500 hover:bg-rose-100' },
-        { icon: SiOrcid, href: 'https://orcid.org/0009-0009-0057-6839', label: 'ORCID', color: 'bg-lime-50 text-[#A6CE39] hover:bg-lime-100' },
+        // Brand colors are raw hex: the Tailwind blue/red/lime families are remapped to the earth palette.
+        { icon: FaGithub, href: 'https://github.com/RiteshKumar2e', label: 'GitHub', color: 'bg-[#181717]/5 text-[#181717] hover:bg-[#181717]/10', darkColor: 'text-[#f0f6fc]' },
+        { icon: FaLinkedin, href: 'https://www.linkedin.com/in/riteshkumar-tech', label: 'LinkedIn', color: 'bg-[#0A66C2]/10 text-[#0A66C2] hover:bg-[#0A66C2]/15', darkColor: 'text-[#0A66C2]' },
+        { icon: FaEnvelope, href: 'mailto:riteshkumar90359@gmail.com', label: 'Email', color: 'bg-[#EA4335]/10 text-[#EA4335] hover:bg-[#EA4335]/15', darkColor: 'text-[#EA4335]' },
+        { icon: SiOrcid, href: 'https://orcid.org/0009-0009-0057-6839', label: 'ORCID', color: 'bg-[#A6CE39]/15 text-[#A6CE39] hover:bg-[#A6CE39]/20', darkColor: 'text-[#A6CE39]' },
     ];
 
     return (
@@ -75,7 +76,7 @@ const Footer = () => {
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all shadow-sm border ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-indigo-500/50' : `border-slate-50 ${social.color}`}`}
+                                    className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all shadow-sm border ${isDarkMode ? `bg-white/5 border-white/10 hover:bg-white/10 ${social.darkColor}` : `border-slate-50 ${social.color}`}`}
                                     whileHover={{ y: -5, scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     aria-label={social.label}
@@ -123,13 +124,13 @@ const Footer = () => {
                         <h4 className={`text-sm font-black uppercase tracking-[0.2em] mb-8 ml-1 ${isDarkMode ? 'text-slate-300' : 'text-slate-800'}`}>Connect</h4>
                         <div className="space-y-4">
                             <a href="mailto:riteshkumar90359@gmail.com" className={`group flex items-center gap-4 p-4 rounded-2xl border transition-all shadow-sm ${isDarkMode ? 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-indigo-500/30' : 'bg-slate-50 border-transparent hover:border-indigo-100 hover:bg-white'}`}>
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border ${isDarkMode ? 'bg-slate-900 text-indigo-400 border-white/5' : 'bg-white text-indigo-600 border-slate-100'}`}>
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border ${isDarkMode ? 'bg-slate-900 text-[#EA4335] border-white/5' : 'bg-white text-[#EA4335] border-slate-100'}`}>
                                     <FaEnvelope />
                                 </div>
                                 <span className={`text-sm font-black truncate ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>riteshkumar90359@gmail.com</span>
                             </a>
                             <a href="https://www.linkedin.com/in/riteshkumar-tech" target="_blank" rel="noopener noreferrer" className={`group flex items-center gap-4 p-4 rounded-2xl border transition-all shadow-sm ${isDarkMode ? 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-blue-500/30' : 'bg-slate-50 border-transparent hover:border-blue-100 hover:bg-white'}`}>
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border ${isDarkMode ? 'bg-slate-900 text-blue-400 border-white/5' : 'bg-white text-blue-600 border-slate-100'}`}>
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border ${isDarkMode ? 'bg-slate-900 text-[#0A66C2] border-white/5' : 'bg-white text-[#0A66C2] border-slate-100'}`}>
                                     <FaLinkedin />
                                 </div>
                                 <span className={`text-sm font-black ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>LinkedIn Profile</span>

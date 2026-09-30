@@ -47,7 +47,7 @@ const Contact = () => {
                     particleCount: 150,
                     spread: 70,
                     origin: { y: 0.6 },
-                    colors: ['#4f46e5', '#6366f1', '#3b82f6']
+                    colors: ['#c3a47b', '#dbc39c', '#7b845e']
                 });
                 setFormData({ name: '', email: '', subject: '', message: '' });
 

@@ -9,7 +9,7 @@ import {
     SiExpress, SiScikitlearn, SiKeras, SiFastapi, SiPostgresql,
     SiJsonwebtokens, SiSqlalchemy, SiPydantic, SiPlotly, SiHuggingface,
     SiGooglegemini, SiMui, SiTurso, SiDocker, SiRender,
-    SiVercel, SiBrevo, SiGoogle
+    SiVercel, SiBrevo, SiGoogle, SiReactrouter, SiGithubactions
 } from 'react-icons/si';
 import { VscVscode } from 'react-icons/vsc';
 import {
@@ -17,7 +17,8 @@ import {
     FaCodeBranch, FaCube, FaGlobe, FaShapes, FaLayerGroup, FaTimes, FaArrowRight,
     FaArrowLeft, FaGithub as FaGithubBrand, FaExternalLinkAlt,
     FaRobot, FaEye, FaLanguage, FaNetworkWired, FaChartLine, FaChartBar, FaTree, FaSitemap,
-    FaBolt, FaBullseye, FaMobileAlt, FaChevronDown
+    FaBolt, FaBullseye, FaMobileAlt, FaChevronDown, FaMemory, FaRedoAlt,
+    FaTachometerAlt, FaStream, FaCubes, FaUserShield, FaProjectDiagram
 } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
 
@@ -29,45 +30,42 @@ const projectDetails = {
         role: "Full-Stack Developer",
         code: "https://github.com/RiteshKumar2e/Community-Empowering-2.0",
         live: "https://communityai.co.in",
-        summary: "Imagine one friendly website that tells people exactly which government schemes and opportunities they qualify for — and talks to them in their own language. That is what this platform does for communities that usually miss out because the information is scattered and hard to read.",
+        summary: "Imagine one friendly website that tells people exactly which government schemes, courses, and jobs are out there for them — and talks to them in their own language. More than 100 people use it actively today.",
         steps: [
-            { title: "Understanding the real problem", text: "Government help often exists, but people never find it: details are spread across dozens of sites, written in complex English, and buried inside PDFs. I started by mapping what an ordinary user actually needs — 'what am I eligible for, and how do I get it?' — and designed the entire product around answering that one question simply." },
-            { title: "Building a solid backend with FastAPI", text: "I chose FastAPI, a modern Python framework, because it is fast and can serve many users at once using asynchronous requests. Think of it as the engine room: it receives every request from the website, runs the logic, and sends an answer back in milliseconds." },
-            { title: "Modelling data safely (SQLAlchemy + Pydantic)", text: "I used SQLAlchemy to design the database — tables for users, schemes, and chat history — without writing risky raw SQL. Pydantic validates every incoming request, so malformed or malicious data is rejected before it ever reaches the database." },
-            { title: "Locking the doors with JWT", text: "When a user logs in, the server hands them a secure digital token (a JWT). Every time they open a private page, the server checks that token. In plain terms, it is a tamper-proof wristband that proves who you are, so nobody can peek at someone else's information." },
-            { title: "A multilingual AI assistant", text: "The centrepiece is a chat assistant that understands context and replies in the user's own language. Someone can simply type 'mujhe kya madad mil sakti hai?' and get a clear, friendly answer instead of scrolling through confusing forms." },
-            { title: "Smart recommendations with deep learning", text: "Instead of forcing people to search, a deep-learning model studies their profile and surfaces the opportunities most relevant to them — like a helpful friend who already knows all the rules." },
-            { title: "The React frontend and going live", text: "I built a clean, responsive interface in React so it runs smoothly even on a budget phone, then deployed it to production at communityai.co.in, where it is live and serving real users today." }
+            { title: "Understanding the real problem", text: "Government help often exists, but people never find it: details are spread across dozens of sites, written in complex English, and buried inside PDFs. I designed the product around one simple question — 'what is out there for me, and how do I get it?'" },
+            { title: "An assistant that speaks your language", text: "The centrepiece is an AI assistant that answers in 5 Indian languages. It tries Amazon Q first, then Groq, then Gemini — so if one service is down, the next one quietly takes over." },
+            { title: "Keeping the catalogue fresh on its own", text: "An automated content scanner pulls new schemes and courses from 2 outside sources (the News and YouTube APIs), adds them to the platform, and emails summaries through Brevo — no manual updating needed." },
+            { title: "A fast, careful backend", text: "The FastAPI backend has 27 REST endpoints built on async I/O, with background tasks for email, connection pooling, and indexed queries, so it stays quick as more people use it." },
+            { title: "Locking the doors", text: "Logins use JWT tokens and bcrypt-hashed passwords, every request is checked by Pydantic before it touches the database, and rate limiting stops anyone from hammering the API." },
+            { title: "Live for real users", text: "The React frontend is live at communityai.co.in, where 100+ active users browse 50+ schemes, courses, and jobs." }
         ]
     },
     "QuickFix AI Customer Agent": {
         role: "Solo Developer",
         code: "https://github.com/RiteshKumar2e/customer-complaint-agent_new",
         live: "https://riteshkr.online",
-        summary: "Picture the best customer-support person you have ever dealt with — fast, patient, and always right. Now imagine thirty of them, each an expert in one topic, answering instantly. That is QuickFix: a team of AI agents that resolves complaints in under a second.",
+        summary: "Picture a support desk where every complaint is read by a small team of AI helpers at the same moment — one works out the category, one reads the mood, one decides how urgent it is — and then a reply is drafted straight from the company's own policy. That is QuickFix, and it works in English, Hindi, and Hinglish.",
         steps: [
-            { title: "The everyday frustration", text: "When you complain to a company, you wait on hold, repeat yourself, and often get different answers from different people. I set out to make support that is instant, consistent, and genuinely kind, no matter how unusual the problem is." },
-            { title: "A team of 30+ specialist agents", text: "Instead of one giant AI trying to know everything, I built more than thirty smaller AI agents, each specialised in one area — refunds, delivery, billing, and so on. The system reads your complaint and routes it to the right expert, exactly like a well-run call centre." },
-            { title: "Teaching the AI the rulebook with RAG", text: "RAG (Retrieval-Augmented Generation) means the AI first looks up the company's actual policy documents and then answers based on them. In simple terms, it 'reads the manual' before it speaks, so it gives correct, policy-backed answers instead of guessing." },
-            { title: "Choosing fast, smart brains", text: "I connected the agents to Gemini 2.0 and Groq's LLaMA models, which understand language extremely well and respond at very high speed — the key to those sub-second replies." },
-            { title: "The backend and its memory", text: "A FastAPI backend orchestrates all the agents, and a MariaDB database stores every complaint and its history, so the system remembers context and stays consistent across a whole conversation." },
-            { title: "A real-time React console", text: "I built the interface in React 19, where a customer types a problem and watches a clear, empathetic resolution appear almost instantly on screen." },
-            { title: "The outcome", text: "The result is support that is available 24/7, never tired, and consistent — sub-second resolutions across a huge range of tricky, policy-heavy cases." }
+            { title: "The everyday frustration", text: "When you complain to a company, you wait, repeat yourself, and often get different answers from different people. I set out to make support that is quick, consistent, and grounded in the actual rules." },
+            { title: "Three agents working in parallel", text: "An async orchestrator sends each complaint to category, sentiment, and priority agents at the same time, so the system understands what the problem is, how the customer feels, and how urgent it is — all at once." },
+            { title: "Reading the rulebook with RAG", text: "RAG (Retrieval-Augmented Generation) means the AI first looks up the company's policy and then drafts its reply from it — so answers are policy-grounded instead of guessed." },
+            { title: "Never going down: a 3-tier fallback", text: "Groq's LLaMA 3.3 answers first. If it fails or hits a rate limit, Gemini 2.0 Flash takes over (rotating across several keys), and if the cloud is unavailable, a local TF-IDF/TextBlob model still processes the complaint." },
+            { title: "Making it 5× faster", text: "An in-memory cache remembers repeated questions, cutting API response time from 2.5 seconds to about 0.5 seconds." },
+            { title: "Secure by default", text: "The REST APIs are protected with Google OAuth 2.0 plus email OTP, and JWT-based role access control decides who can see what. It runs on FastAPI, SQLAlchemy, and Turso, with a React 19 frontend." }
         ]
     },
     "Steel Surface Defect Detection": {
-        role: "ML Research · NIT Jamshedpur",
+        role: "Research Intern · NIT Jamshedpur",
         code: "https://github.com/RiteshKumar2e/Steel_Surface_Defect",
         live: "",
-        summary: "On a steel production line, tiny scratches and cracks can ruin a whole batch — but humans inspecting fast-moving sheets get tired and miss things. I built an AI 'inspector' that watches the surface and flags defects automatically, with 98.33% accuracy.",
+        summary: "On a steel production line, tiny scratches and cracks can ruin a whole batch — and people inspecting fast-moving sheets get tired and miss things. At NIT Jamshedpur I built three different AI 'inspectors' for this, and the best one is right 99.67% of the time.",
         steps: [
-            { title: "Why this matters", text: "Manual quality control is slow, costly, and inconsistent. A model that spots defects reliably saves money and prevents faulty steel from ever shipping. This was a research project carried out at NIT Jamshedpur." },
-            { title: "Preparing the images with OpenCV", text: "I used OpenCV to clean and standardise thousands of steel-surface images — adjusting size, contrast, and lighting — so the model always sees clear, consistent examples to learn from." },
-            { title: "Picking a lightweight 'brain' (MobileNetV2)", text: "Factories need models that run on small, cheap hardware right next to the camera, not just on powerful servers. I chose MobileNetV2 as the backbone because it is accurate yet light enough to run on edge devices." },
-            { title: "Seeing defects of every size (FPN + attention fusion)", text: "Defects range from large blotches to hairline cracks. I added a Feature Pyramid Network and attention-based multi-scale feature fusion — my AMFF-CNN design — so the model examines the image at several zoom levels and focuses on the parts that actually matter." },
-            { title: "Training the model in PyTorch", text: "Using PyTorch, I trained the network on the labelled images, repeatedly adjusting it until it learned to tell a genuine defect apart from a harmless mark or reflection." },
-            { title: "Measuring success", text: "I validated it carefully and reached 98.33% accuracy and a 0.85 mAP score — strong, trustworthy numbers for real industrial use." },
-            { title: "Ready for the real world", text: "The final model is light enough to be deployed on the edge, right beside the production line, for instant, around-the-clock quality checks." }
+            { title: "Why this matters", text: "Manual quality control is slow, costly, and inconsistent. I worked on two public datasets — NEU-DET and SteelDefectX, 1,800 and 1,631 images — as research at the Machine Vision & Intelligence Lab, NIT Jamshedpur." },
+            { title: "Model 1 — AMFF-CNN", text: "A compact 3.4-million-parameter network (MobileNetV2 + a Feature Pyramid Network) that looks at each image at several zoom levels and uses attention to focus on what matters. It reached 92.95% macro-F1 on a leakage-free test split, runs in 118 ms on a plain CPU, and Grad-CAM shows where it is looking." },
+            { title: "Testing it honestly", text: "I compared 6 versions of the design across 3 random seeds, so the results reflect the architecture, not luck." },
+            { title: "Model 2 — TinySteelLLM", text: "A different idea: describe each image with ~30 hand-measured features (edges, texture, frequency, region stats) written as short text, then classify that text with a small Transformer I trained from scratch — no pretrained weights, no outside APIs." },
+            { title: "Model 3 — SteelSense-BiLSTM", text: "I scaled that idea to 92 features and a 1.75-million-parameter BiLSTM. It scored 99.67% ± 0.23 on NEU-DET and 99.02% ± 0.40 on SteelDefectX across 5 seeds, and beat XGBoost, Random Forest, SVM, MobileNetV3, and ShuffleNetV2." },
+            { title: "Where it stands", text: "The work is written up as a first-author paper that is currently under review." }
         ]
     },
     "Age Gender Prediction": {
@@ -144,38 +142,15 @@ const projectDetails = {
         role: "Full-Stack Developer",
         code: "https://github.com/RiteshKumar2e/SOEIT-Acheivement-portal",
         live: "https://soeit-acheivement-portal.vercel.app",
-        summary: "Imagine a college where every student's achievements are scattered across emails, spreadsheets, and paperwork. SOEIT brings everything together into one platform where students can showcase their achievements and faculty can review, verify, and manage them with ease.",
+        summary: "Imagine a college where every student's achievements are scattered across emails, spreadsheets, and paperwork. I built the achievement portal for Arka Jain University's School of Engineering & IT so students upload once, faculty verify, and everyone can see the record.",
         steps: [
-            {
-            title: "The everyday challenge",
-            text: "Managing student achievements manually is slow, repetitive, and prone to errors. Students often struggle to keep track of their certificates, while faculty spend hours verifying and organizing records."
-        },
-        {
-            title: "A centralized achievement platform",
-            text: "I built a web application where students can submit academic, technical, sports, and extracurricular achievements in one place. Every submission follows a structured workflow, making records easy to manage."
-        },
-        {
-            title: "Role-based access for everyone",
-            text: "Different users have different responsibilities. Students can upload and monitor their achievements, faculty members can verify submissions, and administrators have complete control over managing users and records."
-        },
-        {
-            title: "Fast and responsive experience",
-            text: "The frontend is built with React, providing a clean and responsive interface that makes navigation simple across desktops and mobile devices."
-        },
-        {
-            title: "Reliable backend",
-            text: "The backend securely handles authentication, validation, and database operations while ensuring every achievement is stored safely and can be retrieved whenever needed."
-        },
-        {
-            title: "Smart organization",
-            text: "Achievements are categorized, searchable, and easy to filter, allowing users to quickly find records instead of searching through spreadsheets or paper files."
-        },
-        {
-            title: "The outcome",
-            text: "The portal replaces manual paperwork with a streamlined digital workflow, making achievement management faster, more organized, and easier for both students and faculty."
-        }
-    ]
-},
+            { title: "The everyday challenge", text: "Managing achievements by hand is slow and error-prone: students lose track of certificates, and faculty spend hours verifying records." },
+            { title: "Three roles, one workflow", text: "Students upload certificates, faculty verify them, and admins manage users and view analytics. JWT-based role access control keeps each role to what it should see." },
+            { title: "Points and a weekly leaderboard", text: "Every verified achievement earns points by category, and those points feed a weekly leaderboard that makes progress visible." },
+            { title: "More than records", text: "The portal also hosts a hub of 90+ curated hackathons and exports a one-click ATS resume in DOCX or PDF." },
+            { title: "Fast at scale", text: "The stateless REST backend (Node.js, Express 5, Turso) uses SQL indexes for sub-100 ms lookups on 10k+ records, and stores certificates as BLOBs." }
+        ]
+    },
 "ArthaNova": {
     role: "Full-Stack Developer",
     code: "https://github.com/RiteshKumar2e/ArthaNova",
@@ -607,6 +582,13 @@ const SkillsAdvanced = () => {
             icon: FaLaptopCode,
             skills: [
                 {
+                    name: "React Router", icon: SiReactrouter, color: "text-[#CA4245]",
+                    description: "Client-side routing for multi-page React apps, including protected routes.",
+                    usedIn: [
+                        { project: "Recipe Discovery App (TechMantra)", detail: "7 pages with protected dashboard and profile routes and a Context API auth store." }
+                    ]
+                },
+                {
                     name: "React.js", icon: SiReact, color: "text-[#61DAFB]", level: "Decent",
                     description: "Most of my frontend projects are built with React because it makes developing scalable and maintainable applications easier. I regularly work with reusable components, React Hooks, routing, API integration, and responsive layouts to create modern user experiences.",
                   usedIn: [
@@ -676,7 +658,10 @@ const SkillsAdvanced = () => {
                 {
                     name: "Node.js", icon: SiNodedotjs, color: "text-[#339933]", level: "Good",
                     description: "JavaScript runtime I use for backend services, scripts, and the build tooling behind my frontends (Vite, npm).",
-                    usedIn: []
+                    usedIn: [
+                        { project: "SOEIT Achievement Portal", detail: "Stateless REST backend with sub-100 ms lookups on 10k+ records." },
+                        { project: "Recipe Discovery App (TechMantra)", detail: "5 REST endpoints for search, lookup, and auth, with a hybrid local + TheMealDB search layer." }
+                    ]
                 },
                 {
                     name: "FastAPI", icon: SiFastapi, color: "text-[#009688]", level: "Good",
@@ -689,7 +674,10 @@ const SkillsAdvanced = () => {
                 {
                     name: "Express.js", icon: SiExpress, color: "text-slate-900 dark:text-white", level: "Good",
                     description: "Minimal Node.js framework for building lightweight REST APIs and web servers.",
-                    usedIn: []
+                    usedIn: [
+                        { project: "SOEIT Achievement Portal", detail: "Express 5 REST backend with JWT-based RBAC and BLOB certificate storage." },
+                        { project: "Recipe Discovery App (TechMantra)", detail: "Search, lookup, and auth routes for the recipe app." }
+                    ]
                 },
                 {
                     name: "Python", icon: SiPython, color: "text-[#3776AB]", level: "Proficient",
@@ -757,8 +745,7 @@ const SkillsAdvanced = () => {
                     name: "MySQL", icon: SiMysql, color: "text-[#4479A1]", level: "Good",
                     description: "Relational database for transactional web applications.",
                     usedIn: [
-                        { project: "QuickFix AI Customer Agent", detail: "Used a MySQL-compatible MariaDB store for complaints and agent state." }
-                    ]
+                                            ]
                 },
                 {
                     name: "SQLAlchemy", icon: SiSqlalchemy, color: "text-[#D71F00]", level: "Good",
@@ -781,7 +768,7 @@ const SkillsAdvanced = () => {
                     name: "SQL", icon: FaDatabase, color: "text-[#4479A1]", level: "Good",
                     description: "The query language behind every relational database I use — joins, aggregates, indexing, and query tuning.",
                     usedIn: [
-                        { project: "Food & Recipe API (TechMantra)", detail: "Cut API response time by ~35% through SQL query optimization and database indexing." }
+                        { project: "SOEIT Achievement Portal", detail: "SQL indexes for sub-100 ms lookups on 10k+ records." }
                     ]
                 },
                 {
@@ -817,7 +804,7 @@ const SkillsAdvanced = () => {
                     name: "Deep Learning", icon: FaBrain, color: "text-[#FF6F00]", level: "Decent",
                     description: "Designing and training neural networks for computer-vision and prediction tasks.",
                     usedIn: [
-                        { project: "Steel Surface Defect Detection", detail: "Built an AMFF-CNN detector with attention-based multi-scale feature fusion (98.33% accuracy)." },
+                        { project: "Steel Surface Defect Detection", detail: "Built AMFF-CNN and SteelSense-BiLSTM — 99.67% ± 0.23 on NEU-DET." },
                         { project: "Age Gender Prediction", detail: "Trained a real-time CNN model for live age and gender estimation." }
                     ]
                 },
@@ -830,7 +817,7 @@ const SkillsAdvanced = () => {
                     name: "PyTorch", icon: SiPytorch, color: "text-[#EE4C2C]", level: "Decent",
                     description: "My preferred deep-learning framework for research-style model building and training.",
                     usedIn: [
-                        { project: "Steel Surface Defect Detection", detail: "Built the MobileNetV2 + Feature Pyramid Network detector in PyTorch." },
+                        { project: "Steel Surface Defect Detection", detail: "Trained TinySteelLLM, a 2-layer Transformer built from scratch with no pretrained weights." },
                         { project: "Age Gender Prediction", detail: "Implemented and trained the real-time CNN model." }
                     ]
                 },
@@ -846,7 +833,7 @@ const SkillsAdvanced = () => {
                     name: "OpenCV", icon: SiOpencv, color: "text-[#5C3EE8]", level: "Good",
                     description: "Computer-vision toolkit for image processing and real-time camera pipelines.",
                     usedIn: [
-                        { project: "Steel Surface Defect Detection", detail: "Image preprocessing for the defect-detection pipeline." },
+                        { project: "Steel Surface Defect Detection", detail: "Extracted the handcrafted descriptors (edges, GLCM texture, FFT, region stats) behind TinySteelLLM and SteelSense-BiLSTM." },
                         { project: "Age Gender Prediction", detail: "Live face detection from the camera feed." }
                     ]
                 },
@@ -883,8 +870,8 @@ const SkillsAdvanced = () => {
                     name: "Generative AI (LLMs)", icon: SiGooglegemini, color: "text-[#8E75B2]", level: "Good",
                     description: "Building with large language models — Gemini and LLaMA — for chat, reasoning, and AI agents.",
                     usedIn: [
-                        { project: "QuickFix AI Customer Agent", detail: "Powered 30+ support agents with Gemini 2.0 and Groq LLaMA." },
-                        { project: "Community AI Platform", detail: "Drove the context-aware multilingual chat assistant." }
+                        { project: "QuickFix AI Customer Agent", detail: "Runs the category, sentiment, and priority agents on Groq LLaMA 3.3 and Gemini 2.0 Flash." },
+                        { project: "Community AI Platform", detail: "Drives the 5-language assistant through an Amazon Q → Groq → Gemini fallback." }
                     ]
                 },
                 {
@@ -950,7 +937,7 @@ const SkillsAdvanced = () => {
                     name: "Keras", icon: SiKeras, color: "text-[#D00000]", level: "Good",
                     description: "High-level API over TensorFlow for assembling and training networks quickly.",
                     usedIn: [
-                        { project: "Steel Surface Defect Detection", detail: "Used for rapid architecture experiments alongside the PyTorch pipeline." }
+                        { project: "Steel Surface Defect Detection", detail: "Built the AMFF-CNN variants for a 6-variant ablation across 3 seeds." }
                     ]
                 },
                 {
@@ -971,7 +958,7 @@ const SkillsAdvanced = () => {
                     name: "Attention Mechanisms", icon: FaBullseye, color: "text-[#F59E0B]", level: "Decent",
                     description: "Teaching a network where to look — weighting the parts of an image or sequence that actually carry the signal.",
                     usedIn: [
-                        { project: "Steel Surface Defect Detection", detail: "Attention-modulated multi-scale feature fusion — the core idea of my AMFF-CNN and the paper under review at Springer Nature." }
+                        { project: "Steel Surface Defect Detection", detail: "Channel/spatial attention with learned cross-scale weights — the core idea of my AMFF-CNN." }
                     ]
                 },
                 {
@@ -986,8 +973,60 @@ const SkillsAdvanced = () => {
                     name: "Groq API", icon: FaBolt, color: "text-[#F55036]", level: "Good",
                     description: "Ultra-low-latency LLM inference (LLaMA 3.3) — the first tier of my model fallback chains.",
                     usedIn: [
-                        { project: "QuickFix AI Customer Agent", detail: "Primary model, keeping complaint resolution responses under 200ms." },
-                        { project: "Community AI Platform", detail: "First stop in the Groq → Gemini fallback pipeline." }
+                        { project: "QuickFix AI Customer Agent", detail: "First tier of the fallback chain; an in-memory cache cut responses from 2.5 s to ~0.5 s." },
+                        { project: "Community AI Platform", detail: "Second stop in the Amazon Q → Groq → Gemini fallback pipeline." }
+                    ]
+                }
+            ]
+        },
+        {
+            title: "System Design",
+            icon: FaProjectDiagram,
+            skills: [
+                {
+                    name: "Caching", icon: FaMemory, color: "text-[#c3a47b]",
+                    description: "Keeping hot answers in memory so repeated work is skipped.",
+                    usedIn: [
+                        { project: "QuickFix AI Customer Agent", detail: "In-memory cache for repeated queries cut API response time from 2.5 s to ~0.5 s." }
+                    ]
+                },
+                {
+                    name: "Fault Tolerance & Fallbacks", icon: FaRedoAlt, color: "text-[#d0703a]",
+                    description: "Designing so one failing dependency does not take the product down.",
+                    usedIn: [
+                        { project: "QuickFix AI Customer Agent", detail: "3-tier LLM fallback: Groq LLaMA 3.3 → Gemini 2.0 Flash (multi-key rotation) → local TF-IDF/TextBlob." },
+                        { project: "Community AI Platform", detail: "Amazon Q → Groq → Gemini fallback behind the multilingual assistant." }
+                    ]
+                },
+                {
+                    name: "Rate Limiting", icon: FaTachometerAlt, color: "text-[#7b845e]",
+                    description: "Protecting APIs from abuse and runaway clients.",
+                    usedIn: [
+                        { project: "Community AI Platform", detail: "Rate limiting on the public FastAPI endpoints." }
+                    ]
+                },
+                {
+                    name: "Async I/O & Concurrency", icon: FaStream, color: "text-[#c3a47b]",
+                    description: "Doing independent work in parallel instead of waiting in line.",
+                    usedIn: [
+                        { project: "QuickFix AI Customer Agent", detail: "Async orchestrator runs category, sentiment, and priority agents in parallel." },
+                        { project: "Community AI Platform", detail: "27 async REST endpoints with background email tasks and connection pooling." }
+                    ]
+                },
+                {
+                    name: "Stateless Services", icon: FaCubes, color: "text-[#7b845e]",
+                    description: "Servers that keep no session state, so they scale and restart cleanly.",
+                    usedIn: [
+                        { project: "SOEIT Achievement Portal", detail: "Stateless REST backend with JWT auth." },
+                        { project: "Recipe Discovery App (TechMantra)", detail: "Stateless JWT auth with a 1-hour expiry." }
+                    ]
+                },
+                {
+                    name: "RBAC", icon: FaUserShield, color: "text-[#d0703a]",
+                    description: "Role-based access control — each role sees and does only what it should.",
+                    usedIn: [
+                        { project: "SOEIT Achievement Portal", detail: "Student, faculty, and admin roles enforced with JWT-based RBAC." },
+                        { project: "QuickFix AI Customer Agent", detail: "JWT-based RBAC behind Google OAuth 2.0 + email OTP." }
                     ]
                 }
             ]
@@ -996,6 +1035,11 @@ const SkillsAdvanced = () => {
             title: "Developer Tools",
             icon: FaTools,
             skills: [
+                {
+                    name: "GitHub Actions", icon: SiGithubactions, color: "text-[#2088FF]",
+                    description: "CI/CD workflows for building, testing, and deploying from GitHub.",
+                    usedIn: []
+                },
                 {
                     name: "Git", icon: SiGit, color: "text-[#F05032]", level: "Good",
                     description: "Version control for tracking, branching, and collaborating on every project.",
@@ -1034,10 +1078,10 @@ const SkillsAdvanced = () => {
     ];
 
     const coursework = [
-        { name: "Data Structures", icon: FaCodeBranch, level: "Coursework", description: "Arrays, trees, graphs, hashing, and the algorithms that run on them — the backbone of my problem solving." },
+        { name: "DSA", icon: FaCodeBranch, level: "Coursework", description: "Data structures and algorithms — arrays, trees, graphs, hashing, and the techniques that run on them." },
         { name: "OOPs", icon: FaCube, level: "Coursework", description: "Object-oriented design principles I apply when structuring real applications." },
         { name: "DBMS", icon: FaDatabase, level: "Coursework", description: "Relational design, normalization, and SQL that underpin my database work." },
-        { name: "Software Eng.", icon: FaShapes, level: "Coursework", description: "SDLC, design patterns, and version-control practices for building maintainable software." }
+        { name: "Design Patterns", icon: FaShapes, level: "Coursework", description: "Reusable design patterns for keeping real applications maintainable." }
     ];
 
     const interests = [

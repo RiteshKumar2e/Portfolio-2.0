@@ -5,8 +5,9 @@ import {
     FaTrophy, FaMedal, FaStar, FaAward, FaCertificate,
     FaCode, FaGraduationCap, FaLightbulb, FaUsers, FaChartLine,
     FaRocket, FaHandshake, FaUserTie, FaBrain, FaClock, FaSmile,
-    FaServer, FaBolt, FaTachometerAlt, FaPlug, FaLandmark
+    FaServer, FaBolt, FaTachometerAlt, FaPlug, FaLandmark, FaBookOpen, FaRedoAlt
 } from 'react-icons/fa';
+import { Trophy as LTrophy, Target as LTarget, FolderGit2 as LFolder, Briefcase as LBriefcase, Crown as LCrown, Zap as LZap } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 const Achievements = () => {
@@ -16,14 +17,23 @@ const Achievements = () => {
         threshold: 0.1,
     });
 
-    const [activeTab, setActiveTab] = useState('all');
+    const [activeTab, setActiveTab] = useState('achievements');
+    const [openRow, setOpenRow] = useState(0);
 
     const achievementsData = {
         achievements: [
             {
+                icon: FaBookOpen,
+                title: 'First-Author Research Paper',
+                description: 'SteelSense-BiLSTM, with K. K. Singh — under review at Discover Computing (Springer Nature), 2026.',
+                color: 'from-indigo-600 to-violet-600',
+                gradient: 'bg-gradient-to-br from-indigo-600/10 to-violet-600/10',
+                category: 'Achievements'
+            },
+            {
                 icon: FaRocket,
                 title: 'AutonomousHacks ’26 Finalist',
-                description: 'Shortlisted for Offline Finale among 2,000+ participants, qualifying for agentic AI hackathon organized by GDG Gandhinagar.',
+                description: 'Offline finalist from 2,000+ participants in the Agentic AI track, organized by GDG Gandhinagar.',
                 color: 'from-indigo-600 to-violet-600',
                 gradient: 'bg-gradient-to-br from-indigo-600/10 to-violet-600/10',
                 category: 'Achievements'
@@ -62,7 +72,7 @@ const Achievements = () => {
             },
             {
                 icon: FaHandshake,
-                title: 'Organized Hack Horizon 2K25',
+                title: 'Organized Hack Horizon 1.0 (2025)',
                 description: 'University-level hackathon fostering innovation and collaboration among tech enthusiasts',
                 color: 'from-indigo-500 to-purple-500',
                 gradient: 'bg-gradient-to-br from-indigo-500/10 to-purple-500/10',
@@ -122,8 +132,8 @@ const Achievements = () => {
         leadership: [
             {
                 icon: FaUserTie,
-                title: 'Club President - CCS',
-                description: 'Leading Code & Compute Society, coordinating with faculty and driving coding culture on campus',
+                title: 'Gen. Secretary & President — CCS',
+                description: 'General Secretary and President of the Code & Compute Society, coordinating with faculty and driving coding culture on campus',
                 color: 'from-green-600 to-emerald-600',
                 gradient: 'bg-gradient-to-br from-green-600/10 to-emerald-600/10',
                 category: 'Leadership'
@@ -156,32 +166,40 @@ const Achievements = () => {
         technical: [
             {
                 icon: FaServer,
-                title: '15,900+ Daily Requests',
-                description: 'QuickFix sustains 15,900+ requests a day through an async pipeline of specialized AI services (Orchestrator, Classifier, Sentiment Analyzer, Priority Detector, RAG Engine)',
+                title: '99.67% on NEU-DET',
+                description: 'SteelSense-BiLSTM reached 99.67% ± 0.23 on NEU-DET and 99.02% ± 0.40 on SteelDefectX across 5 seeds, beating XGBoost, Random Forest, SVM, MobileNetV3 and ShuffleNetV2',
                 color: 'from-amber-600 to-orange-600',
                 gradient: 'bg-gradient-to-br from-amber-600/10 to-orange-600/10',
                 category: 'Technical'
             },
             {
                 icon: FaBolt,
-                title: '<200ms Response Time',
-                description: 'Kept complaint resolution under 200ms with a 3-tier LLM fallback: Groq LLaMA 3.3 → Gemini 2.0 Flash → local TF-IDF',
+                title: '2.5 s → 0.5 s Responses',
+                description: 'Cut QuickFix API response time from 2.5 s to ~0.5 s with an in-memory cache for repeated queries, behind a 3-tier LLM fallback: Groq LLaMA 3.3 → Gemini 2.0 Flash → local TF-IDF/TextBlob',
                 color: 'from-yellow-500 to-amber-600',
                 gradient: 'bg-gradient-to-br from-yellow-500/10 to-amber-600/10',
                 category: 'Technical'
             },
             {
+                icon: FaRedoAlt,
+                title: '3-Tier LLM Fallback',
+                description: 'QuickFix keeps processing complaints when a cloud API fails or hits its rate limit: Groq LLaMA 3.3 → Gemini 2.0 Flash (multi-key rotation) → local TF-IDF/TextBlob',
+                color: 'from-emerald-600 to-teal-600',
+                gradient: 'bg-gradient-to-br from-emerald-600/10 to-teal-600/10',
+                category: 'Technical'
+            },
+            {
                 icon: FaTachometerAlt,
-                title: '35% Faster APIs',
-                description: 'Reduced API response time by ~35% at TechMantra Global through SQL query optimization and database indexing',
+                title: 'Sub-100 ms Lookups',
+                description: 'SOEIT portal\u2019s stateless REST backend uses SQL indexes for sub-100 ms lookups on 10k+ records',
                 color: 'from-emerald-600 to-teal-600',
                 gradient: 'bg-gradient-to-br from-emerald-600/10 to-teal-600/10',
                 category: 'Technical'
             },
             {
                 icon: FaPlug,
-                title: '10+ REST Endpoints',
-                description: 'Shipped 10+ production-ready endpoints with input validation, exception handling, and reusable code, backed by Jest unit and integration tests',
+                title: '27 REST Endpoints',
+                description: 'Community AI\u2019s async FastAPI backend: background email tasks, connection pooling, indexed queries, JWT + bcrypt auth, Pydantic validation and rate limiting',
                 color: 'from-blue-600 to-indigo-600',
                 gradient: 'bg-gradient-to-br from-blue-600/10 to-indigo-600/10',
                 category: 'Technical'
@@ -189,7 +207,7 @@ const Achievements = () => {
             {
                 icon: FaLandmark,
                 title: '50+ Government Schemes',
-                description: 'Community AI Platform makes 50+ schemes, learning resources, and job opportunities searchable across 5 Indian languages with source-attributed answers',
+                description: 'Community AI puts 50+ government schemes, courses, and jobs in front of 100+ active users, with an AI assistant answering in 5 Indian languages',
                 color: 'from-violet-600 to-purple-600',
                 gradient: 'bg-gradient-to-br from-violet-600/10 to-purple-600/10',
                 category: 'Technical'
@@ -197,7 +215,7 @@ const Achievements = () => {
             {
                 icon: FaAward,
                 title: '10+ Projects',
-                description: 'Successfully delivered major projects: Community AI Platform, QuickFix AI, Steel Defect Detection, Sentiment Analysis',
+                description: 'Successfully delivered major projects: Community AI, QuickFix, the SOEIT Achievement Portal, and steel-defect research at NIT Jamshedpur',
                 color: 'from-rose-600 to-red-600',
                 gradient: 'bg-gradient-to-br from-rose-600/10 to-red-600/10',
                 category: 'Technical'
@@ -205,7 +223,7 @@ const Achievements = () => {
             {
                 icon: FaCode,
                 title: 'Full Stack Developer',
-                description: 'Proficient in React, Node.js, Express, FastAPI, MongoDB, and MySQL with modern web development practices',
+                description: 'FastAPI, Node.js and Express on the backend; React and React Router on the front; PostgreSQL, MySQL, Turso and MongoDB for data',
                 color: 'from-indigo-600 to-violet-600',
                 gradient: 'bg-gradient-to-br from-indigo-600/10 to-violet-600/10',
                 category: 'Technical'
@@ -213,177 +231,174 @@ const Achievements = () => {
         ]
     };
 
-    const allItems = [
-        ...achievementsData.achievements,
-        ...achievementsData.strengths,
-        ...achievementsData.leadership,
-        ...achievementsData.technical
+    const chapters = [
+        { id: 'achievements', numeral: 'I', label: 'Achievements', items: achievementsData.achievements },
+        { id: 'strengths', numeral: 'II', label: 'Strengths', items: achievementsData.strengths },
+        { id: 'leadership', numeral: 'III', label: 'Leadership', items: achievementsData.leadership },
+        { id: 'technical', numeral: 'IV', label: 'Technical', items: achievementsData.technical }
     ];
+    const total = chapters.reduce((n, c) => n + c.items.length, 0);
+    const chapter = chapters.find((c) => c.id === activeTab) ?? chapters[0];
 
-    const getFilteredItems = () => {
-        if (activeTab === 'all') return allItems;
-        if (activeTab === 'achievements') return achievementsData.achievements;
-        if (activeTab === 'strengths') return achievementsData.strengths;
-        if (activeTab === 'leadership') return achievementsData.leadership;
-        if (activeTab === 'technical') return achievementsData.technical;
-        return allItems;
+    const selectChapter = (id) => {
+        setActiveTab(id);
+        setOpenRow(0);
     };
 
-    const tabs = [
-        { id: 'all', label: 'All', count: allItems.length },
-        { id: 'achievements', label: 'Achievements', count: achievementsData.achievements.length },
-        { id: 'strengths', label: 'Strengths', count: achievementsData.strengths.length },
-        { id: 'leadership', label: 'Leadership', count: achievementsData.leadership.length },
-        { id: 'technical', label: 'Technical', count: achievementsData.technical.length }
-    ];
+    const muted = isDarkMode ? 'text-[#c5b79e]' : 'text-slate-600';
+    const rule = isDarkMode ? 'border-[#c5b79e]/20' : 'border-slate-300/70';
 
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.05
-            }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { scale: 0.8, opacity: 0, y: 20 },
-        visible: {
-            scale: 1,
-            opacity: 1,
-            y: 0,
-            transition: {
-                type: 'spring',
-                stiffness: 120,
-                damping: 12
-            }
-        }
+    const fadeUp = {
+        hidden: { opacity: 0, y: 24 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
     };
 
     return (
-        <section id="achievements" className={`section-container relative transition-colors duration-700 ${isDarkMode ? 'bg-transparent' : 'bg-slate-50/50'}`}>
+        <section id="achievements" className="relative py-24">
             <motion.div
                 ref={ref}
-                variants={containerVariants}
                 initial="hidden"
-                animate={inView ? "visible" : "hidden"}
+                animate={inView ? 'visible' : 'hidden'}
+                variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+                className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12"
             >
-                <motion.h2
-                    variants={itemVariants}
-                    className={`text-4xl md:text-5xl font-extrabold text-center mb-4 tracking-tighter ${isDarkMode ? 'text-white text-glow' : 'gradient-text'}`}
-                >
-                    Achievements & Excellence
-                </motion.h2>
+                {/* Editorial header */}
+                <motion.div variants={fadeUp} className={`flex flex-wrap items-center justify-between gap-3 eyebrow ${muted}`}>
+                    <span>Recognition</span>
+                    <span>{total} entries · {chapters.length} chapters</span>
+                </motion.div>
+                <motion.div variants={fadeUp} className="hairline mt-4" />
 
-                <motion.p
-                    variants={itemVariants}
-                    className={`text-center mb-10 max-w-3xl mx-auto px-4 font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
-                >
-                    Awards, Leadership, Strengths, and Technical Excellence organized for your review.
-                </motion.p>
-
-                {/* Tabs - Responsive handling */}
-                <div className="overflow-x-auto no-scrollbar pb-4 px-2 -mx-2">
-                    <motion.div
-                        variants={itemVariants}
-                        className="flex items-center justify-start md:justify-center gap-2 md:gap-4 min-w-max px-2"
+                <div className="grid md:grid-cols-12 gap-6 md:gap-10 mt-8 md:mt-10 mb-12 md:mb-16 items-end">
+                    <motion.h2
+                        variants={fadeUp}
+                        className="md:col-span-8 text-6xl sm:text-8xl lg:text-[9rem] leading-[0.85] tracking-[-0.06em]"
+                        style={{ fontWeight: 500 }}
                     >
-                        {tabs.map((tab) => (
-                            <motion.button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm md:text-base font-bold transition-all shadow-sm ${activeTab === tab.id
-                                    ? isDarkMode
-                                        ? 'bg-indigo-600 text-white shadow-indigo-500/20'
-                                        : 'bg-slate-900 text-white shadow-md'
-                                    : isDarkMode ? 'bg-white/5 text-slate-400 border border-white/10 hover:border-indigo-500/50 hover:text-white' : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-400 hover:text-indigo-600'
-                                    }`}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                        The Honours <span className="italic text-bronze-700 dark:text-bronze-400">Ledger.</span>
+                    </motion.h2>
+                    <motion.p variants={fadeUp} className={`md:col-span-4 text-lg leading-relaxed ${muted}`}>
+                        Awards, leadership, strengths and technical wins — kept like an index. Pick a chapter, open any line.
+                    </motion.p>
+                </div>
+
+                <div className="grid md:grid-cols-12 gap-8 md:gap-12">
+                    {/* Chapters */}
+                    <motion.nav variants={fadeUp} className="min-w-0 md:col-span-4 lg:col-span-3" aria-label="Chapters">
+                        <ol className="flex md:flex-col gap-2 md:gap-0 overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 md:sticky md:top-28">
+                            {chapters.map((c) => {
+                                const active = c.id === activeTab;
+                                return (
+                                    <li key={c.id} className="shrink-0">
+                                        <button
+                                            type="button"
+                                            onClick={() => selectChapter(c.id)}
+                                            aria-pressed={active}
+                                            className={`relative w-full flex items-baseline gap-3 text-left px-4 py-2.5 md:px-0 md:py-4 rounded-full md:rounded-none border md:border-0 md:border-b transition-colors ${rule} ${active
+                                                ? 'text-bronze-700 dark:text-bronze-300 border-bronze-400/60'
+                                                : `${muted} hover:text-bronze-700 dark:hover:text-bronze-300`}`}
+                                        >
+                                            <span className="font-mono text-[10px] tracking-[0.2em] w-7">{c.numeral}</span>
+                                            <span className="text-lg md:text-2xl tracking-tight">{c.label}</span>
+                                            <span className="font-mono text-[10px] ml-auto pl-3">{String(c.items.length).padStart(2, '0')}</span>
+                                            {active && (
+                                                <motion.span
+                                                    layoutId="ledger-chapter"
+                                                    className="hidden md:block absolute -bottom-px left-0 right-0 h-[2px] bg-bronze-500"
+                                                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                                                />
+                                            )}
+                                        </button>
+                                    </li>
+                                );
+                            })}
+                        </ol>
+                    </motion.nav>
+
+                    {/* Index of entries */}
+                    <motion.div variants={fadeUp} className="min-w-0 md:col-span-8 lg:col-span-9">
+                        <div className={`flex items-baseline justify-between eyebrow pb-3 border-b ${rule} ${muted}`}>
+                            <span>Chapter {chapter.numeral} — {chapter.label}</span>
+                            <span className="hidden sm:inline">Tap a line to read</span>
+                        </div>
+
+                        <AnimatePresence mode="wait">
+                            <motion.ol
+                                key={chapter.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.3 }}
                             >
-                                {tab.label} <span className="text-[10px] md:text-xs opacity-75 ml-1">({tab.count})</span>
-                            </motion.button>
-                        ))}
+                                {chapter.items.map((item, index) => {
+                                    const open = openRow === index;
+                                    return (
+                                        <li key={item.title} className={`border-b ${rule}`}>
+                                            <button
+                                                type="button"
+                                                onClick={() => setOpenRow(open ? null : index)}
+                                                aria-expanded={open}
+                                                className="group w-full flex items-center gap-3 sm:gap-5 py-4 md:py-5 text-left"
+                                            >
+                                                <span className={`font-mono text-[10px] w-6 shrink-0 ${muted}`}>{String(index + 1).padStart(2, '0')}</span>
+                                                <span className={`w-9 h-9 shrink-0 rounded-full border flex items-center justify-center transition-colors duration-300 ${open
+                                                    ? 'bg-bronze-400 border-bronze-400 text-ink-950'
+                                                    : 'border-bronze-400/40 text-bronze-700 dark:text-bronze-300 group-hover:border-bronze-400'}`}
+                                                >
+                                                    <item.icon className="text-sm" />
+                                                </span>
+                                                <span className={`text-lg md:text-2xl tracking-tight leading-snug transition-colors ${open ? 'text-bronze-700 dark:text-bronze-300' : 'group-hover:text-bronze-700 dark:group-hover:text-bronze-300'}`}>
+                                                    {item.title}
+                                                </span>
+                                                <span className={`hidden sm:block flex-1 min-w-[2rem] border-b border-dotted translate-y-1 ${rule}`} aria-hidden="true" />
+                                                <span className={`ml-auto sm:ml-0 shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-lg leading-none transition-transform duration-300 ${open ? 'rotate-45' : ''} ${muted}`} aria-hidden="true">+</span>
+                                            </button>
+                                            <AnimatePresence initial={false}>
+                                                {open && (
+                                                    <motion.div
+                                                        initial={{ height: 0, opacity: 0 }}
+                                                        animate={{ height: 'auto', opacity: 1 }}
+                                                        exit={{ height: 0, opacity: 0 }}
+                                                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                                                        className="overflow-hidden"
+                                                    >
+                                                        <p className={`pl-[4.5rem] sm:pl-[5.5rem] pr-10 pb-5 text-base md:text-lg leading-relaxed max-w-3xl ${muted}`}>
+                                                            {item.description}
+                                                        </p>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </li>
+                                    );
+                                })}
+                            </motion.ol>
+                        </AnimatePresence>
                     </motion.div>
                 </div>
 
-                {/* Items Grid */}
-                <AnimatePresence mode="popLayout">
-                    <motion.div
-                        key={activeTab}
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.98 }}
-                        transition={{ duration: 0.2, ease: "easeInOut" }}
-                        className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4"
-                    >
-                        {getFilteredItems().map((item, index) => (
-                            <motion.div
-                                key={`${activeTab}-${index}`}
-                                initial={{ opacity: 0, y: 15 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.03, duration: 0.3 }}
-                                className={`group relative rounded-3xl p-6 border transition-all duration-300 overflow-hidden ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow hover:border-indigo-500/50' : 'bg-white border-slate-100 shadow-sm hover:shadow-xl hover:border-indigo-100'}`}
-                                whileHover={{ y: -8 }}
-                            >
-                                {/* Category Badge */}
-                                <div className="absolute top-4 right-4 z-20">
-                                    <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-lg transition-colors ${isDarkMode ? 'bg-white/5 text-slate-500 group-hover:text-indigo-400 group-hover:bg-indigo-500/10' : 'bg-slate-50 text-slate-400 group-hover:text-indigo-500 group-hover:bg-indigo-50'}`}>
-                                        {item.category}
-                                    </span>
-                                </div>
-
-                                {/* Subtle Background Glow */}
-                                <div className={`absolute inset-0 ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl`} />
-
-                                {/* Content */}
-                                <div className="relative z-10">
-                                    {/* Icon with Circle */}
-                                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-5 shadow-inner group-hover:shadow-lg transition-shadow duration-300`}>
-                                        <item.icon className="text-2xl text-white" />
-                                    </div>
-
-                                    {/* Title */}
-                                    <h3 className={`text-lg font-bold mb-3 transition-colors ${isDarkMode ? 'text-white group-hover:text-indigo-400' : 'text-slate-800 group-hover:text-indigo-700'}`}>
-                                        {item.title}
-                                    </h3>
-
-                                    {/* Description */}
-                                    <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                                        {item.description}
-                                    </p>
-                                </div>
-
-                                {/* Bottom Accent Line */}
-                                <div className={`absolute bottom-0 left-6 right-6 h-0.5 rounded-full bg-gradient-to-r ${item.color} opacity-0 group-hover:opacity-100 transition-all duration-300`} />
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </AnimatePresence>
-
-                {/* Key Stats Section */}
+                {/* Key figures — one quiet strip instead of six cards */}
                 <motion.div
-                    variants={itemVariants}
-                    className={`mt-20 pt-10 border-t grid grid-cols-2 lg:grid-cols-6 gap-4 max-w-6xl mx-auto px-4 ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}
+                    variants={fadeUp}
+                    className={`mt-16 md:mt-20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px border-y ${rule} ${isDarkMode ? 'bg-[#c5b79e]/20' : 'bg-slate-300/70'}`}
                 >
                     {[
-                        { number: '98.61%', label: 'Naukri Score', icon: '🏆' },
-                        { number: '98.33%', label: 'Best Accuracy', icon: '🎯' },
-                        { number: '10+', label: 'Projects', icon: '🚀' },
-                        { number: '4', label: 'Internships', icon: '💼' },
-                        { number: '4', label: 'Lead Roles', icon: '👑' },
-                        { number: '5', label: 'Strengths', icon: '💪' }
+                        { number: '98.61%', label: 'Naukri Score', icon: LTrophy },
+                        { number: '99.67%', label: 'Best Accuracy', icon: LTarget },
+                        { number: '10+', label: 'Projects', icon: LFolder },
+                        { number: '4', label: 'Internships', icon: LBriefcase },
+                        { number: '4', label: 'Lead Roles', icon: LCrown },
+                        { number: '5', label: 'Strengths', icon: LZap }
                     ].map((stat, index) => (
-                        <motion.div
+                        <div
                             key={index}
-                            className={`rounded-2xl p-5 text-center shadow-sm border transition-all border-b-4 border-b-indigo-500 ${isDarkMode ? 'bg-slate-900/40 border-white/5 hover:bg-slate-800/60' : 'bg-white border-slate-50 hover:shadow-md'}`}
-                            whileHover={{ y: -5 }}
+                            className={`px-4 py-6 md:py-8 ${isDarkMode ? 'bg-[#29251d]' : 'bg-[#f4ecdd]'}`}
                         >
-                            <div className="text-2xl mb-2">{stat.icon}</div>
-                            <div className={`text-xl font-extrabold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{stat.number}</div>
-                            <div className={`text-[10px] uppercase font-bold mt-1 tracking-tight ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{stat.label}</div>
-                        </motion.div>
+                            <div className={`flex items-center gap-2 eyebrow ${muted}`}>
+                                <stat.icon size={13} strokeWidth={1.5} className="text-bronze-600 dark:text-bronze-400" />
+                                {stat.label}
+                            </div>
+                            <div className="mt-3 text-4xl md:text-5xl tracking-[-0.04em] text-bronze-700 dark:text-bronze-300">{stat.number}</div>
+                        </div>
                     ))}
                 </motion.div>
             </motion.div>

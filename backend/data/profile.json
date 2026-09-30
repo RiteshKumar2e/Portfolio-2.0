@@ -42,48 +42,16 @@
     }
   ],
   "skills": {
-    "languages": ["Python", "C", "C++", "JavaScript", "SQL", "HTML", "CSS"],
-    "backend": [
-      "FastAPI",
-      "Node.js",
-      "Express.js",
-      "SQLAlchemy",
-      "REST API design",
-      "Pydantic",
-      "JWT authentication",
-      "Async / concurrent request handling"
-    ],
-    "frontend": ["React.js", "React 19", "Tailwind CSS", "MUI", "Vite", "Framer Motion", "Three.js / React Three Fiber"],
-    "databases": ["PostgreSQL", "MySQL", "MongoDB", "Turso (LibSQL)", "MariaDB"],
-    "ai_ml": [
-      "TensorFlow",
-      "Keras",
-      "PyTorch",
-      "scikit-learn",
-      "OpenCV",
-      "NumPy",
-      "Pandas",
-      "MobileNetV2",
-      "Feature Pyramid Network (FPN)",
-      "Attention mechanisms",
-      "RAG (Retrieval-Augmented Generation)",
-      "XGBoost",
-      "LightGBM",
-      "NLP / Transformers / embeddings",
-      "VADER sentiment analysis"
-    ],
+    "languages": ["Python", "JavaScript", "C++", "C", "SQL", "HTML", "CSS"],
+    "backend": ["FastAPI", "Node.js", "Express.js", "REST APIs", "Pydantic", "SQLAlchemy", "JWT", "OAuth 2.0", "RBAC", "Async / concurrent request handling"],
+    "frontend": ["React.js", "React 19", "React Router", "Tailwind CSS", "MUI", "Vite", "Framer Motion", "Three.js / React Three Fiber"],
+    "databases": ["PostgreSQL", "MySQL", "SQLite (Turso / LibSQL)", "MongoDB", "Schema design", "Indexing", "Connection pooling"],
+    "system_design": ["Caching", "Fault tolerance & fallbacks", "Rate limiting", "Async I/O", "Concurrency", "Stateless services"],
+    "cs_fundamentals": ["Data Structures & Algorithms", "OOP", "Design Patterns", "DBMS"],
+    "ai_ml": ["TensorFlow", "Keras", "PyTorch", "scikit-learn", "OpenCV", "NumPy", "Pandas", "MobileNetV2", "Feature Pyramid Network (FPN)", "RAG (Retrieval-Augmented Generation)", "XGBoost", "LightGBM", "NLP / Transformers / embeddings", "VADER sentiment analysis", "Transformers (from scratch)", "BiLSTM", "Grad-CAM", "LLM APIs"],
     "llm_apis": ["Groq API (LLaMA 3.3)", "Google Gemini 2.0 Flash", "Multi-model fallback pipelines"],
     "google_technologies": ["Gemini API", "Google OAuth 2.0", "Google Colab / Jupyter"],
-    "tools_and_deployment": [
-      "Git",
-      "GitHub Actions (CI/CD)",
-      "Docker",
-      "Render",
-      "Vercel",
-      "VS Code",
-      "Jest (unit & integration testing)",
-      "Brevo (transactional email/SMTP)"
-    ],
+    "tools_and_deployment": ["Git", "GitHub Actions (CI/CD)", "Docker", "Docker Compose", "Vercel", "Render", "VS Code", "Brevo (transactional email/SMTP)"],
     "self_assessed_levels": {
       "note": "Levels as stated on the portfolio site and resume (Proficient > Good > Decent).",
       "proficient": [
@@ -155,11 +123,12 @@
       "start": "May 2025",
       "end": "Present",
       "highlights": [
-        "Developed a modular Python-based industrial defect detection system using TensorFlow, PyTorch, OpenCV, MobileNetV2, Feature Pyramid Network (FPN) and attention-based fusion, with reusable preprocessing, training, evaluation and inference pipelines for the 6-class NEU-DET dataset.",
-        "Designed and optimized lightweight deep learning architectures for steel surface defect classification, reaching 98.33% classification accuracy and 0.85 mAP.",
-        "Enabled efficient edge deployment through multi-scale feature fusion and attention-based learning, targeting real-time use on industrial production lines."
+        "Steel defect classification on NEU-DET and SteelDefectX (1,800 + 1,631 images).",
+        "AMFF-CNN (MobileNetV2 + FPN): designed a 3.4M-parameter CNN that fuses multi-scale FPN features using channel/spatial attention and learned cross-scale weights; 92.95% macro-F1 on a leakage-free held-out split, Grad-CAM weak localization, 118 ms CPU inference; 6-variant ablation across 3 seeds (TensorFlow).",
+        "TinySteelLLM (Transformer, from scratch): converted ~30 handcrafted OpenCV descriptors (edges, GLCM texture, FFT, region stats) into short text prompts and classified them with a 2-layer, 4-head Transformer encoder trained from random initialization — no pretrained weights or external APIs (PyTorch).",
+        "SteelSense-BiLSTM: scaled this to 92 descriptors tokenized into ~94 tokens and a 2-layer BiLSTM with attention/max/mean pooling (1.75M parameters); 99.67% ± 0.23 on NEU-DET and 99.02% ± 0.40 on SteelDefectX (5 seeds), benchmarked against XGBoost, Random Forest, SVM, MobileNetV3 and ShuffleNetV2; first-author paper under review."
       ],
-      "stack": ["Python", "TensorFlow", "PyTorch", "OpenCV", "MobileNetV2", "FPN", "Deep Learning", "Computer Vision", "Git"]
+      "stack": ["Python", "TensorFlow", "PyTorch", "OpenCV", "MobileNetV2", "FPN", "Transformer", "BiLSTM", "Grad-CAM", "Computer Vision"]
     },
     {
       "title": "Web Development Intern",
@@ -168,12 +137,13 @@
       "start": "May 2024",
       "end": "July 2024",
       "highlights": [
-        "Engineered backend features for a full-stack web application (Food & Recipe API) using Node.js, Express.js, MySQL and REST APIs, implementing 10+ production-ready endpoints with input validation, exception handling and reusable code.",
-        "Reduced API response time by ~35% through SQL query optimization and database indexing.",
-        "Implemented unit and integration tests with Jest, and automated linting, testing and deployment via GitHub Actions CI/CD.",
-        "Built the responsive frontend using HTML, CSS and Bootstrap, integrated with the backend."
+        "Developed the backend for a recipe discovery app with 5 REST endpoints for search, lookup, and auth (Node.js, Express).",
+        "Architected a hybrid search layer that queries an in-memory catalog, merges it with the external TheMealDB API, and caps results at 50 per query; lookups check local data first and fall back to the external API.",
+        "Authored a data seeding script that generates 2,500+ recipes in TheMealDB’s schema with a separate ID range, so local and external results share one response format and never collide on lookup.",
+        "Secured the API with stateless JWT auth (1-hour expiry), bcrypt hashing, duplicate-account checks, and email/phone login.",
+        "Built the React frontend with React Router (7 pages), protected routes for dashboard and profile, and a Context API auth store that keeps users logged in across reloads (React 19, Vite)."
       ],
-      "stack": ["Node.js", "Express.js", "MySQL", "REST API", "Jest", "GitHub Actions", "JavaScript", "Bootstrap", "HTML", "CSS"]
+      "stack": ["Node.js", "Express.js", "React 19", "React Router", "Vite", "JWT", "bcrypt", "REST APIs", "TheMealDB API"]
     },
     {
       "title": "Data Science Intern",
@@ -227,25 +197,27 @@
       "tier": "flagship",
       "status": "Live in production",
       "best_for": "Backend engineering, AI/LLM systems, distributed architecture",
-      "why_it_stands_out": "The most architecturally ambitious build: an orchestrated system of 30+ specialised AI services with a 3-tier model fallback, sustaining 15,900+ requests a day at under 200ms.",
-      "hardest_part": "Making more than thirty specialised agents route correctly and answer consistently, while keeping every reply grounded in the company's real policy documents rather than guessed.",
+      "why_it_stands_out": "The most architecturally ambitious build: an async orchestrator runs category, sentiment and priority agents in parallel, drafts policy-grounded replies with RAG, and survives provider outages through a 3-tier LLM fallback.",
+      "hardest_part": "Keeping complaints flowing when a cloud LLM fails or hits its rate limit, while every reply stays grounded in the company's real policy rather than guessed.",
       "key_decisions": [
-        "Many small specialised agents instead of one general model — the system reads a complaint and routes it to the right expert, like a well-run call centre.",
-        "RAG so the AI 'reads the manual' before it speaks, giving policy-backed answers rather than plausible-sounding ones.",
-        "A 3-tier fallback (Groq LLaMA 3.3 → Gemini 2.0 Flash → local TF-IDF) so the system degrades gracefully instead of going down when a provider fails."
+        "Parallel category, sentiment and priority agents coordinated by an async orchestrator, instead of one general model doing everything in sequence.",
+        "RAG so replies are drafted from the actual policy, not from what sounds plausible.",
+        "A 3-tier fallback — Groq LLaMA 3.3 → Gemini 2.0 Flash (multi-key rotation) → local TF-IDF/TextBlob — so the system keeps working when a cloud API fails.",
+        "An in-memory cache for repeated queries, cutting API response time from 2.5 s to ~0.5 s."
       ],
       "role": "Solo Developer",
-      "period": "Not specified",
+      "period": "Dec 2025",
       "problem": "Support teams are slow and inconsistent at resolving complex customer complaints across many policy edge-cases.",
-      "what_was_built": "A full-stack complaint resolution platform with an async pipeline of 30+ specialized AI services (Orchestrator, Classifier, Sentiment Analyzer, Priority Detector, RAG Engine). A RAG engine grounds answers in the company's actual policy documents so replies are policy-backed rather than guessed.",
+      "what_was_built": "A support platform where an async orchestrator runs category, sentiment and priority agents in parallel on each complaint, then drafts a policy-grounded reply using RAG. It handles English, Hindi and Hinglish.",
       "engineering_details": [
-        "Sustains 15,900+ daily requests at <200ms response time.",
-        "3-tier LLM fallback chain: Groq LLaMA 3.3 → Gemini 2.0 Flash → local TF-IDF, so the system degrades gracefully instead of failing.",
-        "Google OAuth 2.0 + email OTP authentication, JWT-based role access control, Brevo SMTP notifications.",
-        "FastAPI backend orchestrates the agents; database stores every complaint and its history for conversational context."
+        "Async orchestrator running category, sentiment and priority agents in parallel per complaint.",
+        "3-tier LLM fallback: Groq LLaMA 3.3 → Gemini 2.0 Flash (multi-key rotation) → local TF-IDF/TextBlob.",
+        "In-memory cache for repeated queries cut API response time from 2.5 s to ~0.5 s.",
+        "REST APIs guarded by Google OAuth 2.0 + email OTP and JWT-based RBAC.",
+        "FastAPI, React 19, SQLAlchemy and Turso."
       ],
-      "impact": ["30+ AI agents", "Sub-second resolutions", "RAG policy-aware answers", "15,900+ daily requests at <200ms"],
-      "stack": ["FastAPI", "React 19", "Turso (LibSQL)", "Groq API (LLaMA 3.3)", "Gemini 2.0 Flash", "JWT", "REST APIs", "MariaDB"],
+      "impact": ["2.5 s → ~0.5 s API response time", "3-tier LLM fallback", "English, Hindi and Hinglish support", "RAG policy-grounded replies"],
+      "stack": ["FastAPI", "React 19", "SQLAlchemy", "Turso (LibSQL)", "Groq API (LLaMA 3.3)", "Gemini 2.0 Flash", "TF-IDF/TextBlob", "Google OAuth 2.0", "JWT", "RAG"],
       "links": {
         "live": "https://riteshkr.online",
         "github": "https://github.com/RiteshKumar2e/customer-complaint-agent_new"
@@ -254,30 +226,29 @@
     {
       "name": "Community AI Platform",
       "tier": "flagship",
-      "status": "Live in production at communityai.co.in, serving real users",
+      "status": "Live in production at communityai.co.in, used by 100+ active users",
       "best_for": "Full-stack product engineering, applied AI, social-impact products",
-      "why_it_stands_out": "The project with the clearest real-world impact: a live multilingual platform that puts 50+ government schemes within reach of people who would never find them otherwise.",
+      "why_it_stands_out": "The project with the clearest real-world impact: a live platform used by 100+ active users to find 50+ government schemes, courses and jobs, with an AI assistant answering in 5 Indian languages.",
       "hardest_part": "Designing the whole product around one question an ordinary user actually asks — 'what am I eligible for, and how do I get it?' — when the underlying information is scattered across dozens of sites, written in complex English and buried in PDFs.",
       "key_decisions": [
-        "Async FastAPI so a single service can serve many concurrent users on modest hosting.",
-        "SQLAlchemy models plus Pydantic validation so malformed or malicious input is rejected before it reaches the database, without writing raw SQL.",
-        "A multi-model pipeline (Groq → Gemini fallback) with source attribution, so answers can be traced back to where they came from.",
-        "A lightweight React frontend, because the target users are often on budget phones."
+        "A multi-model assistant (Amazon Q → Groq → Gemini fallback) so answers keep coming if one provider fails.",
+        "An automated content scanner so the catalogue updates itself from external sources instead of by hand.",
+        "Async FastAPI with background tasks, connection pooling and indexed queries so the backend stays fast under load.",
+        "JWT + bcrypt auth, Pydantic validation and rate limiting to keep the API safe."
       ],
       "role": "Full-Stack Developer",
-      "period": "Not specified",
+      "period": "Jan 2026",
       "problem": "Government help exists, but people never find it — details are spread across dozens of sites, written in complex English, and buried inside PDFs. Underserved communities can't discover the resources meant for them.",
-      "what_was_built": "A multilingual platform providing access to 50+ government schemes, learning resources and job opportunities across India, with a context-aware AI chat assistant and deep-learning-driven recommendations that surface relevant opportunities from a user's profile.",
+      "what_was_built": "A platform used by 100+ active users to find 50+ government schemes, courses and jobs, with an AI assistant (Amazon Q → Groq → Gemini fallback) answering in 5 Indian languages.",
       "engineering_details": [
-        "Async FastAPI backend with SQLAlchemy models for users, schemes and chat history; Pydantic validates every request before it reaches the database.",
-        "JWT-based authentication for private pages.",
-        "Multi-model AI pipeline (Groq → Gemini fallback) for source-attributed Q&A.",
-        "Content ingestion via News and YouTube APIs.",
-        "Supports English, Hindi, Bengali, Telugu and Marathi.",
-        "Responsive React frontend designed to run well on low-end phones."
+        "AI assistant with an Amazon Q → Groq → Gemini fallback, answering in 5 Indian languages.",
+        "Automated content scanner that pulls new schemes and courses from 2 external APIs (News, YouTube), adds them to the platform, and emails summaries via Brevo.",
+        "27 REST endpoints with async I/O, background tasks for email, connection pooling and indexed queries.",
+        "JWT + bcrypt auth, Pydantic validation and rate limiting.",
+        "FastAPI, React, SQLAlchemy and Turso."
       ],
-      "impact": ["Live in production", "50+ government schemes", "5 languages supported", "Source-attributed answers"],
-      "stack": ["FastAPI", "React", "SQLAlchemy", "Turso (LibSQL)", "Groq API", "Gemini", "Brevo API", "JWT", "Pydantic"],
+      "impact": ["100+ active users", "50+ government schemes, courses and jobs", "5 Indian languages", "27 REST endpoints"],
+      "stack": ["FastAPI", "React", "SQLAlchemy", "Turso (LibSQL)", "Amazon Q", "Groq API", "Gemini", "Brevo API", "News API", "YouTube API", "JWT", "bcrypt", "Pydantic"],
       "links": {
         "live": "https://communityai.co.in",
         "github": "https://github.com/RiteshKumar2e/Community-Empowering-2.0"
@@ -286,27 +257,27 @@
     {
       "name": "Steel Surface Defect Detection (AMFF-CNN)",
       "tier": "flagship",
-      "status": "Ongoing research at NIT Jamshedpur; paper under review at Discover Artificial Intelligence (Springer Nature)",
+      "status": "Ongoing research at NIT Jamshedpur; first-author paper (SteelSense-BiLSTM) under review at Discover Computing (Springer Nature)",
       "best_for": "Machine learning, computer vision, research roles, edge deployment",
-      "why_it_stands_out": "The only project with peer-reviewed research behind it — an original architecture (AMFF-CNN) with measured results, 98.33% accuracy and 0.85 mAP, and a paper under review.",
-      "hardest_part": "Detecting defects that range from large blotches to hairline cracks with one model, while keeping it small enough to run on cheap hardware beside the production line rather than on a server.",
+      "why_it_stands_out": "The research project: three original models on NEU-DET and SteelDefectX, with the best (SteelSense-BiLSTM) reaching 99.67% ± 0.23 on NEU-DET and 99.02% ± 0.40 on SteelDefectX, and a first-author paper under review.",
+      "hardest_part": "Getting results that hold up — a leakage-free held-out split, ablations across multiple seeds, and benchmarks against strong classical and CNN baselines rather than a single lucky run.",
       "key_decisions": [
-        "MobileNetV2 as the backbone specifically because factories need models that run on small, cheap edge hardware next to the camera.",
-        "A Feature Pyramid Network plus attention-based multi-scale fusion so the model examines the image at several zoom levels and focuses on the regions that matter.",
-        "OpenCV preprocessing to standardise size, contrast and lighting across thousands of images, so the model always learns from consistent examples."
+        "AMFF-CNN: a compact 3.4M-parameter MobileNetV2 + FPN network with channel/spatial attention and learned cross-scale weights, evaluated on a leakage-free held-out split.",
+        "TinySteelLLM: describe each image with ~30 handcrafted OpenCV descriptors written as text, and classify with a small Transformer trained from scratch — no pretrained weights or external APIs.",
+        "SteelSense-BiLSTM: scale that to 92 descriptors (~94 tokens) with a 1.75M-parameter BiLSTM and attention/max/mean pooling."
       ],
-      "role": "ML Researcher — Machine Vision and Intelligence Lab, NIT Jamshedpur",
+      "role": "Research Intern — Machine Vision & Intelligence Lab, NIT Jamshedpur",
       "period": "May 2025 – Present",
       "problem": "Manual quality control on steel surfaces is slow, costly and inconsistent at spotting fine defects on a live production line.",
-      "what_was_built": "A lightweight defect detector combining a MobileNetV2 backbone, a Feature Pyramid Network and attention-based multi-scale feature fusion (the AMFF-CNN design), trained on the 6-class NEU-DET dataset for industrial quality control.",
+      "what_was_built": "Three steel-defect classifiers on NEU-DET and SteelDefectX (1,800 + 1,631 images): AMFF-CNN (MobileNetV2 + FPN with attention fusion), TinySteelLLM (a from-scratch Transformer over descriptor text prompts) and SteelSense-BiLSTM.",
       "engineering_details": [
-        "OpenCV preprocessing pipeline to standardize size, contrast and lighting across thousands of steel-surface images.",
-        "MobileNetV2 backbone chosen so the model runs on cheap edge hardware next to the camera, not only on servers.",
-        "FPN + attention-based multi-scale fusion so both large blotches and hairline cracks are detected.",
-        "Trained and validated in PyTorch."
+        "AMFF-CNN: 3.4M parameters, 92.95% macro-F1 on a leakage-free held-out split, Grad-CAM weak localization, 118 ms CPU inference, 6-variant ablation across 3 seeds (TensorFlow).",
+        "TinySteelLLM: ~30 OpenCV descriptors (edges, GLCM texture, FFT, region stats) as text prompts, 2-layer 4-head Transformer encoder trained from random initialization (PyTorch).",
+        "SteelSense-BiLSTM: 92 descriptors tokenized into ~94 tokens, 2-layer BiLSTM with attention/max/mean pooling, 1.75M parameters.",
+        "Benchmarked against XGBoost, Random Forest, SVM, MobileNetV3 and ShuffleNetV2."
       ],
-      "impact": ["98.33% classification accuracy on NEU-DET", "0.85 mAP", "Edge-deployment ready"],
-      "stack": ["Python", "PyTorch", "TensorFlow", "OpenCV", "MobileNetV2", "FPN", "Attention mechanisms"],
+      "impact": ["99.67% ± 0.23 on NEU-DET (5 seeds)", "99.02% ± 0.40 on SteelDefectX (5 seeds)", "92.95% macro-F1 for AMFF-CNN", "First-author paper under review"],
+      "stack": ["Python", "TensorFlow", "PyTorch", "OpenCV", "MobileNetV2", "FPN", "Transformer", "BiLSTM", "Grad-CAM", "XGBoost"],
       "links": {
         "live": null,
         "github": "https://github.com/RiteshKumar2e/Steel_Surface_Defect_NEU_DET-DATASET"
@@ -317,26 +288,26 @@
       "tier": "substantial",
       "status": "Live in production",
       "best_for": "Full-stack engineering, role-based access control, product workflows",
-      "why_it_stands_out": "The clearest example of replacing a manual institutional process with software — three user roles, a verification workflow, and one-click ATS-compliant resume generation.",
+      "why_it_stands_out": "The clearest example of replacing a manual institutional process with software: three roles, a verification workflow, category-based point scoring with a weekly leaderboard, and one-click ATS resume export.",
       "hardest_part": "Modelling one submission workflow that works for three different roles at once — students uploading, faculty verifying, admins managing — without the permissions leaking into each other.",
       "key_decisions": [
-        "Role-based access control as the organising principle rather than an afterthought.",
-        "Categorised, searchable, filterable records so users find things instead of scrolling spreadsheets.",
-        "Docker for consistent deployment; Google OAuth and Brevo for auth and notifications rather than rolling both by hand."
+        "JWT-based role access control as the organising principle — students upload, faculty verify, admins manage users and view analytics.",
+        "A stateless REST backend with SQL indexes, for sub-100 ms lookups on 10k+ records.",
+        "BLOB storage for certificates."
       ],
       "role": "Full-Stack Developer",
-      "period": "Not specified",
+      "period": "Feb 2026",
       "problem": "Student achievements are scattered across emails, spreadsheets and paperwork; students lose track of certificates and faculty spend hours verifying records.",
-      "what_was_built": "A full-stack academic platform with three roles (Student / Faculty / Admin) covering achievement submission and verification, certificate uploads, gamified leaderboards, bulk certificate export, and one-click ATS-compliant resume generation.",
+      "what_was_built": "The achievement portal for Arka Jain University’s School of Engineering & IT: students upload certificates, faculty verify them, admins manage users and view analytics. Category-based point scoring feeds a weekly leaderboard, alongside a hub of 90+ curated hackathons and one-click ATS resume export (DOCX/PDF).",
       "engineering_details": [
-        "Role-based access control: students submit and track, faculty verify, admins manage users and records.",
-        "React 19 frontend, responsive across desktop and mobile.",
-        "Node.js/Express backend handling authentication, validation and database operations.",
-        "Categorized, searchable and filterable achievement records replacing manual paperwork.",
-        "Containerized with Docker; Google OAuth and Brevo API integrated."
+        "Automated category-based point scoring that feeds a weekly leaderboard.",
+        "Hub of 90+ curated hackathons and one-click ATS resume export (DOCX/PDF).",
+        "Stateless REST backend with SQL indexes for sub-100 ms lookups on 10k+ records.",
+        "JWT-based RBAC and BLOB storage for certificates.",
+        "Node.js, Express 5, React 19 and Turso."
       ],
-      "impact": ["Live in production", "3 role types", "One-click ATS resume generation"],
-      "stack": ["Node.js", "Express", "React 19", "Turso (LibSQL)", "Docker", "JWT", "Google OAuth", "Brevo API"],
+      "impact": ["Live in production", "Sub-100 ms lookups on 10k+ records", "90+ curated hackathons", "One-click ATS resume (DOCX/PDF)"],
+      "stack": ["Node.js", "Express 5", "React 19", "Turso (LibSQL)", "JWT", "RBAC"],
       "links": {
         "live": "https://soeit-acheivement-portal.vercel.app",
         "github": "https://github.com/RiteshKumar2e/SOEIT-Acheivement-portal"
@@ -513,9 +484,9 @@
   ],
   "publications": [
     {
-      "title": "Cross-Enhanced and Attention-Modulated Multi-Scale Feature Fusion for Efficient Industrial Surface Defect Identification",
+      "title": "SteelSense-BiLSTM",
       "authors": "Ritesh Kumar, K. K. Singh",
-      "venue": "Discover Artificial Intelligence, Springer Nature",
+      "venue": "Discover Computing, Springer Nature",
       "year": "2026",
       "status": "Under Review"
     }
@@ -547,7 +518,7 @@
       "year": "2026"
     },
     {
-      "title": "Organizer — Hack Horizon 2K25",
+      "title": "Organizer — Hack Horizon 1.0 (2025)",
       "detail": "University-level hackathon fostering innovation and collaboration among tech enthusiasts.",
       "year": "2025"
     }
@@ -571,7 +542,7 @@
   ],
   "leadership": [
     {
-      "role": "President, Code & Compute Society (CCS)",
+      "role": "General Secretary & President, Code & Compute Society (CCS)",
       "organization": "Arka Jain University",
       "detail": "Leads the university's coding community — organizing technical events, mentoring students, collaborating with faculty and promoting software development initiatives."
     },

@@ -4,9 +4,9 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
     const [isDarkMode, setIsDarkMode] = useState(() => {
-        // Default to light theme on first visit; only use dark if the user
-        // has explicitly switched to it before (saved preference).
-        return localStorage.getItem('theme') === 'dark';
+        // Default to the dark "ink" theme on first visit; only use light if the
+        // user has explicitly switched to it before (saved preference).
+        return localStorage.getItem('theme') !== 'light';
     });
 
     useEffect(() => {

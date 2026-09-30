@@ -62,7 +62,7 @@ function AppContent() {
             wheelMultiplier: 0.8,
             touchMultiplier: 1.5,
         }}>
-            <div className="relative min-h-screen">
+            <div className="relative min-h-screen paper-grain">
                 <CustomCursor />
                 <Toaster position="top-right" theme={isDarkMode ? 'dark' : 'light'} richColors closeButton />
                 {/* Global Theme Overlays */}
@@ -70,7 +70,7 @@ function AppContent() {
                 <div className="blur-overlay blur-purple" />
                 <div className="blur-overlay blur-indigo" />
 
-                <div className={`transition-colors duration-700 bg-transparent ${isDarkMode ? 'text-white' : 'text-slate-900'} pb-0 overflow-x-hidden`}>
+                <div className={`transition-colors duration-700 bg-transparent ${isDarkMode ? 'text-[#eee2ca]' : 'text-slate-900'} pb-0 overflow-x-hidden`}>
                     <AnimatePresence mode="wait">
                         {isLoading ? (
                             <LoadingScreen key="loader" />

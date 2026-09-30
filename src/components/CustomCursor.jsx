@@ -83,8 +83,8 @@ const CustomCursor = () => {
 
     if (isTouchDevice) return null;
 
-    const primaryColor = isDarkMode ? '#22d3ee' : '#111827'; // Cyan for Dark, Deep Charcoal for Light
-    const auraColor = isDarkMode ? 'rgba(34, 211, 238, 0.15)' : 'rgba(17, 24, 39, 0.1)';
+    const primaryColor = isDarkMode ? '#dbc39c' : '#29251d'; // Bronze on ink, ink on paper
+    const auraColor = isDarkMode ? 'rgba(219, 195, 156, 0.15)' : 'rgba(41, 37, 29, 0.1)';
 
     return (
         <div className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden">
@@ -143,7 +143,7 @@ const CustomCursor = () => {
                     width: 6,
                     height: 6,
                     backgroundColor: primaryColor,
-                    boxShadow: isDarkMode ? '0 0 12px #22d3ee' : '0 0 10px #4f46e5',
+                    boxShadow: isDarkMode ? '0 0 12px #c3a47b' : '0 0 10px #8f6f45',
                     left: 0,
                     top: 0,
                     willChange: 'transform',

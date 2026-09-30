@@ -64,19 +64,19 @@ function SoftOrb({ position, scale, color, speed = 1, opacity = 0.18, distort = 
 
 const DarkAmbient = () => (
     <>
-        <color attach="background" args={['#0a0e1a']} />
-        <fogExp2 attach="fog" args={['#0a0e1a', 0.012]} />
+        <color attach="background" args={['#29251d']} />
+        <fogExp2 attach="fog" args={['#29251d', 0.012]} />
 
-        <FaintDust count={1600} color="#c7d2fe" opacity={0.28} />
+        <FaintDust count={1400} color="#dbc39c" opacity={0.22} />
 
         <Suspense fallback={null}>
-            <SoftOrb position={[-34, 16, -55]} scale={2.4} color="#4f46e5" opacity={0.16} speed={0.8} />
-            <SoftOrb position={[40, -22, -65]} scale={3.0} color="#3730a3" opacity={0.12} speed={0.6} />
-            <SoftOrb position={[18, 30, -75]} scale={1.6} color="#6366f1" opacity={0.14} speed={1} />
+            <SoftOrb position={[-34, 16, -55]} scale={2.4} color="#c3a47b" opacity={0.12} speed={0.8} />
+            <SoftOrb position={[40, -22, -65]} scale={3.0} color="#7b845e" opacity={0.1} speed={0.6} />
+            <SoftOrb position={[18, 30, -75]} scale={1.6} color="#b7976c" opacity={0.1} speed={1} />
         </Suspense>
 
-        <pointLight position={[40, 40, -20]} intensity={1.4} color="#818cf8" />
-        <pointLight position={[-45, -30, -25]} intensity={0.9} color="#4f46e5" />
+        <pointLight position={[40, 40, -20]} intensity={1.2} color="#dbc39c" />
+        <pointLight position={[-45, -30, -25]} intensity={0.8} color="#c3a47b" />
         <ambientLight intensity={0.45} />
     </>
 );
@@ -85,17 +85,17 @@ const DarkAmbient = () => (
 
 const LightAmbient = () => (
     <>
-        <color attach="background" args={['#fafbfc']} />
-        <fog attach="fog" args={['#fafbfc', 40, 130]} />
+        <color attach="background" args={['#f4ecdd']} />
+        <fog attach="fog" args={['#f4ecdd', 40, 130]} />
 
         <Suspense fallback={null}>
-            <SoftOrb position={[-32, 18, -55]} scale={2.6} color="#c7d2fe" opacity={0.5} speed={0.7} distort={0.25} />
-            <SoftOrb position={[38, -20, -62]} scale={3.2} color="#dbeafe" opacity={0.45} speed={0.6} distort={0.2} />
-            <SoftOrb position={[14, 28, -72]} scale={1.6} color="#e0e7ff" opacity={0.55} speed={0.9} distort={0.3} />
+            <SoftOrb position={[-32, 18, -55]} scale={2.6} color="#e8d6b6" opacity={0.28} speed={0.7} distort={0.25} />
+            <SoftOrb position={[38, -20, -62]} scale={3.2} color="#cfd4bb" opacity={0.22} speed={0.6} distort={0.2} />
+            <SoftOrb position={[14, 28, -72]} scale={1.6} color="#dbc39c" opacity={0.25} speed={0.9} distort={0.3} />
         </Suspense>
 
-        <directionalLight position={[6, 12, 6]} intensity={1.1} color="#ffffff" />
-        <pointLight position={[-12, 10, -10]} intensity={0.6} color="#c7d2fe" />
+        <directionalLight position={[6, 12, 6]} intensity={1.1} color="#fff6e6" />
+        <pointLight position={[-12, 10, -10]} intensity={0.6} color="#dbc39c" />
         <ambientLight intensity={1} />
     </>
 );
@@ -115,7 +115,7 @@ const LayoutBackground = () => {
     const { isDarkMode } = useTheme();
 
     return (
-        <div className={`fixed inset-0 -z-30 w-screen h-screen pointer-events-none transition-colors duration-1000 ${isDarkMode ? 'bg-[#0a0e1a]' : 'bg-[#fafbfc]'}`}>
+        <div className={`fixed inset-0 -z-30 w-screen h-screen pointer-events-none transition-colors duration-1000 ${isDarkMode ? 'bg-[#29251d]' : 'bg-[#f4ecdd]'}`}>
             <Canvas
                 camera={{ position: [0, 0, 60], fov: 60 }}
                 style={{ width: '100vw', height: '100vh' }}

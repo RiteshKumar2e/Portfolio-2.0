@@ -4,33 +4,37 @@
 
 @layer base {
   :root {
-    --primary: 79, 70, 229;
-    --secondary: 124, 58, 237;
-    --accent: 37, 99, 235;
-    --glass-bg: 255, 255, 255;
-    --glass-border: 15, 23, 42;
-    --text-main: 15, 23, 42;
+    --primary: 195, 164, 123;
+    --secondary: 123, 132, 94;
+    --accent: 219, 195, 156;
+    --glass-bg: 255, 252, 246;
+    --glass-border: 41, 37, 29;
+    --text-main: 41, 37, 29;
   }
 
   .dark {
     --glass-bg: 255, 255, 255;
     --glass-border: 255, 255, 255;
-    --text-main: 226, 232, 240;
+    --text-main: 238, 226, 202;
   }
 
   body {
-    @apply bg-[#fafbfc] text-slate-800 antialiased selection:bg-indigo-600 selection:text-white;
-    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+    @apply bg-[#f4ecdd] text-slate-800 antialiased selection:bg-bronze-400 selection:text-ink-950;
+    font-family: 'Iowan Old Style', 'Newsreader', 'Palatino Linotype', Palatino, Georgia, serif;
+    font-size: 17px;
+    font-weight: 400;
+    font-optical-sizing: auto;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
 
   .dark body {
-    @apply bg-[#0a0e1a] text-slate-200 selection:bg-indigo-500/40 selection:text-white;
+    @apply bg-[#29251d] text-[#eee2ca] selection:bg-bronze-400/60 selection:text-ink-950;
   }
 
   h1, h2, h3 {
-    letter-spacing: -0.02em;
+    letter-spacing: -0.035em;
+    font-weight: 500;
   }
 }
 
@@ -42,42 +46,42 @@
     background: rgba(var(--glass-bg), 0.72);
     border-color: rgba(var(--glass-border), 0.08);
     backdrop-filter: blur(12px);
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 14px 32px -20px rgba(15, 23, 42, 0.18);
+    box-shadow: 0 1px 2px rgba(41, 37, 29, 0.05), 0 14px 32px -20px rgba(41, 37, 29, 0.22);
   }
 
   .dark .glass-card {
-    background: rgba(255, 255, 255, 0.035);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(238, 226, 202, 0.035);
+    border-color: rgba(238, 226, 202, 0.1);
     box-shadow: 0 14px 36px -22px rgba(0, 0, 0, 0.7);
   }
 
   .glass-card:hover {
     @apply -translate-y-1;
     border-color: rgba(var(--primary), 0.28);
-    box-shadow: 0 22px 44px -24px rgba(15, 23, 42, 0.22);
+    box-shadow: 0 22px 44px -24px rgba(41, 37, 29, 0.3);
   }
 
   .dark .glass-card:hover {
-    border-color: rgba(129, 140, 248, 0.32);
+    border-color: rgba(195, 164, 123, 0.4);
     box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.8);
   }
 
   /* Refined gradient text — tasteful, static two-tone */
   .text-gradient,
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-bronze-700 via-bronze-600 to-bronze-800;
   }
 
   .dark .text-gradient,
   .dark .gradient-text {
-    @apply from-indigo-300 via-indigo-200 to-sky-300;
+    @apply from-bronze-300 via-bronze-200 to-bronze-400;
   }
 
   /* Primary button — flat, confident, soft elevation */
   .btn-premium {
-    @apply relative px-8 py-3.5 rounded-xl font-semibold overflow-hidden transition-all duration-300 active:scale-[0.98] text-white;
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-    box-shadow: 0 10px 24px -12px rgba(79, 70, 229, 0.5);
+    @apply relative px-8 py-3.5 rounded-full font-medium overflow-hidden transition-all duration-300 active:scale-[0.98] text-[#1d1a15];
+    background: #c3a47b;
+    box-shadow: 0 10px 24px -14px rgba(143, 111, 69, 0.6);
   }
 
   .btn-premium::before {
@@ -91,11 +95,12 @@
 
   .btn-premium:hover {
     @apply -translate-y-0.5;
-    box-shadow: 0 18px 34px -14px rgba(79, 70, 229, 0.55);
+    background: #dbc39c;
+    box-shadow: 0 18px 34px -14px rgba(143, 111, 69, 0.6);
   }
 
   .btn-outline {
-    @apply relative px-8 py-3.5 rounded-xl font-semibold border transition-all duration-300 active:scale-[0.98]
+    @apply relative px-8 py-3.5 rounded-full font-medium border transition-all duration-300 active:scale-[0.98]
            border-slate-300/70 text-slate-700 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/60;
   }
 
@@ -117,7 +122,7 @@
   .magnetic-card::after {
     content: '';
     @apply absolute top-0 left-0 w-full h-full opacity-0 transition-opacity duration-300;
-    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(79, 70, 229, 0.06), transparent 40%);
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(195, 164, 123, 0.08), transparent 40%);
   }
 
   .magnetic-card:hover::after {
@@ -135,11 +140,11 @@
   }
 
   .dark .text-glow {
-    text-shadow: 0 1px 24px rgba(99, 102, 241, 0.18);
+    text-shadow: 0 1px 24px rgba(195, 164, 123, 0.15);
   }
 
   .focus-glow:focus {
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+    box-shadow: 0 0 0 4px rgba(195, 164, 123, 0.2);
   }
 }
 
@@ -200,17 +205,17 @@
 .bg-grid {
   background-size: 56px 56px;
   background-image:
-    linear-gradient(to right, rgba(15, 23, 42, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.025) 1px, transparent 1px);
+    linear-gradient(to right, rgba(41, 37, 29, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(41, 37, 29, 0.035) 1px, transparent 1px);
 }
 
 .dark .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    linear-gradient(to right, rgba(238, 226, 202, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(238, 226, 202, 0.03) 1px, transparent 1px);
 }
 
-/* Soft ambient blur overlays — subtle indigo wash */
+/* Soft ambient blur overlays — warm bronze / sage wash */
 .blur-overlay {
   @apply fixed -z-10 pointer-events-none;
   filter: blur(120px);
@@ -235,4 +240,305 @@
 /* Masking for content clarity */
 .content-mask {
   mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Editorial ("Field Manuals") typography helpers                     */
+/* ------------------------------------------------------------------ */
+
+/* Paper grain — keeps large flat ink/paper fields from feeling digital. */
+.paper-grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -5;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .16 0 0 0 0 .14 0 0 0 0 .11 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.dark .paper-grain::before {
+  mix-blend-mode: screen;
+  opacity: 0.18;
+}
+
+/* Oversized editorial display heading (headingSize 325 / tracking -0.085). */
+.display-heading {
+  font-family: 'Iowan Old Style', 'Newsreader', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(4.5rem, 17vw, 20.3rem);
+  line-height: 0.8;
+  letter-spacing: -0.085em;
+  font-optical-sizing: auto;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.hairline {
+  height: 1px;
+  background: currentColor;
+  opacity: 0.18;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Field Library — 3D cloth-bound books (Projects)                    */
+/* ------------------------------------------------------------------ */
+
+.book-scene {
+  perspective: 1400px;
+}
+
+.book {
+  --bw: 150px;
+  --bh: calc(var(--bw) * 1.45);
+  --bd: 30px;
+  position: relative;
+  width: var(--bw);
+  height: var(--bh);
+  transform-style: preserve-3d;
+  transform: rotateY(28deg) rotateX(2deg) rotateZ(var(--tilt, 0deg));
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+  .book { --bw: 190px; --bd: 38px; }
+}
+
+@media (min-width: 1280px) {
+  .book { --bw: 210px; --bd: 42px; }
+}
+
+.book-trigger:hover .book,
+.book-trigger:focus-visible .book {
+  transform: rotateY(-16deg) rotateX(4deg) translateY(-14px);
+}
+
+.book-face {
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.book-front {
+  inset: 0;
+  transform: translateZ(calc(var(--bd) / 2));
+  border-radius: 2px 5px 5px 2px;
+  overflow: hidden;
+}
+
+/* Cloth texture + hinge groove near the spine. */
+.book-front::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.32) 0, rgba(255, 255, 255, 0.1) 3%, transparent 6%, rgba(0, 0, 0, 0.16) 7.5%, transparent 10%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.1), transparent 45%, rgba(0, 0, 0, 0.18)),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 4px);
+  z-index: 2;
+}
+
+.book-back {
+  inset: 0;
+  transform: rotateY(180deg) translateZ(calc(var(--bd) / 2));
+  border-radius: 5px 2px 2px 5px;
+}
+
+.book-spine {
+  top: 0;
+  height: 100%;
+  width: var(--bd);
+  left: calc(50% - var(--bd) / 2);
+  transform: rotateY(-90deg) translateZ(calc(var(--bw) / 2));
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.08) 40%, rgba(0, 0, 0, 0.25));
+}
+
+.book-pages {
+  top: 4px;
+  height: calc(100% - 8px);
+  width: calc(var(--bd) - 4px);
+  left: calc(50% - (var(--bd) - 4px) / 2);
+  transform: rotateY(90deg) translateZ(calc(var(--bw) / 2 - 4px));
+  background: repeating-linear-gradient(90deg, #f3ebdc 0 1px, #d8cab0 1px 2px);
+  box-shadow: inset 0 0 8px rgba(41, 37, 29, 0.35);
+}
+
+.book-shadow {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: -22px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(15, 12, 8, 0.55), transparent 70%);
+  filter: blur(4px);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s;
+}
+
+.book-trigger:hover .book-shadow,
+.book-trigger:focus-visible .book-shadow {
+  transform: scale(0.82);
+  opacity: 0.6;
+}
+
+.book-plate img {
+  filter: sepia(0.35) saturate(0.8);
+  transition: filter 0.6s;
+}
+
+.book-trigger:hover .book-plate img {
+  filter: none;
+}
+
+/* Open-book spread */
+.page-paper {
+  background-color: #f3ebdc;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.5), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(41, 37, 29, 0.018) 0 1px, transparent 1px 3px);
+  color: #29251d;
+}
+
+/* Illustrated paper covers — glints, sheen, glowing doorway, idle float */
+.cover-paper {
+  background:
+    radial-gradient(ellipse at 50% 42%, #f7eed9 0%, #ecdfc2 62%, #d9c59c 100%);
+}
+
+.cover-glint {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fff6dc;
+  box-shadow: 0 0 6px 2px rgba(255, 214, 140, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  animation: cover-glint 4.8s ease-in-out infinite;
+}
+
+@keyframes cover-glint {
+  0% { opacity: 0; transform: translateY(0) scale(0.4); }
+  20% { opacity: 1; transform: translateY(-6px) scale(1); }
+  60% { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-28px) scale(0.3); }
+}
+
+.book-front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 248, 228, 0.5) 50%, transparent 65%);
+  transform: translateX(-130%);
+  animation: cover-sheen 8s ease-in-out infinite;
+  animation-delay: var(--sheen-delay, 0s);
+}
+
+.book-trigger:hover .book-front::after {
+  animation: cover-sheen-fast 1.4s ease-out 1;
+}
+
+@keyframes cover-sheen {
+  0%, 78% { transform: translateX(-130%); }
+  100% { transform: translateX(130%); }
+}
+
+@keyframes cover-sheen-fast {
+  from { transform: translateX(-130%); }
+  to { transform: translateX(130%); }
+}
+
+.door-glow {
+  animation: door-glow 3.4s ease-in-out infinite;
+}
+
+.book-trigger:hover .door-glow {
+  animation-duration: 1.2s;
+}
+
+@keyframes door-glow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.book-float {
+  animation: book-float 6.5s ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+
+@keyframes book-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+/* Cover-illustration motion (SVG). transform-box keeps rotations/scales centred on each shape. */
+.svg-spin,
+.svg-spin-rev,
+.svg-pulse,
+.svg-twinkle,
+.svg-blink,
+.svg-ripple {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.svg-spin { animation: svg-spin 48s linear infinite; }
+.svg-spin-rev { animation: svg-spin 22s linear infinite reverse; }
+.svg-pulse { animation: svg-pulse 2.6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.svg-twinkle { animation: svg-twinkle 3.2s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.svg-flow { animation: svg-flow 2.8s linear infinite; }
+.svg-scan { animation: svg-scan 3.8s ease-in-out infinite alternate; }
+.svg-sway { animation: svg-sway 5.5s ease-in-out infinite alternate; }
+.svg-blink { animation: svg-blink 6s ease-in-out infinite; }
+.svg-ripple { animation: svg-ripple 2.4s ease-out infinite; }
+.svg-bob { animation: svg-bob 2.4s ease-in-out infinite; }
+.svg-glow { filter: drop-shadow(0 0 3px rgba(255, 170, 90, 0.9)); }
+
+@keyframes svg-spin { to { transform: rotate(360deg); } }
+@keyframes svg-pulse {
+  0%, 100% { opacity: 0.45; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+@keyframes svg-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(45deg); }
+}
+@keyframes svg-flow { to { stroke-dashoffset: -24; } }
+@keyframes svg-scan {
+  from { transform: translateY(0); }
+  to { transform: translateY(112px); }
+}
+@keyframes svg-sway {
+  from { transform: translate(-16px, -8px); }
+  to { transform: translate(14px, 10px); }
+}
+@keyframes svg-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  94% { transform: scaleY(0.08); }
+}
+@keyframes svg-ripple {
+  from { opacity: 0.9; transform: scale(0.3); }
+  to { opacity: 0; transform: scale(2.4); }
+}
+@keyframes svg-bob {
+  0%, 100% { transform: translate(0, 0); }
+  45% { transform: translate(-4px, 6px); }
+  55% { transform: translate(-4px, 7px); }
 }

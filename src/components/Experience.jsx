@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FaBriefcase, FaCalendar, FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa';
+import { Microscope, Code2, BarChart3, BrainCircuit, Briefcase, CalendarClock, Target } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 const Experience = () => {
@@ -18,12 +19,12 @@ const Experience = () => {
             duration: 'May 2025 - Present',
             location: 'Jamshedpur (On-Site)',
             description: [
-                'Developed a lightweight steel surface defect detection model using MobileNetV2, Feature Pyramid Network (FPN), and attention-based multi-scale feature fusion on the NEU-DET dataset.',
-                'Achieved 98.33% classification accuracy and 0.85 mAP on NEU-DET.',
-                'Optimized the architecture for real-time edge deployment in industrial manufacturing environments.'
+                'AMFF-CNN (MobileNetV2 + FPN): designed a 3.4M-parameter CNN that fuses multi-scale features with channel/spatial attention and learned cross-scale weights — 92.95% macro-F1 on a leakage-free held-out split, Grad-CAM weak localization, 118 ms CPU inference, and a 6-variant ablation across 3 seeds (TensorFlow).',
+                'TinySteelLLM: turned ~30 handcrafted OpenCV descriptors (edges, GLCM texture, FFT, region stats) into short text prompts and classified them with a 2-layer, 4-head Transformer trained from scratch — no pretrained weights or external APIs (PyTorch).',
+                'SteelSense-BiLSTM: scaled to 92 descriptors (~94 tokens) and a 1.75M-parameter BiLSTM with attention/max/mean pooling — 99.67% ± 0.23 on NEU-DET and 99.02% ± 0.40 on SteelDefectX (5 seeds), benchmarked against XGBoost, Random Forest, SVM, MobileNetV3 and ShuffleNetV2. First-author paper under review.'
             ],
-            skills: ['Python', 'PyTorch', 'OpenCV', 'Deep Learning', 'MobileNetV2', 'FPN', 'Attention Mechanism'],
-            icon: '🔬',
+            skills: ['Python', 'TensorFlow', 'PyTorch', 'OpenCV', 'MobileNetV2', 'FPN', 'Transformer', 'BiLSTM', 'Grad-CAM'],
+            icon: Microscope,
             color: 'from-purple-500 to-pink-600'
         },
         {
@@ -32,12 +33,14 @@ const Experience = () => {
             duration: 'May 2024 - July 2024',
             location: 'Noida (Remote)',
             description: [
-                'Developed a Food & Recipe API website using Node.js and MySQL, implementing 10+ RESTful APIs.',
-                'Reduced data retrieval latency by ~35% and optimized database query performance.',
-                'Built a full-stack web app with a responsive UI (HTML, CSS, Bootstrap) and backend integration.'
+                'Developed the backend for a recipe discovery app with 5 REST endpoints for search, lookup, and auth (Node.js, Express).',
+                'Architected a hybrid search layer that queries an in-memory catalog, merges it with the external TheMealDB API, and caps results at 50 per query; lookups check local data first and fall back to the external API.',
+                'Authored a seeding script that generates 2,500+ recipes in TheMealDB\u2019s schema with a separate ID range, so local and external results share one format and never collide.',
+                'Secured the API with stateless JWT auth (1-hour expiry), bcrypt hashing, duplicate-account checks, and email/phone login.',
+                'Built the React 19 + Vite frontend with React Router (7 pages), protected dashboard and profile routes, and a Context API auth store that keeps users logged in across reloads.'
             ],
-            skills: ['Node.js', 'MySQL', 'REST API', 'JavaScript', 'Bootstrap', 'HTML', 'CSS'],
-            icon: '🚀',
+            skills: ['Node.js', 'Express', 'React 19', 'React Router', 'Vite', 'JWT', 'bcrypt', 'REST API'],
+            icon: Code2,
             color: 'from-blue-500 to-indigo-600'
         },
     
@@ -52,7 +55,7 @@ const Experience = () => {
                 'Utilized Pandas and Seaborn for advanced visualizations.'
             ],
             skills: ['Python', 'Pandas', 'Jupyter', 'EDA'],
-            icon: '📊',
+            icon: BarChart3,
             color: 'from-emerald-500 to-teal-600'
         },
         {
@@ -66,7 +69,7 @@ const Experience = () => {
                 'Analyzed overfitting and bias-variance trade-offs.'
             ],
             skills: ['Python', 'scikit-learn', 'NumPy', 'ML Algorithms'],
-            icon: '🧠',
+            icon: BrainCircuit,
             color: 'from-orange-500 to-red-600'
         }
     ];
@@ -139,7 +142,7 @@ const Experience = () => {
                                     <div className="flex items-center gap-4">
                                         <div className={`w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-3xl bg-gradient-to-br ${internship.color} p-0.5 flex items-center justify-center shadow-xl transition-all duration-500 group-hover:scale-105 group-hover:-rotate-3`}>
                                             <div className="w-full h-full bg-slate-900/10 rounded-[1.4rem] flex items-center justify-center text-2xl sm:text-3xl backdrop-blur-sm">
-                                                <span className="drop-shadow-lg">{internship.icon}</span>
+                                                <internship.icon className="w-7 h-7 sm:w-9 sm:h-9 text-[#fbf6ee] drop-shadow" strokeWidth={1.4} />
                                             </div>
                                         </div>
                                         <div className="min-w-0">
@@ -209,12 +212,12 @@ const Experience = () => {
                     className="flex flex-wrap justify-center gap-4 mt-20 max-w-4xl mx-auto px-4"
                 >
                     {[
-                        { number: '4', label: 'Internships', icon: '💼' },
-                        { number: '12+', label: 'Months Active', icon: '⏰' },
-                        { number: '98.33%', label: 'Accuracy', icon: '🎯' }
+                        { number: '4', label: 'Internships', icon: Briefcase },
+                        { number: '12+', label: 'Months Active', icon: CalendarClock },
+                        { number: '99.67%', label: 'Accuracy', icon: Target }
                     ].map((stat, index) => (
-                        <div key={index} className={`px-6 py-4 rounded-2xl border flex items-center gap-4 transition-all duration-500 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow text-white' : 'bg-white border-slate-100 shadow-sm hover:shadow-md text-slate-800'}`}>
-                            <span className="text-2xl">{stat.icon}</span>
+                        <div key={index} className={`group/stat px-6 py-4 rounded-2xl border flex items-center gap-4 transition-all duration-500 ${isDarkMode ? 'bg-slate-900/40 border-white/10 cyber-card-glow text-white' : 'bg-white border-slate-100 shadow-sm hover:shadow-md text-slate-800'}`}>
+                            <span className="w-10 h-10 rounded-full border border-bronze-400/40 flex items-center justify-center text-bronze-700 dark:text-bronze-300 transition-colors duration-300 group-hover/stat:bg-bronze-400 group-hover/stat:text-ink-950 group-hover/stat:border-bronze-400"><stat.icon size={18} strokeWidth={1.5} /></span>
                             <div className="text-left">
                                 <div className="text-xl font-black">{stat.number}</div>
                                 <div className={`text-[10px] uppercase font-bold tracking-tighter ${isDarkMode ? 'text-indigo-400/80' : 'text-slate-400'}`}>{stat.label}</div>
