@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { FolderGit2, Layers, CalendarDays, GraduationCap } from 'lucide-react';
+import { FolderGit2, Layers, CalendarDays, GraduationCap, BookOpen } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 const About = () => {
@@ -98,20 +98,28 @@ const About = () => {
                         </div>
 
                         {/* Stats Cards */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-4">
+                        <div className="grid grid-cols-2 gap-4 sm:gap-6 pt-4">
                             {[
                                 { number: '10+', label: 'Projects', icon: FolderGit2 },
                                 { number: '5+', label: 'Tech Stack', icon: Layers },
-                                { number: '1', label: 'Year Exp', icon: CalendarDays }
+                                { number: '1', label: 'Year Exp', icon: CalendarDays },
+                                { number: '1', label: 'Research Paper', icon: BookOpen, note: 'Under review', title: 'SteelSense-BiLSTM — first author, under review at Discover Computing (Springer Nature)' }
                             ].map((stat, index) => (
                                 <motion.div
                                     key={index}
-                                    className="glass-card rounded-[32px] p-6 flex flex-col items-center justify-center gap-2 group/stat"
+                                    className="glass-card rounded-[32px] p-6 flex flex-col items-center justify-center gap-2 group/stat text-center"
+                                    title={stat.title}
                                     whileHover={{ y: -8 }}
                                 >
                                     <span className="w-10 h-10 mx-auto rounded-full border border-bronze-400/40 flex items-center justify-center text-bronze-700 dark:text-bronze-300 transition-colors duration-300 group-hover/stat:bg-bronze-400 group-hover/stat:text-ink-950 group-hover/stat:border-bronze-400"><stat.icon size={18} strokeWidth={1.5} /></span>
                                     <div className={`text-3xl font-black mt-1 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{stat.number}</div>
                                     <div className="text-[9px] uppercase tracking-widest font-black text-slate-500">{stat.label}</div>
+                                    {stat.note && (
+                                        <span className="mt-1 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-bronze-400/50 text-[9px] uppercase tracking-[0.14em] whitespace-nowrap text-bronze-700 dark:text-bronze-300">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-bronze-500 animate-pulse" />
+                                            {stat.note}
+                                        </span>
+                                    )}
                                 </motion.div>
                             ))}
                         </div>
